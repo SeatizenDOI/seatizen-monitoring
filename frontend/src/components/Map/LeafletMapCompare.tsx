@@ -4,6 +4,7 @@ import L, { LatLngTuple } from "leaflet";
 import { useEffect, useRef } from "react";
 import "@/lib/leaflet-splitmap";
 import "leaflet-fullscreen";
+import "leaflet-measure";
 import { COGServerResponse, URL_COG_SERVER, DEFAULT_CENTER, DEFAULT_ZOOM } from "@/lib/definition";
 import { load_edna_data } from "@/lib/edna_functions";
 
@@ -19,6 +20,23 @@ L.Icon.Default.mergeOptions({
     iconRetinaUrl: "/leaflet/marker-icon.png",
     iconUrl: "/leaflet/marker-icon.png",
     shadowUrl: "/leaflet/marker-shadow.png",
+});
+
+// This piece of code correct a bug with leaflet-measure where the map move on click. https://github.com/ljagis/leaflet-measure/issues/171
+// @ts-ignore (no correct types)
+L.Control.Measure.include({
+    // set icon on the capture marker
+    _setCaptureMarkerIcon: function () {
+        // disable autopan
+        this._captureMarker.options.autoPanOnFocus = false;
+
+        // default function
+        this._captureMarker.setIcon(
+            L.divIcon({
+                iconSize: this._map.getSize().multiplyBy(2),
+            })
+        );
+    },
 });
 
 export default function LeafletMapCompare({ leftUrls, rightUrls, withASV }: LeafletSplitMapProps) {
@@ -54,6 +72,18 @@ export default function LeafletMapCompare({ leftUrls, rightUrls, withASV }: Leaf
             //@ts-ignore
             fullscreenControl: true,
         });
+
+        const measure_control = L.control
+            // @ts-ignore (no correct types)
+            .measure({
+                position: "topleft",
+                primaryLengthUnit: "meters",
+                secondaryLengthUnit: "kilometers",
+                primaryAreaUnit: "hectares",
+                secondaryAreaUnit: "sqmeters",
+                localization: "fr",
+            })
+            .addTo(map);
 
         // Setup the map backgound.
         L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {

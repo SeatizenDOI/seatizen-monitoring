@@ -1,5 +1,5 @@
 export const URL_COG_SERVER = "http://localhost:8000";
-export const DEFAULT_CENTER = [-21.170876, 55.286604];
+export const DEFAULT_CENTER: [number, number] = [-21.170876, 55.286604];
 export const DEFAULT_ZOOM = 18;
 
 export type Layer = {
