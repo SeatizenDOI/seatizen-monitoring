@@ -9,8 +9,10 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@types/leaflet-side-by-side": "^2.2.3",
     "choices.js": "^11.1.0",
     "leaflet": "^1.9.4",
+    "leaflet-fullscreen": "^1.0.2",
     "leaflet-splitmap": "^1.0.3",
     "next": "15.5.2",
     "react": "19.1.0",
@@ -26,6 +28,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.5.2",
+    "eslint-config-prettier": "^10.1.8",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

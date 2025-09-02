@@ -1,154 +1,102 @@
-
 "use client";
 
-import { useEffect, useRef } from "react";
-import L from "leaflet";
-import "leaflet/dist/leaflet.css";
-import dynamic from "next/dynamic";
+import type { Metadata } from "next";
+import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
-const SplitMap = dynamic(() => import("leaflet-splitmap"), { ssr:false })
+import ShareButton from "@/components/Controls/ShareButton";
+import ToggleButton from "@/components/Controls/ToggleButtons";
+import MapCompare from "@/components/Map/DynamicLeafletMapCompare";
+import LayerDropDown from "@/components/Controls/DynamicLayerDropDown";
+import { COGServerResponse, URL_COG_SERVER } from "@/lib/definition";
+
+export const metadata: Metadata = {
+    title: "Explorer",
+    description: "Explore our data",
+};
+
 export default function Page() {
-  const mapRef = useRef<HTMLDivElement>(null);
+    const router = useRouter();
+    const searchParams = useSearchParams();
 
-  useEffect(() => {
-    let map: L.Map | null = null;
-    let control: any;
+    const [selectedLayersLeft, setSelectedLayersLeft] = useState<COGServerResponse[]>([]);
+    const [selectedLayersRight, setSelectedLayersRight] = useState<COGServerResponse[]>([]);
+    const [layers, setLayers] = useState<COGServerResponse[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [showExtraControls, setShowExtraControls] = useState(true);
 
-    async function initMap() {
+    // Retrieve all the layers from the cog server.
+    useEffect(() => {
+        async function fetchLayers() {
+            try {
+                const res = await fetch(`${URL_COG_SERVER}/layers`);
+                if (!res.ok) throw new Error("Failed to fetch layers");
+                const layers: COGServerResponse[] = await res.json();
+                setLayers(layers);
 
-      // Create the map
-      map = L.map(mapRef.current as HTMLDivElement, {
-        center: [48.8566, 2.3522],
-        zoom: 5,
-      });
+                const leftIds = searchParams.get("left")?.split(",") || [];
+                const rightIds = searchParams.get("right")?.split(",") || [];
+                setSelectedLayersLeft(layers.filter((l) => leftIds.includes(l.id)));
+                setSelectedLayersRight(layers.filter((l) => rightIds.includes(l.id)));
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setLoading(false);
+            }
+        }
+        fetchLayers();
+    }, []);
 
-      // Base layers for split
-      const leftLayer = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        attribution: "&copy; OpenStreetMap contributors",
-      });
+    // Update the url based on the selected layers for each side.
+    useEffect(() => {
+        updateURL(selectedLayersLeft, selectedLayersRight);
+    }, [selectedLayersLeft, selectedLayersRight]);
 
-      const rightLayer = L.tileLayer("https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png", {
-        attribution: "&copy; OpenTopoMap contributors",
-      });
+    const updateURL = (left: COGServerResponse[], right: COGServerResponse[]) => {
+        const params = new URLSearchParams(searchParams.toString());
+        if (left.length !== 0) params.set("left", left.map((l) => l.id).join(","));
+        else params.delete("left");
 
-      // Add SplitMap control
-      control = new SplitMap({
-        leftLayers: [leftLayer],
-        rightLayers: [rightLayer],
-      }).addTo(map);
-    }
+        if (right.length !== 0) params.set("right", right.map((l) => l.id).join(","));
+        else params.delete("right");
 
-    initMap();
-
-    return () => {
-      if (map) {
-        map.remove();
-      }
+        router.push(`?${params.toString()}`, { scroll: false });
     };
-  }, []);
 
-  return <div ref={mapRef} style={{ height: "100vh", width: "100%" }} />;
+    // Set the new layers after the dropdown is set.
+    const handleLeftChange = (values: COGServerResponse[]) => {
+        setSelectedLayersLeft(values);
+    };
+
+    const handleRightChange = (values: COGServerResponse[]) => {
+        setSelectedLayersRight(values);
+    };
+
+    if (loading) return <p>Loading layers...</p>;
+    if (!layers.length) return <p>No layers available</p>;
+
+    // The div is in reverse because the LayerDropDown need to be init before the map.
+    return (
+        <div className="flex flex-col-reverse">
+            <div className="flex justify-end p-4">
+                <ShareButton />
+            </div>
+            <div className="flex justify-center my-4">
+                <ToggleButton
+                    label="With Underwater orthophoto"
+                    defaultState={true}
+                    onToggle={(state) => setShowExtraControls(state)}
+                />
+            </div>
+
+            <div className="flex flex-row justify-around">
+                <LayerDropDown opt_layers={layers} onChange={handleLeftChange} selected_layers={selectedLayersLeft} />
+
+                <LayerDropDown opt_layers={layers} onChange={handleRightChange} selected_layers={selectedLayersRight} />
+            </div>
+            <div className="border-2 min-h-4/6 max-h-4/6 h-fit">
+                <MapCompare leftUrls={selectedLayersLeft} rightUrls={selectedLayersRight} withASV={showExtraControls} />
+            </div>
+        </div>
+    );
 }
-
-
-// import LeafletCompareMap from "@/components/Map/LeafletMapCompare";
-
-// export default function Page() {
-//   return (
-//     <LeafletCompareMap
-//       leftUrl="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-//       rightUrl="https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png"
-//       center={[48.8566, 2.3522]}
-//       zoom={5}
-//     />
-//   );
-// }
-
-
-// "use client";
-
-// import { useState } from "react";
-// import LeafletMap from "@/components/Map/LeafletMap";
-// import { Layer } from "@/components/Map/LeafletMap";
-// import LayerDropdown from "@/components/Controls/LayerDropDown";
-
-
-// export default function Page() {
-//   const [selectedBase, setSelectedBase] = useState("OpenStreetMap");
-
-
-//   const layers: Layer[] = [
-//     {
-//       name: "OpenStreetMap",
-//       type: "tile",
-//       url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-//       checked: selectedBase === "OpenStreetMap",
-//     },
-//     {
-//       name: "Satellite",
-//       type: "tile",
-//       url: "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
-//       checked: selectedBase === "Satellite",
-//     },
-//     {
-//       name: "Cities",
-//       type: "marker",
-//       markers: [
-//         { lat: 48.8566, lng: 2.3522, popup: "Paris" },
-//         { lat: 51.5074, lng: -0.1278, popup: "London" },
-//       ],
-//       checked: true,
-//     },
-//   ];
-
-//   return (
-//     <div>
-//       <LayerDropdown
-//         options={["OpenStreetMap", "Satellite"]}
-//         onChange={(value) => setSelectedBase(value)}
-//       />
-//       <LeafletMap layers={layers} center={[48.8566, 2.3522]} zoom={5} />
-//     </div>
-//   );
-// }
-
-
-// // "use client";
-
-// // import { useEffect, useState } from "react";
-// // import LeafletMap from "@/components/Map/LeafletMap";
-
-// // type Layer = {
-// //   name: string;
-// //   type: "tile" | "marker";
-// //   url?: string;
-// //   checked?: boolean;
-// //   markers?: { lat: number; lng: number; popup?: string }[];
-// // };
-
-// // export default function Page() {
-// //   const [layers, setLayers] = useState<Layer[]>([]);
-// //   const [loading, setLoading] = useState(true);
-
-// //   useEffect(() => {
-// //     async function fetchLayers() {
-// //       try {
-// //         const res = await fetch("http://localhost:8000/layers");
-// //         if (!res.ok) throw new Error("Failed to fetch layers");
-// //         const data: Layer[] = await res.json();
-// //         setLayers(data);
-// //       } catch (error) {
-// //         console.error(error);
-// //       } finally {
-// //         setLoading(false);
-// //       }
-// //     }
-
-// //     fetchLayers();
-// //   }, []);
-
-// //   if (loading) return <p>Loading map...</p>;
-// //   if (!layers.length) return <p>No layers available</p>;
-
-// //   return <LeafletMap layers={layers} center={[48.8566, 2.3522]} zoom={5} />;
-// // }

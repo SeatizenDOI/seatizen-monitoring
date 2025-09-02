@@ -1,13 +1,13 @@
-import type { Metadata } from 'next';
-import { poppins } from '@/app/ui/fonts';
-import '@/app/ui/globals.css';
+import type { Metadata } from "next";
+import { poppins } from "@/app/ui/fonts";
+import "@/app/ui/globals.css";
 
 export const metadata: Metadata = {
     title: {
-        template: '%s | Seatizen Monitoring',
-        default: 'Seatizen Monitoring',
+        template: "%s | Seatizen Monitoring",
+        default: "Seatizen Monitoring",
     },
-    description: 'Seatizen Monitoring',
+    description: "Seatizen Monitoring",
 };
 
 export default function RootLayout({
@@ -17,9 +17,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="fr">
-            <body className={`${poppins.className} antialiased`}>
-                {children}
-            </body>
+            <body className={`${poppins.className} antialiased`}>{children}</body>
         </html>
     );
 }
