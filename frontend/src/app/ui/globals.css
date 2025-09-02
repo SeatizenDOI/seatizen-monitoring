@@ -2,8 +2,6 @@
 @import "choices.js/public/assets/styles/choices.min.css";
 @import "leaflet/dist/leaflet.css";
 @import "leaflet-fullscreen/dist/leaflet.fullscreen.css";
-@import "leaflet-splitmap/src/layout.css"; /* Manually import the css but you need to comment the require in the index.js*/
-@import "leaflet-splitmap/src/range.css";
 
 
 

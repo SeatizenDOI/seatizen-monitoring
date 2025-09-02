@@ -2,7 +2,7 @@
 
 import L, { LatLngTuple } from "leaflet";
 import { useEffect, useRef } from "react";
-import "leaflet-splitmap";
+import "@/lib/leaflet-splitmap";
 import "leaflet-fullscreen";
 import { COGServerResponse, URL_COG_SERVER, DEFAULT_CENTER, DEFAULT_ZOOM } from "@/lib/definition";
 import { load_edna_data } from "@/lib/edna_functions";
