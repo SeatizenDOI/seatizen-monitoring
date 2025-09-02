@@ -7,6 +7,7 @@ import "leaflet-fullscreen";
 import "leaflet-measure";
 import { COGServerResponse, URL_COG_SERVER, DEFAULT_CENTER, DEFAULT_ZOOM } from "@/lib/definition";
 import { load_edna_data } from "@/lib/edna_functions";
+import { bindMapMoveToUrl, bindMapRequestPredOrDepthAtClick } from "@/utils/mapUtils";
 
 export interface LeafletSplitMapProps {
     leftUrls: COGServerResponse[];
@@ -96,49 +97,9 @@ export default function LeafletMapCompare({ leftUrls, rightUrls, withASV }: Leaf
                 '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
         }).addTo(map);
 
-        // Update URL params at the end of draging the map.
-        const onMoveEnd = () => {
-            const center = map.getCenter();
-            const zoom = map.getZoom();
-            const newParams = new URLSearchParams(window.location.search);
-            newParams.set("lat", center.lat.toFixed(5));
-            newParams.set("lng", center.lng.toFixed(5));
-            newParams.set("zoom", zoom.toString());
-            window.history.replaceState({}, "", `?${newParams.toString()}`);
-        };
-
-        // On map click, get the depth or the predictions value.
-        const onClick = async (event: any) => {
-            const separator = Number(splitRef.current._divider.style.left.replace("px", ""));
-            if (Math.abs(event.containerPoint.x - separator) <= 1) return; // Click trigger by sliding the split object.
-            let request_years = "";
-
-            const layers_on_choosen_side =
-                event.containerPoint.x < separator ? urlsRef.current.left : urlsRef.current.right;
-            layers_on_choosen_side.forEach((layer) => {
-                request_years = "&layers_id=" + layer.id + request_years;
-            });
-
-            if (request_years === "") return;
-
-            const { lat, lng } = event.latlng;
-
-            const response = await fetch(`${URL_COG_SERVER}/depthOrprediction?lon=${lng}&lat=${lat}${request_years}`);
-            const data = await response.json();
-
-            if (data.value === null) return;
-
-            L.popup()
-                .setLatLng([lat, lng, lat])
-                .setContent(
-                    data.type === "bathy" ? `Depth: ${data.value.toFixed(2)} m` : `Habitat Class: ${data.value}`
-                )
-                .openOn(map);
-        };
-
         // Setup listener.
-        map.on("click", onClick);
-        map.on("moveend", onMoveEnd);
+        const cleanupClickHandler = bindMapRequestPredOrDepthAtClick(map, splitRef, urlsRef);
+        const cleanupMoveHandler = bindMapMoveToUrl(map);
 
         // Keep ref to map.
         mapRef.current = map as any;
@@ -147,8 +108,8 @@ export default function LeafletMapCompare({ leftUrls, rightUrls, withASV }: Leaf
         load_edna_data(map);
 
         return () => {
-            map.off("click", onClick);
-            map.off("moveend", onMoveEnd);
+            cleanupMoveHandler();
+            cleanupClickHandler();
 
             map.remove();
         };

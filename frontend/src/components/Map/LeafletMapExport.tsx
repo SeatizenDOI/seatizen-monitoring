@@ -5,6 +5,8 @@ import { useEffect, useRef } from "react";
 import { DEFAULT_CENTER, DEFAULT_ZOOM } from "@/lib/definition";
 import "leaflet-fullscreen";
 import "leaflet-measure";
+import "leaflet-draw";
+import { bindMapMoveToUrl } from "@/utils/mapUtils";
 
 export interface LeafletExportProps {}
 
@@ -81,18 +83,47 @@ export default function LeafletMapExport({}: LeafletExportProps) {
             attribution: "&copy; OpenStreetMap &copy; CARTO",
         }).addTo(map);
 
-        // Update URL on map move
-        map.on("moveend", () => {
-            const center = map.getCenter();
-            const zoom = map.getZoom();
-            const newParams = new URLSearchParams(window.location.search);
-            newParams.set("lat", center.lat.toFixed(5));
-            newParams.set("lng", center.lng.toFixed(5));
-            newParams.set("zoom", zoom.toString());
-            window.history.replaceState({}, "", `?${newParams.toString()}`);
+        const drawnItems = new L.FeatureGroup();
+        map.addLayer(drawnItems);
+
+        // Add draw control
+        // @ts-ignore (no correct types)
+        const drawControl = new L.Control.Draw({
+            position: "bottomleft",
+            edit: {
+                featureGroup: drawnItems,
+                edit: false,
+            },
+            draw: {
+                polygon: true,
+                polyline: false,
+                rectangle: false,
+                circle: false,
+                marker: false,
+                circlemarker: false,
+            },
+        });
+        map.addControl(drawControl);
+
+        // Listen to create event
+        // @ts-ignore (no correct types)
+        map.on(L.Draw.Event.CREATED, function (event: any) {
+            const layer = event.layer;
+            drawnItems.addLayer(layer);
+
+            // Get GeoJSON
+            console.log(layer.toGeoJSON());
         });
 
+        const cleanupMoveHandler = bindMapMoveToUrl(map);
+
         mapRef.current = map;
+
+        return () => {
+            cleanupMoveHandler();
+            map.remove();
+            mapRef.current = null;
+        };
     }, []);
 
     return <div ref={mapContainerRef} style={{ height: "65vh", width: "100%" }} />;
