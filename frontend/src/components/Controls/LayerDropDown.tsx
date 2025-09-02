@@ -19,7 +19,7 @@ export default function LayerDropdown({ opt_layers, onChange, selected_layers }:
 
     // Group options by category based on `name`
     const groupedOptions: Record<string, COGServerResponse[]> = opt_layers.reduce((acc, option) => {
-        let groupName = option.name.split(" ")[0];
+        const groupName = option.name.split(" ")[0];
         if (!acc[groupName]) acc[groupName] = [];
         acc[groupName].push(option);
         return acc;
@@ -67,7 +67,9 @@ export default function LayerDropdown({ opt_layers, onChange, selected_layers }:
         }
 
         return () => {
-            selectRef.current?.removeEventListener("change", updateLabels);
+            if (selectRef.current) {
+                selectRef.current.removeEventListener("change", updateLabels);
+            }
             if (choicesRef.current) {
                 choicesRef.current.destroy();
                 choicesRef.current = null;

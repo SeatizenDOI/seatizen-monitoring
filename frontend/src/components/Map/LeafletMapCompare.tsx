@@ -10,7 +10,7 @@ import { load_edna_data } from "@/lib/edna_functions";
 export interface LeafletSplitMapProps {
     leftUrls: COGServerResponse[];
     rightUrls: COGServerResponse[];
-    withASV: Boolean;
+    withASV: boolean;
 }
 
 // Fix marker icons if needed
@@ -98,7 +98,7 @@ export default function LeafletMapCompare({ leftUrls, rightUrls, withASV }: Leaf
 
             if (data.value === null) return;
 
-            var popup = L.popup()
+            L.popup()
                 .setLatLng([lat, lng, lat])
                 .setContent(
                     data.type === "bathy" ? `Depth: ${data.value.toFixed(2)} m` : `Habitat Class: ${data.value}`
