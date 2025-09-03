@@ -1,6 +1,7 @@
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
-from sqlalchemy import String, Boolean, ForeignKey, Integer
 from geoalchemy2 import Geometry 
+
+from sqlalchemy import String, Boolean, ForeignKey, Integer
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 class Base(DeclarativeBase):
     pass

@@ -64,6 +64,8 @@ export default function ClassSelector({ modelId, onSelectClasses }: ClassSelecto
             duplicateItemsAllowed: false,
         });
 
+        choicesInstance.current.setChoiceByValue("0");
+
         // Listen to change events
         selectRef.current.addEventListener("change", () => {
             const selectedOptions = Array.from(selectRef.current!.selectedOptions).map((o) => Number(o.value));

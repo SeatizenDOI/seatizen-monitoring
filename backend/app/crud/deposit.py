@@ -1,9 +1,10 @@
-from sqlalchemy.ext.asyncio import AsyncSession
+from geoalchemy2.shape import to_shape
+
 from sqlalchemy import select
 from sqlalchemy.orm import joinedload
-from app.models.deposit import Deposit
+from sqlalchemy.ext.asyncio import AsyncSession
 
-from geoalchemy2.shape import to_shape
+from app.models.deposit import Deposit
 
 PLATFORMS_AS_LINESTRING = ["UVC", "SCUBA", "PADDLE"]
 

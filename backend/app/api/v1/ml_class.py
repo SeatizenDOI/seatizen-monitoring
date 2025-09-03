@@ -1,10 +1,10 @@
+from typing import List
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from typing import List
 
+from app.database import get_db
 from app.schemas.ml_class import MlClassResponse
 from app.crud.ml_class import get_all_ml_class, get_all_ml_class_by_model
-from app.database import get_db
 
 router = APIRouter()
 

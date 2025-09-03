@@ -1,5 +1,5 @@
-from pydantic import BaseModel
 from datetime import datetime
+from pydantic import BaseModel
 
 # Base schema (shared attributes)
 class MlModelBase(BaseModel):

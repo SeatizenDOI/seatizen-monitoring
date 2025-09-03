@@ -1,10 +1,10 @@
+from typing import List
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from typing import List
 
-from app.schemas.ml_model import MlModelResponse
-from app.crud.ml_models import get_all_ml_model
 from app.database import get_db
+from app.crud.ml_models import get_all_ml_model
+from app.schemas.ml_model import MlModelResponse
 
 router = APIRouter()
 

@@ -1,5 +1,5 @@
-from pydantic import BaseModel
 from typing import Any
+from pydantic import BaseModel
 
 # Base schema (shared attributes)
 class FrameBase(BaseModel):
