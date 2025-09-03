@@ -1,0 +1,15 @@
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy import String, Integer, Float, ForeignKey
+from typing import Optional
+
+class Base(DeclarativeBase):
+    pass
+
+class MlClass(Base):
+    __tablename__ = "multilabel_class"  # existing table name
+
+    id: Mapped[Integer] = mapped_column(Integer, primary_key=True)
+    name: Mapped[str] = mapped_column(String)
+    threshold: Mapped[float] = mapped_column(Float)
+    ml_label_id: Mapped[Integer] = mapped_column(ForeignKey("multilabel_label.id"))
+    ml_model_id: Mapped[Integer] = mapped_column(ForeignKey("multilabel_model.id"))

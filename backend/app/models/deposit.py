@@ -1,5 +1,5 @@
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-from sqlalchemy import String, Integer, Boolean
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+from sqlalchemy import String, Boolean, ForeignKey, Integer
 from geoalchemy2 import Geometry 
 
 class Base(DeclarativeBase):
@@ -17,3 +17,19 @@ class Deposit(Base):
     location: Mapped[str] = mapped_column(String)
     platform_type: Mapped[str] = mapped_column(String)
     footprint: Mapped[str] = mapped_column(Geometry("POLYGON"))
+
+    deposit_linestring: Mapped["DepositLineString"] = relationship(
+        "DepositLineString",
+        back_populates="deposit",
+        uselist=False,
+        cascade="all, delete-orphan"
+    )
+
+class DepositLineString(Base):
+    __tablename__ = "deposit_linestring"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    deposit_doi: Mapped[str] = mapped_column(ForeignKey("deposit.doi"), unique=True)
+    footprint_linestring: Mapped[str] = mapped_column(Geometry("LINESTRING"))
+
+    deposit: Mapped["Deposit"] = relationship("Deposit", back_populates="deposit_linestring")

@@ -5,9 +5,9 @@ import { useEffect, useRef } from "react";
 import "@/lib/leaflet-splitmap";
 import "leaflet-fullscreen";
 import "leaflet-measure";
-import { COGServerResponse, URL_COG_SERVER, DEFAULT_CENTER, DEFAULT_ZOOM } from "@/lib/definition";
+import { COGServerResponse, URL_COG_SERVER } from "@/lib/definition";
 import { load_edna_data } from "@/lib/edna_functions";
-import { bindMapMoveToUrl, bindMapRequestPredOrDepthAtClick } from "@/utils/mapUtils";
+import { bindMapMoveToUrl, bindMapRequestPredOrDepthAtClick, getInitialView } from "@/utils/mapUtils";
 
 export interface LeafletSplitMapProps {
     leftUrls: COGServerResponse[];
@@ -50,15 +50,6 @@ export default function LeafletMapCompare({ leftUrls, rightUrls, withASV }: Leaf
     useEffect(() => {
         urlsRef.current = { left: leftUrls, right: rightUrls, with_asv: withASV };
     }, [leftUrls, rightUrls, withASV]);
-
-    // Retrieve the parameters from the URL.
-    const getInitialView = (): { lat: number; lng: number; zoom: number } => {
-        const params = new URLSearchParams(window.location.search);
-        const lat = parseFloat(params.get("lat") || `${DEFAULT_CENTER[0]}`);
-        const lng = parseFloat(params.get("lng") || `${DEFAULT_CENTER[1]}`);
-        const z = parseInt(params.get("zoom") || `${DEFAULT_ZOOM}`, 10);
-        return { lat, lng, zoom: z };
-    };
 
     useEffect(() => {
         if (!mapRef.current) return;

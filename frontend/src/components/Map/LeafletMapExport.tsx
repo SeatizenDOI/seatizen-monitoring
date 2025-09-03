@@ -1,14 +1,17 @@
 "use client";
 
-import L, { LatLngTuple } from "leaflet";
+import L, { LatLngTuple, GeoJSON as LeafletGeoJSON } from "leaflet";
 import { useEffect, useRef } from "react";
 import { DEFAULT_CENTER, DEFAULT_ZOOM } from "@/lib/definition";
 import "leaflet-fullscreen";
 import "leaflet-measure";
 import "leaflet-draw";
-import { bindMapMoveToUrl } from "@/utils/mapUtils";
+import { bindMapMoveToUrl, getInitialView } from "@/utils/mapUtils";
+import { Deposit, depositPlatformColorMap } from "@/hooks/useDeposits";
 
-export interface LeafletExportProps {}
+export interface LeafletExportProps {
+    deposits: Deposit[];
+}
 
 // Fix marker icons for Leaflet
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -18,15 +21,11 @@ L.Icon.Default.mergeOptions({
     shadowUrl: "/leaflet/marker-shadow.png",
 });
 
-// This piece of code correct a bug with leaflet-measure where the map move on click. https://github.com/ljagis/leaflet-measure/issues/171
-// @ts-ignore (no correct types)
+// Fix leaflet-measure capture marker bug
+// @ts-ignore
 L.Control.Measure.include({
-    // set icon on the capture marker
     _setCaptureMarkerIcon: function () {
-        // disable autopan
         this._captureMarker.options.autoPanOnFocus = false;
-
-        // default function
         this._captureMarker.setIcon(
             L.divIcon({
                 iconSize: this._map.getSize().multiplyBy(2),
@@ -35,21 +34,13 @@ L.Control.Measure.include({
     },
 });
 
-export default function LeafletMapExport({}: LeafletExportProps) {
+export default function LeafletMapExport({ deposits }: LeafletExportProps) {
     const mapContainerRef = useRef<HTMLDivElement>(null);
     const mapRef = useRef<L.Map | null>(null);
-
-    // Get initial map view from URL or defaults
-    const getInitialView = (): { lat: number; lng: number; zoom: number } => {
-        const params = new URLSearchParams(window.location.search);
-        const lat = parseFloat(params.get("lat") || `${DEFAULT_CENTER[0]}`);
-        const lng = parseFloat(params.get("lng") || `${DEFAULT_CENTER[1]}`);
-        const zoom = parseInt(params.get("zoom") || `${DEFAULT_ZOOM}`, 10);
-        return { lat, lng, zoom };
-    };
+    const geoJsonLayerRef = useRef<LeafletGeoJSON | null>(null);
 
     useEffect(() => {
-        if (!mapContainerRef.current || mapRef.current) return; // initialize only once
+        if (!mapContainerRef.current || mapRef.current) return;
 
         const { lat, lng, zoom } = getInitialView();
 
@@ -61,18 +52,6 @@ export default function LeafletMapExport({}: LeafletExportProps) {
             fullscreenControl: true,
         });
 
-        const measure_control = L.control
-            // @ts-ignore (no correct types)
-            .measure({
-                position: "topleft",
-                primaryLengthUnit: "meters",
-                secondaryLengthUnit: "kilometers",
-                primaryAreaUnit: "hectares",
-                secondaryAreaUnit: "sqmeters",
-                localization: "fr",
-            })
-            .addTo(map);
-
         // Base layers
         L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
             attribution: "&copy; OpenStreetMap contributors",
@@ -83,17 +62,27 @@ export default function LeafletMapExport({}: LeafletExportProps) {
             attribution: "&copy; OpenStreetMap &copy; CARTO",
         }).addTo(map);
 
+        // Measure control
+        L.control
+            // @ts-ignore
+            .measure({
+                position: "topleft",
+                primaryLengthUnit: "meters",
+                secondaryLengthUnit: "kilometers",
+                primaryAreaUnit: "hectares",
+                secondaryAreaUnit: "sqmeters",
+                localization: "fr",
+            })
+            .addTo(map);
+
+        // Draw control
         const drawnItems = new L.FeatureGroup();
         map.addLayer(drawnItems);
 
-        // Add draw control
-        // @ts-ignore (no correct types)
+        // @ts-ignore
         const drawControl = new L.Control.Draw({
             position: "bottomleft",
-            edit: {
-                featureGroup: drawnItems,
-                edit: false,
-            },
+            edit: { featureGroup: drawnItems, edit: false },
             draw: {
                 polygon: true,
                 polyline: false,
@@ -105,18 +94,15 @@ export default function LeafletMapExport({}: LeafletExportProps) {
         });
         map.addControl(drawControl);
 
-        // Listen to create event
-        // @ts-ignore (no correct types)
-        map.on(L.Draw.Event.CREATED, function (event: any) {
+        // Listen to draw events
+        // @ts-ignore
+        map.on(L.Draw.Event.CREATED, (event: any) => {
             const layer = event.layer;
             drawnItems.addLayer(layer);
-
-            // Get GeoJSON
             console.log(layer.toGeoJSON());
         });
 
         const cleanupMoveHandler = bindMapMoveToUrl(map);
-
         mapRef.current = map;
 
         return () => {
@@ -125,6 +111,60 @@ export default function LeafletMapExport({}: LeafletExportProps) {
             mapRef.current = null;
         };
     }, []);
+
+    // Load deposits.
+    useEffect(() => {
+        const map = mapRef.current;
+        if (!map) return;
+
+        // Remove previous GeoJSON
+        if (geoJsonLayerRef.current) {
+            geoJsonLayerRef.current.remove();
+            geoJsonLayerRef.current = null;
+        }
+
+        if (deposits.length === 0) return;
+
+        // Combine deposits as a FeatureCollection
+        const featureCollection = {
+            type: "FeatureCollection",
+            features: deposits.map((d) => ({
+                type: "Feature",
+                geometry: d.footprint ?? d.deposit_linestring.footprint_linestring,
+                properties: {
+                    doi: d.doi,
+                    name: d.session_name,
+                    creation_date: d.session_date,
+                    platform: d.platform_type,
+                },
+            })),
+        };
+
+        //@ts-ignore
+        const geoJsonLayer = L.geoJSON(featureCollection, {
+            style: (feature) => {
+                const platform = (feature?.properties as any)?.platform || "default";
+                return {
+                    color: depositPlatformColorMap[platform] || depositPlatformColorMap.default,
+                    weight: 2,
+                };
+            },
+            onEachFeature: (feature, layer) => {
+                const props = feature.properties as any;
+                layer.bindPopup(`
+          <strong>${props.name}</strong><br/>
+          DOI:  <a href="https://doi.org/10.5281/zenodo.${props.doi}" target="_blank"> ${props.doi}</a><br/>
+          Created: ${props.creation_date}
+        `);
+            },
+        }).addTo(map);
+
+        geoJsonLayerRef.current = geoJsonLayer;
+
+        // Fit map bounds to deposits
+        // const bounds = geoJsonLayer.getBounds();
+        // if (bounds.isValid()) map.fitBounds(bounds);
+    }, [deposits]);
 
     return <div ref={mapContainerRef} style={{ height: "65vh", width: "100%" }} />;
 }

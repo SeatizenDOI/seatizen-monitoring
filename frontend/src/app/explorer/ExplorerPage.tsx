@@ -8,6 +8,7 @@ import ToggleButton from "@/components/Controls/ToggleButtons";
 import MapCompare from "@/components/Map/DynamicLeafletMapCompare";
 import LayerDropDown from "@/components/Controls/DynamicLayerDropDown";
 import { COGServerResponse, URL_COG_SERVER } from "@/lib/definition";
+import PresetButton from "@/components/Controls/PresetButton";
 
 export default function ExplorerPage() {
     const router = useRouter();
@@ -30,8 +31,17 @@ export default function ExplorerPage() {
 
                 const leftIds = searchParams.get("left")?.split(",") || [];
                 const rightIds = searchParams.get("right")?.split(",") || [];
-                setSelectedLayersLeft(layers.filter((l) => leftIds.includes(l.id)));
-                setSelectedLayersRight(layers.filter((l) => rightIds.includes(l.id)));
+                // Filter and sort to keep the url order.
+                setSelectedLayersLeft(
+                    layers
+                        .filter((l) => leftIds.includes(l.id))
+                        .sort((a, b) => leftIds.indexOf(a.id) - leftIds.indexOf(b.id))
+                );
+                setSelectedLayersRight(
+                    layers
+                        .filter((l) => rightIds.includes(l.id))
+                        .sort((a, b) => rightIds.indexOf(a.id) - rightIds.indexOf(b.id))
+                );
             } catch (error) {
                 console.error(error);
             } finally {
@@ -72,6 +82,20 @@ export default function ExplorerPage() {
     // The div is in reverse because the LayerDropDown need to be init before the map.
     return (
         <div className="flex flex-col-reverse">
+            <div className="flex justify-around">
+                <PresetButton
+                    buttonName="Bathy 2023/2025 comparison"
+                    urlString="/explorer?lat=-21.17536&lng=55.29213&zoom=16&left=ortho_2023%2Cbathy_2023&right=ortho_2025%2Cbathy_2025"
+                />
+                <PresetButton
+                    buttonName="Habitat map 2023"
+                    urlString="/explorer?lat=-21.17536&lng=55.29213&zoom=16&left=ortho_2023%2Cpred_2023&right=ortho_2023"
+                />
+                <PresetButton
+                    buttonName="IGN 2022 vs Drone Orthophoto 2023"
+                    urlString="/explorer?lat=-21.17536&lng=55.29213&zoom=16&right=ortho_2023&left=ign_2022"
+                />
+            </div>
             <div className="flex justify-end p-4">
                 <ShareButton />
             </div>
@@ -88,7 +112,7 @@ export default function ExplorerPage() {
 
                 <LayerDropDown opt_layers={layers} onChange={handleRightChange} selected_layers={selectedLayersRight} />
             </div>
-            <div className="border-2 min-h-4/6 max-h-4/6 h-fit">
+            <div className="min-h-4/6 max-h-4/6 h-fit">
                 <MapCompare leftUrls={selectedLayersLeft} rightUrls={selectedLayersRight} withASV={showExtraControls} />
             </div>
         </div>

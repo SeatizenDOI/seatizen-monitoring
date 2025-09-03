@@ -1,4 +1,6 @@
 export const URL_COG_SERVER = "http://localhost:8000";
+export const URL_BACKEND_SERVER = "http://localhost:3001";
+
 export const DEFAULT_CENTER: [number, number] = [-21.170876, 55.286604];
 export const DEFAULT_ZOOM = 18;
 

@@ -1,4 +1,4 @@
-import { COGServerResponse, URL_COG_SERVER } from "@/lib/definition";
+import { COGServerResponse, DEFAULT_CENTER, DEFAULT_ZOOM, URL_COG_SERVER } from "@/lib/definition";
 import L from "leaflet";
 import { RefObject } from "react";
 
@@ -61,4 +61,13 @@ export function bindMapRequestPredOrDepthAtClick(
     return () => {
         map.off("click", handler); // ✅ Remove listener
     };
+}
+
+// Get initial map view from URL or defaults
+export function getInitialView(): { lat: number; lng: number; zoom: number } {
+    const params = new URLSearchParams(window.location.search);
+    const lat = parseFloat(params.get("lat") || `${DEFAULT_CENTER[0]}`);
+    const lng = parseFloat(params.get("lng") || `${DEFAULT_CENTER[1]}`);
+    const zoom = parseInt(params.get("zoom") || `${DEFAULT_ZOOM}`, 10);
+    return { lat, lng, zoom };
 }

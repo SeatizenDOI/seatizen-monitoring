@@ -1,7 +1,13 @@
 from pydantic import BaseModel
-from typing import Any
+from typing import Any, Optional
 
 # Base schema (shared attributes)
+class DepositLineStringResponse(BaseModel):
+    footprint_linestring: Any  # or GeoJSON
+
+    class Config:
+        from_attributes = True
+
 class DepositBase(BaseModel):
     doi: str
     session_name: str
@@ -12,6 +18,8 @@ class DepositBase(BaseModel):
     location: str
     platform_type: str
     footprint: Any  # Will store GeoJSON representation
+    deposit_linestring: Optional[DepositLineStringResponse]  # one-to-one
+
 
 # Response schema (inherits Base)
 class DepositResponse(DepositBase):
