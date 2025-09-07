@@ -36,3 +36,30 @@ export type EdnaDataType = {
     publication: LinkType;
     data: LinkType;
 };
+
+export type Deposit = {
+    doi: string;
+    session_name: string;
+    have_processed_data: boolean;
+    have_processed_raw: boolean;
+    session_date: string;
+    alpha3_country_code: string;
+    location: string;
+    platform_type: string;
+    deposit_linestring: {
+        footprint_linestring: GeoJSON.LineString | null;
+    };
+    footprint: GeoJSON.Polygon | null;
+
+    area: string | null;
+    perimeter: string | null;
+};
+
+export const depositPlatformColorMap: Record<string, string> = {
+    UAV: "cyan",
+    ASV: "blue",
+    SCUBA: "orange",
+    PADDLE: "red",
+    UVC: "black",
+    default: "gray",
+};

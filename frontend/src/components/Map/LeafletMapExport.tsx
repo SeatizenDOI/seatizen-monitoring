@@ -2,12 +2,11 @@
 
 import L, { LatLngTuple, GeoJSON as LeafletGeoJSON } from "leaflet";
 import { useEffect, useRef } from "react";
-import { DEFAULT_CENTER, DEFAULT_ZOOM } from "@/lib/definition";
+import { Deposit, depositPlatformColorMap } from "@/lib/definition";
 import "leaflet-fullscreen";
 import "leaflet-measure";
 import "leaflet-draw";
 import { bindMapMoveToUrl, getInitialView } from "@/utils/mapUtils";
-import { Deposit, depositPlatformColorMap } from "@/hooks/useDeposits";
 
 export interface LeafletExportProps {
     deposits: Deposit[];
@@ -136,6 +135,8 @@ export default function LeafletMapExport({ deposits }: LeafletExportProps) {
                     name: d.session_name,
                     creation_date: d.session_date,
                     platform: d.platform_type,
+                    area: d.area,
+                    perimeter: d.perimeter,
                 },
             })),
         };
@@ -151,11 +152,29 @@ export default function LeafletMapExport({ deposits }: LeafletExportProps) {
             },
             onEachFeature: (feature, layer) => {
                 const props = feature.properties as any;
+
+                const text_length_or_surface = props.perimeter ? `Length: ${props.perimeter}` : `Area: ${props.area}`;
+
                 layer.bindPopup(`
-          <strong>${props.name}</strong><br/>
-          DOI:  <a href="https://doi.org/10.5281/zenodo.${props.doi}" target="_blank"> ${props.doi}</a><br/>
-          Created: ${props.creation_date}
-        `);
+                    <strong>${props.name}</strong><br/>
+                    DOI:  <a href="https://doi.org/10.5281/zenodo.${props.doi}" target="_blank"> ${props.doi}</a><br/>
+                    Acquisition date: ${props.creation_date} <br/>
+                    Platform: ${props.platform} <br/>
+                    ${text_length_or_surface}
+                `);
+
+                // When popup opens → highlight
+                layer.on("popupopen", () => {
+                    (layer as any).setStyle({
+                        weight: 5,
+                        color: "#FFFFFF", // optional: override for emphasis
+                    });
+                });
+
+                // When popup closes → reset style
+                layer.on("popupclose", () => {
+                    geoJsonLayer.resetStyle(layer as any);
+                });
             },
         }).addTo(map);
 

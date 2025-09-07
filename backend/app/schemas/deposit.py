@@ -19,6 +19,9 @@ class DepositBase(BaseModel):
     platform_type: str
     footprint: Any  # Will store GeoJSON representation
     deposit_linestring: Optional[DepositLineStringResponse]  # one-to-one
+    perimeter: Optional[str] 
+    area: Optional[str] 
+
 
 
 # Response schema (inherits Base)
