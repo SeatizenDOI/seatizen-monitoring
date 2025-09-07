@@ -1,4 +1,4 @@
-import { COGServerResponse, DEFAULT_CENTER, DEFAULT_ZOOM, URL_COG_SERVER } from "@/lib/definition";
+import { COGServerResponse, DEFAULT_CENTER, DEFAULT_ZOOM } from "@/lib/definition";
 import L from "leaflet";
 import { RefObject } from "react";
 
@@ -16,7 +16,7 @@ export function bindMapMoveToUrl(map: L.Map) {
     map.on("moveend", handler);
 
     return () => {
-        map.off("moveend", handler); // ✅ Remove listener
+        map.off("moveend", handler); // Remove listener
     };
 }
 
@@ -45,7 +45,9 @@ export function bindMapRequestPredOrDepthAtClick(
 
         const { lat, lng } = event.latlng;
 
-        const response = await fetch(`${URL_COG_SERVER}/depthOrprediction?lon=${lng}&lat=${lat}${request_years}`);
+        const response = await fetch(
+            `${process.env.NEXT_PUBLIC_URL_COG_SERVER}/depthOrprediction?lon=${lng}&lat=${lat}${request_years}`
+        );
         const data = await response.json();
 
         if (data.value === null) return;
@@ -59,7 +61,7 @@ export function bindMapRequestPredOrDepthAtClick(
     map.on("click", handler);
 
     return () => {
-        map.off("click", handler); // ✅ Remove listener
+        map.off("click", handler); // Remove listener
     };
 }
 

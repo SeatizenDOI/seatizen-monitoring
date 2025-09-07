@@ -10,6 +10,8 @@ import { bindMapMoveToUrl, getInitialView } from "@/utils/mapUtils";
 
 export interface LeafletExportProps {
     deposits: Deposit[];
+    onPolygonAdd: (polygon: any) => void;
+    onPolygonDelete: () => void;
 }
 
 // Fix marker icons for Leaflet
@@ -33,7 +35,7 @@ L.Control.Measure.include({
     },
 });
 
-export default function LeafletMapExport({ deposits }: LeafletExportProps) {
+export default function LeafletMapExport({ deposits, onPolygonAdd, onPolygonDelete }: LeafletExportProps) {
     const mapContainerRef = useRef<HTMLDivElement>(null);
     const mapRef = useRef<L.Map | null>(null);
     const geoJsonLayerRef = useRef<LeafletGeoJSON | null>(null);
@@ -98,8 +100,11 @@ export default function LeafletMapExport({ deposits }: LeafletExportProps) {
         map.on(L.Draw.Event.CREATED, (event: any) => {
             const layer = event.layer;
             drawnItems.addLayer(layer);
-            console.log(layer.toGeoJSON());
+            onPolygonAdd(layer.toGeoJSON());
         });
+
+        // @ts-ignore
+        map.on(L.Draw.Event.DELETED, onPolygonDelete);
 
         const cleanupMoveHandler = bindMapMoveToUrl(map);
         mapRef.current = map;

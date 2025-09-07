@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import Choices from "choices.js";
-import { URL_BACKEND_SERVER } from "@/lib/definition";
 
 export interface PlatformSelectorProps {
     value: string[];
@@ -16,7 +15,7 @@ export default function PlatformSelector({ value, onChange }: PlatformSelectorPr
 
     // Fetch platforms from backend
     useEffect(() => {
-        fetch(`${URL_BACKEND_SERVER}/api/v1/deposits/filters`)
+        fetch(`${process.env.NEXT_PUBLIC_URL_BACKEND_SERVER}/api/v1/deposits/filters`)
             .then((res) => res.json())
             .then((data) => {
                 setPlatforms(data.platforms || []);

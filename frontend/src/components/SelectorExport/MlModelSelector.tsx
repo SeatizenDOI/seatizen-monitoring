@@ -1,6 +1,5 @@
 "use client";
 
-import { URL_BACKEND_SERVER } from "@/lib/definition";
 import { useEffect, useState } from "react";
 
 type MlModel = {
@@ -21,7 +20,7 @@ export default function ModelSelector({ onSelectModel }: ModelSelectorProps) {
     useEffect(() => {
         async function fetchModels() {
             try {
-                const res = await fetch(`${URL_BACKEND_SERVER}/api/v1/ml_model/`);
+                const res = await fetch(`${process.env.NEXT_PUBLIC_URL_BACKEND_SERVER}/api/v1/ml_model/`);
                 if (!res.ok) {
                     throw new Error(`HTTP error! status: ${res.status}`);
                 }

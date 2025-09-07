@@ -1,6 +1,5 @@
 "use client";
 
-import { URL_BACKEND_SERVER } from "@/lib/definition";
 import { useEffect, useState } from "react";
 import { Range } from "react-range";
 
@@ -16,7 +15,7 @@ export default function TimelineSlider({ startDate, endDate, onChange }: Timelin
     const [values, setValues] = useState<number[]>([0, 0]);
 
     useEffect(() => {
-        fetch(`${URL_BACKEND_SERVER}/api/v1/deposits/filters`)
+        fetch(`${process.env.NEXT_PUBLIC_URL_BACKEND_SERVER}/api/v1/deposits/filters`)
             .then((res) => res.json())
             .then((data) => {
                 const min = new Date(data.timeline.min);

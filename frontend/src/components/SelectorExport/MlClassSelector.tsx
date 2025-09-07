@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import Choices from "choices.js";
-import { URL_BACKEND_SERVER } from "@/lib/definition";
 
 type MlClass = {
     id: number;
@@ -30,7 +29,9 @@ export default function ClassSelector({ modelId, onSelectClasses }: ClassSelecto
             setLoading(true);
             setError(null);
             try {
-                const res = await fetch(`${URL_BACKEND_SERVER}/api/v1/ml_class/model/${modelId}`);
+                const res = await fetch(
+                    `${process.env.NEXT_PUBLIC_URL_BACKEND_SERVER}/api/v1/ml_class/model/${modelId}`
+                );
                 if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
                 const data: MlClass[] = await res.json();
 

@@ -1,6 +1,3 @@
-export const URL_COG_SERVER = "http://localhost:8000";
-export const URL_BACKEND_SERVER = "http://localhost:3001";
-
 export const DEFAULT_CENTER: [number, number] = [-21.170876, 55.286604];
 export const DEFAULT_ZOOM = 18;
 
@@ -59,7 +56,7 @@ export const depositPlatformColorMap: Record<string, string> = {
     UAV: "cyan",
     ASV: "blue",
     SCUBA: "orange",
-    PADDLE: "red",
-    UVC: "black",
+    PADDLE: "pink",
+    UVC: "red",
     default: "gray",
 };

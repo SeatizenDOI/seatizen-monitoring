@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import ShareButton from "@/components/Controls/ShareButton";
-import ToggleButton from "@/components/Controls/ToggleButtons";
+import ToggleButton from "@/components/Controls/ToggleButton";
 import MapCompare from "@/components/Map/DynamicLeafletMapCompare";
 import LayerDropDown from "@/components/Controls/DynamicLayerDropDown";
-import { COGServerResponse, URL_COG_SERVER } from "@/lib/definition";
+import { COGServerResponse } from "@/lib/definition";
 import PresetButton from "@/components/Controls/PresetButton";
 
 export default function ExplorerPage() {
@@ -24,7 +24,7 @@ export default function ExplorerPage() {
     useEffect(() => {
         async function fetchLayers() {
             try {
-                const res = await fetch(`${URL_COG_SERVER}/layers`);
+                const res = await fetch(`${process.env.NEXT_PUBLIC_URL_COG_SERVER}/layers`);
                 if (!res.ok) throw new Error("Failed to fetch layers");
                 const layers: COGServerResponse[] = await res.json();
                 setLayers(layers);

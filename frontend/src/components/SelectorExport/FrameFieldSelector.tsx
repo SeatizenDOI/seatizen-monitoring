@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import Choices from "choices.js";
-import { URL_BACKEND_SERVER } from "@/lib/definition";
 
 export interface FrameFieldSelectorProps {
     value: string[];
@@ -18,7 +17,7 @@ export default function FrameFieldSelector({ value, onChange }: FrameFieldSelect
 
     // Fetch fields from backend
     useEffect(() => {
-        fetch(`${URL_BACKEND_SERVER}/api/v1/frame/fields`)
+        fetch(`${process.env.NEXT_PUBLIC_URL_BACKEND_SERVER}/api/v1/frame/fields`)
             .then((res) => res.json())
             .then((data) => setFields(data))
             .catch((err) => console.error("Failed to fetch fields:", err));
