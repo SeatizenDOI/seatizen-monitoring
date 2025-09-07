@@ -38,17 +38,28 @@ echo "🔹 Enabling PostGIS on $DB_NAME..."
 sudo -i -u $PG_SUPERUSER psql -d $DB_NAME -c "CREATE EXTENSION postgis;"
 
 # === IMPORT GPKG INTO POSTGIS ===
+echo "🔹 Import deposit..."
 ogr2ogr -f "PostgreSQL" PG:"dbname=${DB_NAME} user=${DB_USER} password=${DB_PASS}" ${GPKG_PATH} deposit -lco GEOMETRY_NAME=footprint -lco FID=gid -overwrite
+echo "🔹 Import deposit_linestring..."
 ogr2ogr -f "PostgreSQL" PG:"dbname=${DB_NAME} user=${DB_USER} password=${DB_PASS}" ${GPKG_PATH} deposit_linestring -lco GEOMETRY_NAME=footprint_linestring -lco FID=id -overwrite
+echo "🔹 Import frame..."
 ogr2ogr -f "PostgreSQL" PG:"dbname=${DB_NAME} user=${DB_USER} password=${DB_PASS}" ${GPKG_PATH} frame -lco GEOMETRY_NAME=gpsposition -lco FID=id -overwrite
+echo "🔹 Import version..."
 ogr2ogr -f "PostgreSQL" PG:"dbname=${DB_NAME} user=${DB_USER} password=${DB_PASS}" ${GPKG_PATH} version -lco FID=gid -overwrite
+echo "🔹 Import multilabel_annotation..."
 ogr2ogr -f "PostgreSQL" PG:"dbname=${DB_NAME} user=${DB_USER} password=${DB_PASS}" ${GPKG_PATH} multilabel_annotation -lco FID=id -overwrite
+echo "🔹 Import multilabel_annotation_session..."
 ogr2ogr -f "PostgreSQL" PG:"dbname=${DB_NAME} user=${DB_USER} password=${DB_PASS}" ${GPKG_PATH} multilabel_annotation_session -lco FID=id -overwrite
+echo "🔹 Import multilabel_class..."
 ogr2ogr -f "PostgreSQL" PG:"dbname=${DB_NAME} user=${DB_USER} password=${DB_PASS}" ${GPKG_PATH} multilabel_class -lco FID=id -overwrite
+echo "🔹 Import multilabel_label..."
 ogr2ogr -f "PostgreSQL" PG:"dbname=${DB_NAME} user=${DB_USER} password=${DB_PASS}" ${GPKG_PATH} multilabel_label -lco FID=id -overwrite
+echo "🔹 Import multilabel_model..."
 ogr2ogr -f "PostgreSQL" PG:"dbname=${DB_NAME} user=${DB_USER} password=${DB_PASS}" ${GPKG_PATH} multilabel_model -lco FID=id -overwrite
+echo "🔹 Import multilabel_prediction..."
 ogr2ogr -f "PostgreSQL" PG:"dbname=${DB_NAME} user=${DB_USER} password=${DB_PASS}" ${GPKG_PATH} multilabel_prediction -lco FID=id -overwrite
 
+echo "🔹 Add all constraints and index..."
 psql -U ${DB_USER} -d ${DB_NAME} <<EOF
 
 ALTER TABLE deposit DROP CONSTRAINT deposit_pkey;
@@ -82,6 +93,8 @@ ALTER TABLE multilabel_annotation ADD CONSTRAINT fk_ml_annotation_ml_anno_sessio
 CREATE INDEX IF NOT EXISTS idx_frame_id ON frame (id);
 CREATE INDEX IF NOT EXISTS idx_filename_version_doi ON frame (filename, version_doi);
 CREATE INDEX IF NOT EXISTS idx_multilabel_prediction_frame_id_version ON multilabel_prediction (frame_id, version_doi);
+
+ALTER TABLE deposit ALTER COLUMN session_date TYPE DATE USING session_date::date;
 
 EOF
 

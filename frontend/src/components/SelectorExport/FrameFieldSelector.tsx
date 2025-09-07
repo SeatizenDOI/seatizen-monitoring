@@ -24,16 +24,14 @@ export default function FrameFieldSelector({ value, onChange }: FrameFieldSelect
             .catch((err) => console.error("Failed to fetch fields:", err));
     }, []);
 
-    // Initialize Choices.js once fields are loaded
+    // Initialize Choices.js only when fields are loaded
     useEffect(() => {
         if (!selectRef.current || fields.length === 0) return;
 
-        // Clear previous instance if any
-        if (choicesRef.current) {
-            choicesRef.current.destroy();
-        }
+        // Destroy any existing instance
+        choicesRef.current?.destroy();
 
-        // Add options
+        // Fill options manually
         selectRef.current.innerHTML = "";
         fields.forEach((f) => {
             const option = document.createElement("option");
@@ -52,21 +50,30 @@ export default function FrameFieldSelector({ value, onChange }: FrameFieldSelect
             placeholderValue: "Select field",
         });
 
-        // Set initial values
+        // Set default values only once at init
         choicesRef.current.setChoiceByValue(DEFAULT_SELECTED_FIELDS);
         onChange(DEFAULT_SELECTED_FIELDS);
 
-        // Listen for selection changes
-        selectRef.current.addEventListener("change", () => {
+        // Handle change events
+        const handler = () => {
             const selected = choicesRef.current?.getValue(true) || [];
             onChange(Array.isArray(selected) ? selected : [selected]);
-        });
+        };
+        selectRef.current.addEventListener("change", handler);
 
         return () => {
+            selectRef.current?.removeEventListener("change", handler);
             choicesRef.current?.destroy();
             choicesRef.current = null;
         };
-    }, [fields, value]);
+    }, [fields]);
 
-    return <select ref={selectRef} multiple></select>;
+    // 🔄 Keep Choices.js in sync with external `value` updates
+    useEffect(() => {
+        if (!choicesRef.current) return;
+        choicesRef.current.removeActiveItems();
+        choicesRef.current.setChoiceByValue(value);
+    }, [value]);
+
+    return <select ref={selectRef} multiple />;
 }

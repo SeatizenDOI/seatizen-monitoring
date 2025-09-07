@@ -18,7 +18,10 @@ export default function PlatformSelector({ value, onChange }: PlatformSelectorPr
     useEffect(() => {
         fetch(`${URL_BACKEND_SERVER}/api/v1/deposits/filters`)
             .then((res) => res.json())
-            .then((data) => setPlatforms(data.platforms || []))
+            .then((data) => {
+                setPlatforms(data.platforms || []);
+                onChange(value);
+            })
             .catch((err) => console.error("Failed to fetch platforms:", err));
     }, []);
 

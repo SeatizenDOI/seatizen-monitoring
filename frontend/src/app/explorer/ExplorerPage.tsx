@@ -89,7 +89,7 @@ export default function ExplorerPage() {
                 />
                 <PresetButton
                     buttonName="Habitat map 2023"
-                    urlString="/explorer?lat=-21.17536&lng=55.29213&zoom=16&left=ortho_2023%2Cpred_2023&right=ortho_2023"
+                    urlString="/explorer?lat=-21.17536&lng=55.29213&zoom=16&left=ortho_2023%2Cpred_drone_2023&right=ortho_2023"
                 />
                 <PresetButton
                     buttonName="IGN 2022 vs Drone Orthophoto 2023"

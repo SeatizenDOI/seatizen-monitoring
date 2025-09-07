@@ -11,7 +11,7 @@ type MlClass = {
 
 export interface ClassSelectorProps {
     modelId: number | null;
-    onSelectClasses: (classIds: number[]) => void; // return array of selected IDs
+    onSelectClasses: (classIds: number[]) => void;
 }
 
 export default function ClassSelector({ modelId, onSelectClasses }: ClassSelectorProps) {
@@ -22,7 +22,7 @@ export default function ClassSelector({ modelId, onSelectClasses }: ClassSelecto
     const selectRef = useRef<HTMLSelectElement | null>(null);
     const choicesInstance = useRef<Choices | null>(null);
 
-    // Fetch classes
+    // Fetch classes when modelId changes
     useEffect(() => {
         if (!modelId) return;
 
@@ -34,11 +34,10 @@ export default function ClassSelector({ modelId, onSelectClasses }: ClassSelecto
                 if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
                 const data: MlClass[] = await res.json();
 
-                // Add "All classes" option at top
                 const allClassesOption: MlClass = { id: 0, name: "All classes" };
                 setClasses([allClassesOption, ...data]);
 
-                // Notify parent that "All classes" is selected by default
+                // By default, notify parent with "All classes"
                 onSelectClasses([0]);
             } catch (err) {
                 setError((err as Error).message);
@@ -48,35 +47,49 @@ export default function ClassSelector({ modelId, onSelectClasses }: ClassSelecto
         }
 
         fetchClasses();
-    }, [modelId, onSelectClasses]);
+    }, [modelId]);
 
-    // Initialize Choices.js with multi-select
+    // Initialize Choices.js
     useEffect(() => {
         if (!selectRef.current) return;
 
-        choicesInstance.current?.destroy(); // destroy previous instance
-
+        choicesInstance.current?.destroy();
         choicesInstance.current = new Choices(selectRef.current, {
             removeItemButton: true,
             searchEnabled: true,
             itemSelectText: "",
             shouldSort: false,
-            duplicateItemsAllowed: false,
         });
 
+        // Default select "All classes"
         choicesInstance.current.setChoiceByValue("0");
 
-        // Listen to change events
-        selectRef.current.addEventListener("change", () => {
-            const selectedOptions = Array.from(selectRef.current!.selectedOptions).map((o) => Number(o.value));
-            onSelectClasses(selectedOptions);
-        });
+        // Listen for changes
+        const handler = () => {
+            const selected = Array.from(selectRef.current!.selectedOptions).map((o) => Number(o.value));
+
+            if (selected.includes(0) && selected.length > 1) {
+                // If "All classes" + others → remove "All classes"
+                const filtered = selected.filter((id) => id !== 0);
+                onSelectClasses(filtered);
+                choicesInstance.current?.removeActiveItemsByValue("0");
+            } else if (selected.length === 0) {
+                // If nothing selected → fallback to "All classes"
+                onSelectClasses([0]);
+                choicesInstance.current?.setChoiceByValue("0");
+            } else {
+                onSelectClasses(selected);
+            }
+        };
+
+        selectRef.current.addEventListener("change", handler);
 
         return () => {
+            selectRef.current?.removeEventListener("change", handler);
             choicesInstance.current?.destroy();
             choicesInstance.current = null;
         };
-    }, [classes, onSelectClasses]);
+    }, [classes]);
 
     if (!modelId) return <p>Please select a model first.</p>;
     if (loading) return <p className="text-gray-500">Loading classes...</p>;

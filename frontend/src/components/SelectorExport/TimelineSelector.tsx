@@ -21,12 +21,13 @@ export default function TimelineSlider({ startDate, endDate, onChange }: Timelin
             .then((data) => {
                 const min = new Date(data.timeline.min);
                 const max = new Date(data.timeline.max);
+                const selected_min = new Date(startDate);
+                const selected_max = new Date(endDate);
                 setMinDate(min);
                 setMaxDate(max);
-                setValues([min.getTime(), max.getTime()]);
-                onChange(data.timeline.min, data.timeline.max);
+                setValues([selected_min.getTime(), selected_max.getTime()]);
             });
-    }, []);
+    }, [startDate, endDate]);
 
     if (!minDate || !maxDate) return null;
 
@@ -45,12 +46,15 @@ export default function TimelineSlider({ startDate, endDate, onChange }: Timelin
                 max={maxDate.getTime()}
                 values={values}
                 onChange={(vals) => {
+                    // just update locally
                     setValues(vals);
+                }}
+                onFinalChange={(vals) => {
+                    // only notify parent when drag ends
                     onChange(formatDate(vals[0]), formatDate(vals[1]));
                 }}
                 renderTrack={({ props, children }) => (
                     <div {...props} className="relative w-full h-2 rounded-full bg-gray-200">
-                        {/* Active range highlight */}
                         <div
                             ref={props.ref}
                             className="absolute h-2 rounded-full bg-blue-500"

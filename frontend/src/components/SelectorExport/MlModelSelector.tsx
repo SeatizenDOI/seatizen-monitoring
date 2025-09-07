@@ -40,7 +40,7 @@ export default function ModelSelector({ onSelectModel }: ModelSelectorProps) {
         }
 
         fetchModels();
-    }, [onSelectModel]);
+    }, []);
 
     const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const newId = Number(e.target.value);

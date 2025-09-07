@@ -1,12 +1,13 @@
-from typing import List
-from fastapi import APIRouter, Depends
+from datetime import date
+from typing import List, Optional
+from fastapi import APIRouter, Depends, Query
 
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
 from app.models.deposit import Deposit
-from app.crud.deposit import get_all_deposits
+from app.crud.deposit import get_all_deposits, get_deposits_filtered
 from app.schemas.deposit import DepositResponse
 
 
@@ -37,3 +38,13 @@ async def get_deposit_filters(db: AsyncSession = Depends(get_db)):
             "max": max_date
         }
     }
+
+@router.get("/data")
+async def get_deposit_filters(
+        platforms: Optional[str] = Query(None, description="Comma-separated list of platforms"),
+        start_date: Optional[date] = None,
+        end_date: Optional[date] = None,
+        db: AsyncSession = Depends(get_db)
+    ):
+    deposits = await get_deposits_filtered(platforms, start_date, end_date, db)
+    return deposits
