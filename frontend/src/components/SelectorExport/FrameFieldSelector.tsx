@@ -8,8 +8,6 @@ export interface FrameFieldSelectorProps {
     onChange: (value: string[]) => void;
 }
 
-const DEFAULT_SELECTED_FIELDS = ["gps_latitude", "gps_longitude", "version_doi", "relative_path"];
-
 export default function FrameFieldSelector({ value, onChange }: FrameFieldSelectorProps) {
     const selectRef = useRef<HTMLSelectElement | null>(null);
     const choicesRef = useRef<Choices | null>(null);
@@ -19,7 +17,10 @@ export default function FrameFieldSelector({ value, onChange }: FrameFieldSelect
     useEffect(() => {
         fetch(`${process.env.NEXT_PUBLIC_URL_BACKEND_SERVER}/api/v1/frame/fields`)
             .then((res) => res.json())
-            .then((data) => setFields(data))
+            .then((data) => {
+                setFields(data);
+                onChange(value);
+            })
             .catch((err) => console.error("Failed to fetch fields:", err));
     }, []);
 
@@ -49,9 +50,10 @@ export default function FrameFieldSelector({ value, onChange }: FrameFieldSelect
             placeholderValue: "Select field",
         });
 
-        // Set default values only once at init
-        choicesRef.current.setChoiceByValue(DEFAULT_SELECTED_FIELDS);
-        onChange(DEFAULT_SELECTED_FIELDS);
+        // Set initial value if provided
+        if (value) {
+            choicesRef.current.setChoiceByValue(value);
+        }
 
         // Handle change events
         const handler = () => {

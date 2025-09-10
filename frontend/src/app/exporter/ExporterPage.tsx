@@ -3,8 +3,9 @@
 import MapExport from "@/components/Map/DynamicLeafletMapExport";
 
 import FilterPanel from "@/components/Controls/FilterPanel";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useFilters } from "@/context/FiltersContext";
+import { formatDateTime } from "@/utils/dateUtils";
 
 export default function ExplorerPage() {
     const { filters } = useFilters();
@@ -17,32 +18,61 @@ export default function ExplorerPage() {
     const handlePolygonDelete = () => {
         setPolygons([]);
     };
-    console.log(process.env.NEXT_PUBLIC_URL_BACKEND_SERVER);
+
     const [deposits, setDeposits] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    const onClickRequest = () => {
-        console.log(filters, polygons);
+    const onClickRequest = async () => {
+        // setLoading(true);
+        // setError(null);
+        try {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_URL_BACKEND_SERVER}/api/v1/export`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ filters, polygons }), // send your data
+            });
+            if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+            // Disable loading before downloading the file.
+            // setLoading(false);
+
+            // Turn response into blob
+            const blob = await res.blob();
+            const url = window.URL.createObjectURL(blob);
+            const formatted_date = formatDateTime(new Date());
+            // Create <a> tag dynamically
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `seatizen_monitoring_${formatted_date}.csv`;
+            a.click();
+            // Cleanup
+            a.remove();
+            window.URL.revokeObjectURL(url);
+        } catch (err) {
+            // setError((err as Error).message);
+        } finally {
+            // setLoading(false);
+        }
     };
+
     useEffect(() => {
+        console.log("JE charge les deposits eheh");
         async function fetchDeposits() {
             setLoading(true);
             setError(null);
             try {
-                console.log(filters);
                 const params = new URLSearchParams();
 
                 if (filters.platform.length > 0) params.append("platforms", filters.platform.join(","));
                 if (filters.startDate) params.append("start_date", filters.startDate);
                 if (filters.endDate) params.append("end_date", filters.endDate);
-                console.log(params);
+
                 const res = await fetch(
                     `${process.env.NEXT_PUBLIC_URL_BACKEND_SERVER}/api/v1/deposits/data?${params.toString()}`
                 );
                 if (!res.ok) throw new Error(`HTTP ${res.status}`);
                 const data = await res.json();
-                console.log(data, filters);
+
                 setDeposits(data);
             } catch (err) {
                 setError((err as Error).message);
@@ -56,7 +86,7 @@ export default function ExplorerPage() {
 
     if (loading) return <p>Loading deposits...</p>;
     if (error) return <p className="text-red-500">Error: {error}</p>;
-
+    console.log("Jaifini ehehe");
     return (
         <div className="flex flex-col-reverse">
             <FilterPanel handleClick={onClickRequest} />

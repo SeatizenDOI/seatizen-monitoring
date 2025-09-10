@@ -1,16 +1,21 @@
 "use client";
 
 import { createContext, useContext, useState, ReactNode } from "react";
-import { DEFAULT_SELECTED_END_DATE, DEFAULT_SELECTED_PLATFORMS, DEFAULT_SELECTED_START_DATE } from "@/lib/definition";
+import {
+    DEFAULT_SELECTED_END_DATE,
+    DEFAULT_SELECTED_FRAMES_FIELDS,
+    DEFAULT_SELECTED_PLATFORMS,
+    DEFAULT_SELECTED_START_DATE,
+} from "@/lib/definition";
 
 type Filters = {
     platform: string[];
     startDate: string;
     endDate: string;
     filterType: "score" | "prediction";
-    selectedField: string[];
+    selectedFields: string[];
     selectedModelId: number | null;
-    selectedClassId: number[];
+    selectedClassIds: number[];
 };
 
 type FiltersContextType = {
@@ -26,9 +31,9 @@ export function FiltersProvider({ children }: { children: ReactNode }) {
         startDate: DEFAULT_SELECTED_START_DATE,
         endDate: DEFAULT_SELECTED_END_DATE,
         filterType: "score",
-        selectedField: [],
+        selectedFields: DEFAULT_SELECTED_FRAMES_FIELDS,
         selectedModelId: null,
-        selectedClassId: [],
+        selectedClassIds: [],
     });
 
     return <FiltersContext.Provider value={{ filters, setFilters }}>{children}</FiltersContext.Provider>;

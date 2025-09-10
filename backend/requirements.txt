@@ -5,3 +5,5 @@ asyncpg
 pydantic
 python-dotenv
 pyproj==3.7.2
+python-multipart-0.0.20
+polars-1.33.1

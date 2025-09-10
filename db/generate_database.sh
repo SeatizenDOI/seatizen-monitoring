@@ -13,6 +13,8 @@ REDIRECT=$(curl -s https://zenodo.org/api/records/11125847)
 
 NEW_ID=$(echo "$REDIRECT" | grep -oP '(?<=>/api/records/)\d+')
 
+echo "🔹 Downloading new geopackage from ${NEW_ID}..."
+
 curl -L -o $GPKG_PATH "https://zenodo.org/records/${NEW_ID}/files/seatizen_atlas_db.gpkg?download=1"
 
 # === POSTGRES SUPERUSER ===
@@ -39,25 +41,25 @@ sudo -i -u $PG_SUPERUSER psql -d $DB_NAME -c "CREATE EXTENSION postgis;"
 
 # === IMPORT GPKG INTO POSTGIS ===
 echo "🔹 Import deposit..."
-ogr2ogr -f "PostgreSQL" PG:"dbname=${DB_NAME} user=${DB_USER} password=${DB_PASS}" ${GPKG_PATH} deposit -lco GEOMETRY_NAME=footprint -lco FID=gid -overwrite
+ogr2ogr -f "PostgreSQL" PG:"dbname=${DB_NAME} user=${DB_USER} password=${DB_PASS}" ${GPKG_PATH} deposit -lco GEOMETRY_NAME=footprint -lco FID=gid -lco LAUNDER=NO -overwrite
 echo "🔹 Import deposit_linestring..."
-ogr2ogr -f "PostgreSQL" PG:"dbname=${DB_NAME} user=${DB_USER} password=${DB_PASS}" ${GPKG_PATH} deposit_linestring -lco GEOMETRY_NAME=footprint_linestring -lco FID=id -overwrite
+ogr2ogr -f "PostgreSQL" PG:"dbname=${DB_NAME} user=${DB_USER} password=${DB_PASS}" ${GPKG_PATH} deposit_linestring -lco GEOMETRY_NAME=footprint_linestring -lco FID=id -lco LAUNDER=NO -overwrite
 echo "🔹 Import frame..."
-ogr2ogr -f "PostgreSQL" PG:"dbname=${DB_NAME} user=${DB_USER} password=${DB_PASS}" ${GPKG_PATH} frame -lco GEOMETRY_NAME=gpsposition -lco FID=id -overwrite
+ogr2ogr -f "PostgreSQL" PG:"dbname=${DB_NAME} user=${DB_USER} password=${DB_PASS}" ${GPKG_PATH} frame -lco GEOMETRY_NAME=GPSPosition -lco FID=id -lco LAUNDER=NO -overwrite
 echo "🔹 Import version..."
-ogr2ogr -f "PostgreSQL" PG:"dbname=${DB_NAME} user=${DB_USER} password=${DB_PASS}" ${GPKG_PATH} version -lco FID=gid -overwrite
+ogr2ogr -f "PostgreSQL" PG:"dbname=${DB_NAME} user=${DB_USER} password=${DB_PASS}" ${GPKG_PATH} version -lco FID=gid -lco LAUNDER=NO -overwrite
 echo "🔹 Import multilabel_annotation..."
-ogr2ogr -f "PostgreSQL" PG:"dbname=${DB_NAME} user=${DB_USER} password=${DB_PASS}" ${GPKG_PATH} multilabel_annotation -lco FID=id -overwrite
+ogr2ogr -f "PostgreSQL" PG:"dbname=${DB_NAME} user=${DB_USER} password=${DB_PASS}" ${GPKG_PATH} multilabel_annotation -lco FID=id -lco LAUNDER=NO -overwrite
 echo "🔹 Import multilabel_annotation_session..."
-ogr2ogr -f "PostgreSQL" PG:"dbname=${DB_NAME} user=${DB_USER} password=${DB_PASS}" ${GPKG_PATH} multilabel_annotation_session -lco FID=id -overwrite
+ogr2ogr -f "PostgreSQL" PG:"dbname=${DB_NAME} user=${DB_USER} password=${DB_PASS}" ${GPKG_PATH} multilabel_annotation_session -lco FID=id -lco LAUNDER=NO -overwrite
 echo "🔹 Import multilabel_class..."
-ogr2ogr -f "PostgreSQL" PG:"dbname=${DB_NAME} user=${DB_USER} password=${DB_PASS}" ${GPKG_PATH} multilabel_class -lco FID=id -overwrite
+ogr2ogr -f "PostgreSQL" PG:"dbname=${DB_NAME} user=${DB_USER} password=${DB_PASS}" ${GPKG_PATH} multilabel_class -lco FID=id -lco LAUNDER=NO -overwrite
 echo "🔹 Import multilabel_label..."
-ogr2ogr -f "PostgreSQL" PG:"dbname=${DB_NAME} user=${DB_USER} password=${DB_PASS}" ${GPKG_PATH} multilabel_label -lco FID=id -overwrite
+ogr2ogr -f "PostgreSQL" PG:"dbname=${DB_NAME} user=${DB_USER} password=${DB_PASS}" ${GPKG_PATH} multilabel_label -lco FID=id -lco LAUNDER=NO -overwrite
 echo "🔹 Import multilabel_model..."
-ogr2ogr -f "PostgreSQL" PG:"dbname=${DB_NAME} user=${DB_USER} password=${DB_PASS}" ${GPKG_PATH} multilabel_model -lco FID=id -overwrite
+ogr2ogr -f "PostgreSQL" PG:"dbname=${DB_NAME} user=${DB_USER} password=${DB_PASS}" ${GPKG_PATH} multilabel_model -lco FID=id -lco LAUNDER=NO -overwrite
 echo "🔹 Import multilabel_prediction..."
-ogr2ogr -f "PostgreSQL" PG:"dbname=${DB_NAME} user=${DB_USER} password=${DB_PASS}" ${GPKG_PATH} multilabel_prediction -lco FID=id -overwrite
+ogr2ogr -f "PostgreSQL" PG:"dbname=${DB_NAME} user=${DB_USER} password=${DB_PASS}" ${GPKG_PATH} multilabel_prediction -lco FID=id -lco LAUNDER=NO -overwrite
 
 echo "🔹 Add all constraints and index..."
 psql -U ${DB_USER} -d ${DB_NAME} <<EOF
@@ -70,7 +72,7 @@ ALTER TABLE version ADD PRIMARY KEY (doi);
 
 CREATE INDEX idx_deposit_geom ON deposit USING GIST (footprint);
 CREATE INDEX idx_deposit_linestring_geom ON deposit_linestring USING GIST (footprint_linestring);
-CREATE INDEX idx_frame_geom ON frame USING GIST (gpsposition);
+CREATE INDEX idx_frame_geom ON frame USING GIST ("GPSPosition");
 
 
 ALTER TABLE deposit_linestring ADD CONSTRAINT fk_deposit_deposit_linestring FOREIGN KEY (deposit_doi) REFERENCES deposit(doi);

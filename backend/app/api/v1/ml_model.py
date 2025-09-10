@@ -6,6 +6,7 @@ from app.database import get_db
 from app.crud.ml_models import get_all_ml_model
 from app.schemas.ml_model import MlModelResponse
 
+
 router = APIRouter()
 
 @router.get("/", response_model=List[MlModelResponse])

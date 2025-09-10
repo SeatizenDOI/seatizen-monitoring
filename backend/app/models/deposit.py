@@ -1,10 +1,10 @@
 from geoalchemy2 import Geometry 
 
 from sqlalchemy import String, Boolean, ForeignKey, Integer
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-class Base(DeclarativeBase):
-    pass
+from .base import Base
+
 
 class Deposit(Base):
     __tablename__ = "deposit"  # existing table name

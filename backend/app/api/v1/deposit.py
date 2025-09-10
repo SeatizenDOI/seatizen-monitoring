@@ -11,13 +11,13 @@ from app.crud.deposit import get_all_deposits, get_deposits_filtered
 from app.schemas.deposit import DepositResponse
 
 
-
 router = APIRouter()
 
 @router.get("/", response_model=List[DepositResponse])
 async def read_deposits(db: AsyncSession = Depends(get_db)):
     deposits = await get_all_deposits(db)
     return deposits
+
 
 @router.get("/filters")
 async def get_deposit_filters(db: AsyncSession = Depends(get_db)):
@@ -38,6 +38,7 @@ async def get_deposit_filters(db: AsyncSession = Depends(get_db)):
             "max": max_date
         }
     }
+
 
 @router.get("/data")
 async def get_deposit_filters(

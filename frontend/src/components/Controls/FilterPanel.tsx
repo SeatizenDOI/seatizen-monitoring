@@ -15,7 +15,7 @@ export default function FilterPanel({ handleClick }: { handleClick: () => void }
                 <ModelSelector onSelectModel={(id) => setFilters((f) => ({ ...f, selectedModelId: id }))} />
                 <ClassSelector
                     modelId={filters.selectedModelId}
-                    onSelectClasses={(ids) => setFilters((f) => ({ ...f, selectedClassId: ids }))}
+                    onSelectClasses={(ids) => setFilters((f) => ({ ...f, selectedClassIds: ids }))}
                 />
                 <ScorePredictionFilter
                     value={filters.filterType}
@@ -33,12 +33,12 @@ export default function FilterPanel({ handleClick }: { handleClick: () => void }
                     onChange={(start, end) => setFilters((f) => ({ ...f, startDate: start, endDate: end }))}
                 />
                 <FrameFieldSelector
-                    value={filters.selectedField}
-                    onChange={(selectedField) => setFilters((f) => ({ ...f, selectedField }))}
+                    value={filters.selectedFields}
+                    onChange={(selectedFields) => setFilters((f) => ({ ...f, selectedFields }))}
                 />
             </div>
 
-            <button onClick={handleClick}>Apply Filters</button>
+            <div onClick={handleClick}>Export your data</div>
         </div>
     );
 }
