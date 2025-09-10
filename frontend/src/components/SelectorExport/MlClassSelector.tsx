@@ -60,6 +60,7 @@ export default function ClassSelector({ modelId, onSelectClasses }: ClassSelecto
             searchEnabled: true,
             itemSelectText: "",
             shouldSort: false,
+            position: "bottom",
         });
 
         // Default select "All classes"
@@ -74,10 +75,6 @@ export default function ClassSelector({ modelId, onSelectClasses }: ClassSelecto
                 const filtered = selected.filter((id) => id !== 0);
                 onSelectClasses(filtered);
                 choicesInstance.current?.removeActiveItemsByValue("0");
-            } else if (selected.length === 0) {
-                // If nothing selected → fallback to "All classes"
-                onSelectClasses([0]);
-                choicesInstance.current?.setChoiceByValue("0");
             } else {
                 onSelectClasses(selected);
             }

@@ -47,7 +47,8 @@ export default function FrameFieldSelector({ value, onChange }: FrameFieldSelect
             shouldSort: false,
             removeItemButton: true,
             placeholder: true,
-            placeholderValue: "Select field",
+            placeholderValue: "Select frame field",
+            position: "bottom",
         });
 
         // Set initial value if provided

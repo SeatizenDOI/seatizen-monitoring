@@ -39,7 +39,7 @@ export default function PlatformSelector({ value, onChange }: PlatformSelectorPr
             removeItemButton: true,
             itemSelectText: "",
             shouldSort: true,
-            allowHTML: true,
+            position: "bottom",
         });
 
         // Handle change event
@@ -65,7 +65,6 @@ export default function PlatformSelector({ value, onChange }: PlatformSelectorPr
         <div className="p-4">
             <label className="block mb-2 font-semibold">Select Platform:</label>
             <select ref={selectRef} multiple>
-                <option value="">All Platforms</option>
                 {platforms.map((p) => (
                     <option key={p} value={p}>
                         {p}
