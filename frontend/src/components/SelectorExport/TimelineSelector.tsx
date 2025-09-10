@@ -28,7 +28,9 @@ export default function TimelineSlider({ startDate, endDate, onChange }: Timelin
             });
     }, [startDate, endDate]);
 
-    if (!minDate || !maxDate) return null;
+    if (!minDate || !maxDate) {
+        return <div className="p-4 text-gray-500">Loading timeline...</div>;
+    }
 
     const formatDate = (ts: number) => new Date(ts).toISOString().split("T")[0];
 
@@ -40,6 +42,7 @@ export default function TimelineSlider({ startDate, endDate, onChange }: Timelin
             </label>
 
             <Range
+                key={`${minDate?.getTime()}-${maxDate?.getTime()}`} // This ensures React doesn’t try to reuse the old virtual DOM tree that was rendered when minDate was null.
                 step={24 * 60 * 60 * 1000} // 1 day in ms
                 min={minDate.getTime()}
                 max={maxDate.getTime()}

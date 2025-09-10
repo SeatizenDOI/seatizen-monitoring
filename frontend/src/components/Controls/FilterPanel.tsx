@@ -1,10 +1,10 @@
+import { useFilters } from "@/context/FiltersContext";
 import PlatformSelector from "@/components/SelectorExport/DynamicPlatformSelector";
 import TimelineSelector from "@/components/SelectorExport/TimelineSelector";
 import ScorePredictionFilter from "../SelectorExport/ScorePredictionFilter";
 import FrameFieldSelector from "../SelectorExport/DynamicFrameFieldSelector";
 import ModelSelector from "@/components/SelectorExport/MlModelSelector";
 import ClassSelector from "@/components/SelectorExport/DynamicMlClassSelector";
-import { useFilters } from "@/context/FiltersContext";
 
 export default function FilterPanel({ handleClick }: { handleClick: () => void }) {
     const { filters, setFilters } = useFilters();
