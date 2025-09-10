@@ -15,7 +15,7 @@ export default function PlatformSelector({ value, onChange }: PlatformSelectorPr
 
     // Fetch platforms from backend
     useEffect(() => {
-        fetch(`${process.env.NEXT_PUBLIC_URL_BACKEND_SERVER}/api/v1/deposits/filters`)
+        fetch(`${process.env.NEXT_PUBLIC_URL_BACKEND_SERVER}/api/v1/deposits/search`)
             .then((res) => res.json())
             .then((data) => {
                 setPlatforms(data.platforms || []);

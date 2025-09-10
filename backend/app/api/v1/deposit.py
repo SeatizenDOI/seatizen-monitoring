@@ -19,8 +19,8 @@ async def read_deposits(db: AsyncSession = Depends(get_db)):
     return deposits
 
 
-@router.get("/filters")
-async def get_deposit_filters(db: AsyncSession = Depends(get_db)):
+@router.get("/search")
+async def get_deposit_search_data(db: AsyncSession = Depends(get_db)):
     # Distinct platform types
     platform_stmt = select(Deposit.platform_type).distinct()
     platform_result = await db.execute(platform_stmt)
@@ -40,8 +40,8 @@ async def get_deposit_filters(db: AsyncSession = Depends(get_db)):
     }
 
 
-@router.get("/data")
-async def get_deposit_filters(
+@router.get("/filter")
+async def get_deposit_filter_by_date_and_platforms(
         platforms: Optional[str] = Query(None, description="Comma-separated list of platforms"),
         start_date: Optional[date] = None,
         end_date: Optional[date] = None,

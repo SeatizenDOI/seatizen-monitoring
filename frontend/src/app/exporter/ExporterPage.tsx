@@ -68,7 +68,7 @@ export default function ExplorerPage() {
                 if (filters.endDate) params.append("end_date", filters.endDate);
 
                 const res = await fetch(
-                    `${process.env.NEXT_PUBLIC_URL_BACKEND_SERVER}/api/v1/deposits/data?${params.toString()}`
+                    `${process.env.NEXT_PUBLIC_URL_BACKEND_SERVER}/api/v1/deposits/filter?${params.toString()}`
                 );
                 if (!res.ok) throw new Error(`HTTP ${res.status}`);
                 const data = await res.json();

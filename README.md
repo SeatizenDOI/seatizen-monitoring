@@ -5,4 +5,4 @@
 - [] Timeline refresh problem.
 - [] Add stats when export is finish
 - [] add a loading animation for waiting.
-- [] Rename route
+- [x] Rename route
