@@ -103,6 +103,12 @@ CREATE INDEX IF NOT EXISTS idx_version_deposit_doi ON version (deposit_doi);
 CREATE INDEX IF NOT EXISTS idx_deposit_session_date ON deposit (session_date);
 CREATE INDEX IF NOT EXISTS idx_deposit_platform_date ON deposit (platform_type, session_date);
 
+-- Index to speedup querying on ml_pred
+CREATE INDEX IF NOT EXISTS idx_mlpred_frame_class ON multilabel_prediction (frame_id, ml_class_id);
+
+ANALYZE multilabel_prediction;
+
+
 ALTER TABLE deposit ALTER COLUMN session_date TYPE DATE USING session_date::date;
 
 EOF

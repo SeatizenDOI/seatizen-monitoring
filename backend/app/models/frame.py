@@ -1,3 +1,4 @@
+import polars as pl
 from shapely import wkb
 from geoalchemy2 import Geometry
 
@@ -54,3 +55,17 @@ def match_frame_header_and_attribut(fs: str, frame: Frame):
     return None
 
 
+def typed_frames_header() -> dict:
+    return {
+        "GPSLatitude": pl.Float64,
+        "GPSLongitude": pl.Float64,
+        "version_doi": pl.String,
+        "OriginalFileName": pl.String,
+        "relative_file_path": pl.String,
+        "GPSAltitude": pl.Float64,
+        "GPSPitch": pl.Float64,
+        "GPSRoll": pl.Float64,
+        "GPSTrack": pl.Float64,
+        "GPSDatetime": pl.Datetime,
+        "GPSFix": pl.UInt8
+    }
