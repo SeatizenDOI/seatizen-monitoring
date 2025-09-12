@@ -18,6 +18,8 @@ async def get_export_data(
         db: AsyncSession
 ) -> pl.DataFrame:
     """ From user filters, selected and build a polars dataframe. """
+
+    t_start = datetime.now()
     # Extract filters/
     user_areas_pol = extract_polygons(user_areas)
     platforms = filters.get("platform", [])
@@ -52,6 +54,7 @@ async def get_export_data(
     data = []
     ml_class_map_by_id = {mlc.id: mlc for mlc in ml_classes_selected}
 
+    # TODO Speedup get all preds for specific frame_id
     for frame in frames:
         data_to_add = [frame.filename]
 
@@ -85,6 +88,7 @@ async def get_export_data(
     
     df_data = pl.DataFrame(data, schema=df_header, schema_overrides=typed_frames_header(), orient="row")
 
+    print(f"Total time take {datetime.now() - t_start}")
     return df_data
 
 

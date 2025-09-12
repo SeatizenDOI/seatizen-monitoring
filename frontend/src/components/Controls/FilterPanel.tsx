@@ -6,7 +6,7 @@ import FrameFieldSelector from "../SelectorExport/DynamicFrameFieldSelector";
 import ModelSelector from "@/components/SelectorExport/MlModelSelector";
 import ClassSelector from "@/components/SelectorExport/DynamicMlClassSelector";
 
-export default function FilterPanel({ handleClick }: { handleClick: () => void }) {
+export default function FilterPanel() {
     const { filters, setFilters } = useFilters();
 
     return (
@@ -37,8 +37,6 @@ export default function FilterPanel({ handleClick }: { handleClick: () => void }
                     onChange={(selectedFields) => setFilters((f) => ({ ...f, selectedFields }))}
                 />
             </div>
-
-            <div onClick={handleClick}>Export your data</div>
         </div>
     );
 }

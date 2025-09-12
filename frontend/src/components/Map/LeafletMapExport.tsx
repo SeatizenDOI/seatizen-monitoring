@@ -10,6 +10,7 @@ import { bindMapMoveToUrl, getInitialView } from "@/utils/mapUtils";
 
 export interface LeafletExportProps {
     deposits: Deposit[];
+    polygons: any[];
     onPolygonAdd: (polygon: any) => void;
     onPolygonDelete: () => void;
 }
@@ -35,7 +36,7 @@ L.Control.Measure.include({
     },
 });
 
-export default function LeafletMapExport({ deposits, onPolygonAdd, onPolygonDelete }: LeafletExportProps) {
+export default function LeafletMapExport({ deposits, polygons, onPolygonAdd, onPolygonDelete }: LeafletExportProps) {
     const mapContainerRef = useRef<HTMLDivElement>(null);
     const mapRef = useRef<L.Map | null>(null);
     const geoJsonLayerRef = useRef<LeafletGeoJSON | null>(null);
@@ -94,6 +95,12 @@ export default function LeafletMapExport({ deposits, onPolygonAdd, onPolygonDele
             },
         });
         map.addControl(drawControl);
+
+        // Draw initial polygons if they exist.
+        for (const pol of polygons) {
+            const layer = L.geoJSON(pol);
+            drawnItems.addLayer(layer);
+        }
 
         // Listen to draw events
         // @ts-ignore

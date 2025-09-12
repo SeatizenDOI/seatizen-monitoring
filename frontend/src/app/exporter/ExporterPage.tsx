@@ -20,12 +20,15 @@ export default function ExplorerPage() {
     };
 
     const [deposits, setDeposits] = useState<any[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [loadingDeposits, setLoadingDeposits] = useState(true);
+    const [loadingData, setLoadingData] = useState(false);
+
     const [error, setError] = useState<string | null>(null);
 
     const onClickRequest = async () => {
-        // setLoading(true);
-        // setError(null);
+        setLoadingData(true);
+        setError(null);
+
         try {
             const res = await fetch(`${process.env.NEXT_PUBLIC_URL_BACKEND_SERVER}/api/v1/export`, {
                 method: "POST",
@@ -33,32 +36,31 @@ export default function ExplorerPage() {
                 body: JSON.stringify({ filters, polygons }), // send your data
             });
             if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-            // Disable loading before downloading the file.
-            // setLoading(false);
 
             // Turn response into blob
             const blob = await res.blob();
             const url = window.URL.createObjectURL(blob);
             const formatted_date = formatDateTime(new Date());
+
             // Create <a> tag dynamically
             const a = document.createElement("a");
             a.href = url;
             a.download = `seatizen_monitoring_${formatted_date}.csv`;
             a.click();
+
             // Cleanup
             a.remove();
             window.URL.revokeObjectURL(url);
         } catch (err) {
-            // setError((err as Error).message);
+            setError((err as Error).message);
         } finally {
-            // setLoading(false);
+            setLoadingData(false);
         }
     };
 
     useEffect(() => {
-        console.log("JE charge les deposits eheh");
         async function fetchDeposits() {
-            setLoading(true);
+            setLoadingDeposits(true);
             setError(null);
             try {
                 const params = new URLSearchParams();
@@ -77,21 +79,59 @@ export default function ExplorerPage() {
             } catch (err) {
                 setError((err as Error).message);
             } finally {
-                setLoading(false);
+                setLoadingDeposits(false);
             }
         }
 
         fetchDeposits();
     }, [filters.platform, filters.startDate, filters.endDate]);
 
-    if (loading) return <p>Loading deposits...</p>;
+    if (loadingDeposits) return <p>Loading deposits...</p>;
     if (error) return <p className="text-red-500">Error: {error}</p>;
-    console.log("Jaifini ehehe");
+
     return (
         <div className="flex flex-col-reverse">
-            <FilterPanel handleClick={onClickRequest} />
+            <div
+                onClick={!loadingData ? onClickRequest : undefined} // prevent clicking while loading
+                className={`px-4 py-2 rounded-md text-white font-semibold cursor-pointer 
+                ${loadingData ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"}`}
+            >
+                {loadingData ? (
+                    <div className="flex items-center justify-center space-x-2">
+                        <svg
+                            className="animate-spin h-5 w-5 text-white"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                        >
+                            <circle
+                                className="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                strokeWidth="4"
+                            ></circle>
+                            <path
+                                className="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                            ></path>
+                        </svg>
+                        <span>Exporting...</span>
+                    </div>
+                ) : (
+                    "Export your data"
+                )}
+            </div>
+            <FilterPanel />
             <div className="min-h-4/6 max-h-4/6 h-fit">
-                <MapExport deposits={deposits} onPolygonAdd={handlePolygonAdd} onPolygonDelete={handlePolygonDelete} />
+                <MapExport
+                    deposits={deposits}
+                    polygons={polygons}
+                    onPolygonAdd={handlePolygonAdd}
+                    onPolygonDelete={handlePolygonDelete}
+                />
             </div>
         </div>
     );

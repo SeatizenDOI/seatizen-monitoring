@@ -7,15 +7,15 @@ export $(grep -v '^#' .env | xargs)
 # Now you can use $DB_NAME, $DB_USER, etc.
 echo "Database name is $DB_NAME"
 
-mkdir -p "$(dirname "$GPKG_PATH")"
+# mkdir -p "$(dirname "$GPKG_PATH")"
 
-REDIRECT=$(curl -s https://zenodo.org/api/records/11125847)
+# REDIRECT=$(curl -s https://zenodo.org/api/records/11125847)
 
-NEW_ID=$(echo "$REDIRECT" | grep -oP '(?<=>/api/records/)\d+')
+# NEW_ID=$(echo "$REDIRECT" | grep -oP '(?<=>/api/records/)\d+')
 
-echo "🔹 Downloading new geopackage from ${NEW_ID}..."
+# echo "🔹 Downloading new geopackage from ${NEW_ID}..."
 
-curl -L -o $GPKG_PATH "https://zenodo.org/records/${NEW_ID}/files/seatizen_atlas_db.gpkg?download=1"
+# curl -L -o $GPKG_PATH "https://zenodo.org/records/${NEW_ID}/files/seatizen_atlas_db.gpkg?download=1"
 
 # === POSTGRES SUPERUSER ===
 
@@ -95,6 +95,13 @@ ALTER TABLE multilabel_annotation ADD CONSTRAINT fk_ml_annotation_ml_anno_sessio
 CREATE INDEX IF NOT EXISTS idx_frame_id ON frame (id);
 CREATE INDEX IF NOT EXISTS idx_filename_version_doi ON frame (filename, version_doi);
 CREATE INDEX IF NOT EXISTS idx_multilabel_prediction_frame_id_version ON multilabel_prediction (frame_id, version_doi);
+
+-- Add index on join
+CREATE INDEX IF NOT EXISTS idx_frame_version_doi ON frame (version_doi);
+CREATE INDEX IF NOT EXISTS idx_version_deposit_doi ON version (deposit_doi);
+
+CREATE INDEX IF NOT EXISTS idx_deposit_session_date ON deposit (session_date);
+CREATE INDEX IF NOT EXISTS idx_deposit_platform_date ON deposit (platform_type, session_date);
 
 ALTER TABLE deposit ALTER COLUMN session_date TYPE DATE USING session_date::date;
 

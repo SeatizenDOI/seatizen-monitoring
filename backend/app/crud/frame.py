@@ -33,8 +33,8 @@ async def get_frames_filter_by_position_platform_date(
      # Date filter
     stmt = stmt.where(
         and_(
-            func.date(d.session_date) >= start_date,
-            func.date(d.session_date) <= end_date,
+            d.session_date >= start_date,
+            d.session_date <= end_date,
         )
     )
 
