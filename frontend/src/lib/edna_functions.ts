@@ -1,7 +1,9 @@
-import { EdnaDataType } from "./definition";
+import { EdnaDataType, ICON_ANCHOR, ICON_SIZE, POPUP_ANCHOR } from "./definition";
 import L from "leaflet";
 
 export async function load_edna_data(map: L.Map) {
+    let ednaMarkers: L.Marker[] = [];
+
     try {
         const response = await fetch("/edna_data.json");
         if (!response.ok) {
@@ -10,10 +12,17 @@ export async function load_edna_data(map: L.Map) {
 
         const edna_data: EdnaDataType[] = await response.json();
 
+        var edna_icon = L.icon({
+            iconUrl: "/leaflet/marker_edna_crop.svg",
+            iconSize: ICON_SIZE,
+            iconAnchor: ICON_ANCHOR,
+            popupAnchor: POPUP_ANCHOR,
+        });
+
         edna_data.forEach((edna) => {
             const popup = new L.Popup({
                 content: `
-                            <h3>${edna.place} - ${edna.date}</h3>
+                            <span style="color: red; font-weight: bold; font-size: 16px">${edna.place} - ${edna.date}</span><br>
                             <b>Position:</b> ${edna.GPSLatitude}, ${edna.GPSLongitude}<br>
                             <b>Publication:</b> <a href="${edna.publication.link}" target="_blank"> ${edna.publication.name}</a><br>
                             <b>Data:</b> <a href="${edna.data.link}" target="_blank"> ${edna.data.name}</a><br>
@@ -25,7 +34,7 @@ export async function load_edna_data(map: L.Map) {
                 closeButton: true,
             });
 
-            const marker = L.marker([Number(edna.GPSLatitude), Number(edna.GPSLongitude)])
+            const marker = L.marker([Number(edna.GPSLatitude), Number(edna.GPSLongitude)], { icon: edna_icon })
                 .addTo(map)
                 .bindPopup(popup);
 
@@ -50,8 +59,11 @@ export async function load_edna_data(map: L.Map) {
                     duration: 0.5,
                 });
             });
+            ednaMarkers.push(marker);
         });
     } catch (error) {
         console.error("There has been a problem with your fetch operation:", error);
     }
+
+    return ednaMarkers;
 }

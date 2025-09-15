@@ -18,7 +18,8 @@ export default function ExplorerPage() {
     const [selectedLayersRight, setSelectedLayersRight] = useState<COGServerResponse[]>([]);
     const [layers, setLayers] = useState<COGServerResponse[]>([]);
     const [loading, setLoading] = useState(true);
-    const [showExtraControls, setShowExtraControls] = useState(true);
+    const [showASV, setShowASV] = useState(true);
+    const [showMarkers, setShowMarkers] = useState(true);
 
     // Retrieve all the layers from the cog server.
     useEffect(() => {
@@ -103,8 +104,9 @@ export default function ExplorerPage() {
                 <ToggleButton
                     label="With Underwater orthophoto"
                     defaultState={true}
-                    onToggle={(state) => setShowExtraControls(state)}
+                    onToggle={(state) => setShowASV(state)}
                 />
+                <ToggleButton label="With Marker" defaultState={true} onToggle={(state) => setShowMarkers(state)} />
             </div>
 
             <div className="flex flex-row justify-around">
@@ -113,7 +115,12 @@ export default function ExplorerPage() {
                 <LayerDropDown opt_layers={layers} onChange={handleRightChange} selected_layers={selectedLayersRight} />
             </div>
             <div className="min-h-4/6 max-h-4/6 h-fit">
-                <MapCompare leftUrls={selectedLayersLeft} rightUrls={selectedLayersRight} withASV={showExtraControls} />
+                <MapCompare
+                    leftUrls={selectedLayersLeft}
+                    rightUrls={selectedLayersRight}
+                    withASV={showASV}
+                    withMarker={showMarkers}
+                />
             </div>
         </div>
     );

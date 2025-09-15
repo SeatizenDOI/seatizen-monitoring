@@ -18,8 +18,8 @@ export interface LeafletExportProps {
 // Fix marker icons for Leaflet
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
-    iconRetinaUrl: "/leaflet/marker-icon.png",
-    iconUrl: "/leaflet/marker-icon.png",
+    iconRetinaUrl: "/leaflet/marker_empty.svg",
+    iconUrl: "/leaflet/marker_empty.svg",
     shadowUrl: "/leaflet/marker-shadow.png",
 });
 

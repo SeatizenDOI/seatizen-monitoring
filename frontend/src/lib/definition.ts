@@ -6,6 +6,12 @@ export const DEFAULT_SELECTED_START_DATE = "2023-06-11";
 export const DEFAULT_SELECTED_END_DATE = "2025-06-20";
 export const DEFAULT_SELECTED_FRAMES_FIELDS = ["GPSLatitude", "GPSLongitude", "version_doi", "relative_file_path"];
 
+export const ICON_SIZE: [number, number] = [50, 82]; // size of the icon
+export const SHADOW_SIZE: [number, number] = [41, 41]; // size of the shadow
+export const ICON_ANCHOR: [number, number] = [25, 82];
+export const SHADOW_ANCHOR: [number, number] = [20.5, 41]; // point of the icon which will correspond to marker's location
+export const POPUP_ANCHOR: [number, number] = [0, -50]; // point from which the popup should open relative to the iconAnchor
+
 export type Layer = {
     name: string;
     url: string;
@@ -33,6 +39,16 @@ export type EdnaDataType = {
     thumbnail: string;
     publication: LinkType;
     data: LinkType;
+};
+
+export type GCRMNPointType = {
+    id: number;
+    mnemonic: string;
+    label: string;
+    latitude: number;
+    longitude: number;
+    creation_date: string;
+    update_date: string;
 };
 
 export type Deposit = {

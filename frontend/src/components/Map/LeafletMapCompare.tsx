@@ -8,18 +8,20 @@ import "leaflet-measure";
 import { COGServerResponse } from "@/lib/definition";
 import { load_edna_data } from "@/lib/edna_functions";
 import { bindMapMoveToUrl, bindMapRequestPredOrDepthAtClick, getInitialView } from "@/utils/mapUtils";
+import { load_gcrmn_data } from "@/lib/gcrmn_functions";
 
 export interface LeafletSplitMapProps {
     leftUrls: COGServerResponse[];
     rightUrls: COGServerResponse[];
     withASV: boolean;
+    withMarker: boolean;
 }
 
 // Fix marker icons if needed
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
-    iconRetinaUrl: "/leaflet/marker-icon.png",
-    iconUrl: "/leaflet/marker-icon.png",
+    iconRetinaUrl: "/leaflet/marker_empty.svg",
+    iconUrl: "/leaflet/marker_empty.svg",
     shadowUrl: "/leaflet/marker-shadow.png",
 });
 
@@ -40,15 +42,16 @@ L.Control.Measure.include({
     },
 });
 
-export default function LeafletMapCompare({ leftUrls, rightUrls, withASV }: LeafletSplitMapProps) {
+export default function LeafletMapCompare({ leftUrls, rightUrls, withASV, withMarker }: LeafletSplitMapProps) {
     const mapRef = useRef<HTMLDivElement>(null);
     const splitRef = useRef<any>(null);
     const layersRef = useRef<L.TileLayer[]>([]);
-    const urlsRef = useRef({ left: leftUrls, right: rightUrls, with_asv: withASV });
+    const urlsRef = useRef({ left: leftUrls, right: rightUrls, with_asv: withASV, with_marker: withMarker });
+    const markersRef = useRef<L.Marker[]>([]);
 
     // Update this value to always get the new one.
     useEffect(() => {
-        urlsRef.current = { left: leftUrls, right: rightUrls, with_asv: withASV };
+        urlsRef.current = { left: leftUrls, right: rightUrls, with_asv: withASV, with_marker: withMarker };
     }, [leftUrls, rightUrls, withASV]);
 
     useEffect(() => {
@@ -95,9 +98,6 @@ export default function LeafletMapCompare({ leftUrls, rightUrls, withASV }: Leaf
         // Keep ref to map.
         mapRef.current = map as any;
 
-        // Load the eDNA data from a json file.
-        load_edna_data(map);
-
         return () => {
             cleanupMoveHandler();
             cleanupClickHandler();
@@ -110,7 +110,7 @@ export default function LeafletMapCompare({ leftUrls, rightUrls, withASV }: Leaf
     useEffect(() => {
         if (!mapRef.current) return;
         const map = mapRef.current as unknown as L.Map;
-
+        console.log(withMarker);
         // Remove the splitpane to redraw it later.
         if (splitRef.current) {
             try {
@@ -151,7 +151,24 @@ export default function LeafletMapCompare({ leftUrls, rightUrls, withASV }: Leaf
             //@ts-ignore
             .splitMap(left_layers, right_layers)
             .addTo(map);
-    }, [leftUrls, rightUrls, withASV]);
+
+        const manageMarkers = async () => {
+            if (withMarker && markersRef.current.length === 0) {
+                // Load the eDNA data
+                const ednaMarkers = await load_edna_data(map);
+                markersRef.current = markersRef.current.concat(ednaMarkers);
+
+                // Load GCRMN data
+                const gcrmnMarkers = await load_gcrmn_data(map);
+                markersRef.current = markersRef.current.concat(gcrmnMarkers);
+            } else if (!withMarker && markersRef.current.length !== 0) {
+                markersRef.current.forEach((marker) => marker.remove());
+                markersRef.current = [];
+            }
+        };
+
+        manageMarkers();
+    }, [leftUrls, rightUrls, withASV, withMarker]);
 
     return <div ref={mapRef} style={{ height: "65vh", width: "100%" }}></div>;
 }
