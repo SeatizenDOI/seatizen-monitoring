@@ -1,152 +1,154 @@
+import io
+import csv
 import polars as pl
 from datetime import datetime
-from collections import defaultdict
-from sqlalchemy.ext.asyncio import AsyncSession
+from typing import AsyncGenerator
 
-from app.models.ml_pred import MlPred
-from app.models.ml_class import MlClass
 from app.utils.polygons import extract_polygons
-from app.models.frame import match_frame_header_and_attribut, Frame, typed_frames_header
+from app.models.frame import match_frame_header_and_attribut, typed_frames_header
+from app.database import SessionLocal
 
 from .ml_class import get_all_ml_class_by_model
-from .frame import get_frames_filter_by_position_platform_date
+from .frame import get_frames_filter_by_position_platform_date, Frame
 from .ml_pred import get_pred_from_frame_ids_and_class_ids
 
+async def stream_export_data(filters: dict, user_areas: list) -> AsyncGenerator[bytes, None]:
+    """Stream CSV per frame, filling all class columns before yielding."""
 
-async def get_export_data(
-        filters: dict,
-        user_areas: list,
-        db: AsyncSession
-) -> pl.DataFrame:
-    """ From user filters, selected and build a polars dataframe. """
+    # --- Setup ---
+    async with SessionLocal() as db:
+        user_areas_pol = extract_polygons(user_areas)
+        platforms = filters.get("platform", [])
+        start_date = datetime.strptime(filters.get("startDate", ""), "%Y-%m-%d").date()
+        end_date = datetime.strptime(filters.get("endDate", ""), "%Y-%m-%d").date()
+        frames_field = filters.get("selectedFields", [])
+        selected_ml_class_ids = filters.get("selectedClassIds")
+        selected_ml_model_id = filters.get("selectedModelId")
+        filter_type = filters.get("filterType")
 
-    # Extract filters.
-    user_areas_pol = extract_polygons(user_areas)
-    platforms = filters.get("platform", [])
-    start_date = datetime.strptime(filters.get("startDate", ""), "%Y-%m-%d").date()
-    end_date = datetime.strptime(filters.get("endDate", ""), "%Y-%m-%d").date()
-    frames_field = filters.get("selectedFields", [])
-    selected_ml_class_ids = filters.get("selectedClassIds")
-    selected_ml_model_id = filters.get("selectedModelId")
-    filter_type = filters.get("filterType")
+        ml_classes = await get_all_ml_class_by_model(db, selected_ml_model_id)
 
+        if len(selected_ml_class_ids) == 1 and selected_ml_class_ids[0] == 0:
+            ml_classes_selected = ml_classes
+        else:
+            ml_classes_selected = [ml_class for ml_class in ml_classes if ml_class.id in selected_ml_class_ids]
 
-    # Get all class for the selected model_id.
-    ml_classes = await get_all_ml_class_by_model(db, selected_ml_model_id)
+        class_names = [mlc.name for mlc in ml_classes_selected]
+        ml_class_map_by_id = {mlc.id: mlc for mlc in ml_classes_selected}
 
-    # Extract only the selected classes or all if the id is selected.
-    ml_classes_selected = []
-    if len(selected_ml_class_ids) == 1 and selected_ml_class_ids[0] == 0:
-        ml_classes_selected = ml_classes
-    else:
-        ml_classes_selected = [ml_class for ml_class in ml_classes if ml_class.id in selected_ml_class_ids]
-    
-    # Retrieve selected frames from database.
-    frames = await get_frames_filter_by_position_platform_date(start_date, end_date, platforms, user_areas_pol, db)
-    
-    # Split the circuit into two case. If the user doesn't need class, render only the metadata.
-    if len(ml_classes_selected) > 0:
-        df_data = await export_frames_with_classes_lazy(frames, ml_classes_selected, frames_field, filter_type, db)
-    else:
-        df_data = export_frames_without_classes(frames, frames_field)
+        # Get frames and prepare lookup
+        frames = await get_frames_filter_by_position_platform_date(start_date, end_date, platforms, user_areas_pol, db)
+        frame_map = {f.id: f for f in frames}
 
-    return df_data
+        # If no class selected, return only frames metadata, skip prediction logic.
+        if len(ml_class_map_by_id) == 0:
+            for chunk in export_frames_without_classes(frames, frames_field):
+                yield chunk
+            return  # stop here
 
-
-async def export_frames_with_classes_lazy(
-    frames: list[Frame],
-    ml_classes_selected: list[MlClass],
-    frames_field: list,
-    filter_type: str,
-    db: AsyncSession,
-    batch_size: int = 50_000,
-) -> pl.DataFrame:
-    """
-    Lazy version: streams predictions and builds Polars DataFrame in chunks.
-    """
-
-    ml_class_map_by_id = {mlc.id: mlc for mlc in ml_classes_selected}
-
-    # Pre-allocate a mapping for quick lookup
-    class_names = [mlc.name for mlc in ml_classes_selected]
-
-    # We'll accumulate rows in batches to avoid huge memory usage
-    all_batches: list[pl.DataFrame] = []
-    current_batch = {
-        "FileName": [],
-        "pred_doi": [],
-        **{fs: [] for fs in frames_field},
-        **{cls: [] for cls in class_names},
-    }
-
-    # Instead of pulling ALL predictions, we stream them grouped by frame
-    # You'll need to modify get_pred_from_frame_ids_and_class_ids to yield rows
-    frame_id_to_preds: dict[int, list[MlPred]] = defaultdict(list)
-
-    async for pred in get_pred_from_frame_ids_and_class_ids(
-        [f.id for f in frames], list(ml_class_map_by_id), db
-    ):
-        frame_id_to_preds[pred["frame_id"]].append(pred)
-
-
-    for idx, frame in enumerate(frames, start=1):
-        preds = frame_id_to_preds.get(frame.id, [])
-
-        # Prepare row
-        row = {
-            "FileName": frame.filename,
-            **{fs: match_frame_header_and_attribut(fs, frame) for fs in frames_field},
-            "pred_doi": "",
-            **{cls: -1.0 for cls in class_names},
+        # Prepare batch
+        batch_size = 10_000
+        current_batch = {
+            "FileName": [],
+            **{fs: [] for fs in frames_field},
+            "pred_doi": [],
+            **{cls: [] for cls in class_names},
         }
 
-        for pred in preds:
-            row["pred_doi"] = f"https://doi.org/10.5281/zenodo.{pred["version_doi"]}" if pred["version_doi"] else ""
-            ml_class = ml_class_map_by_id.get(pred["ml_class_id"])
-            if not ml_class:
-                continue
+        first_chunk = True
+
+        # Helper: flush batch
+        async def flush_batch():
+            nonlocal first_chunk, current_batch
+            df = pl.DataFrame(current_batch, schema_overrides=typed_frames_header())
+            yield _df_to_csv_bytes(df, include_header=first_chunk)
+            first_chunk = False
+            for k in current_batch:
+                current_batch[k] = []
+
+        # --- Streaming and grouping logic ---
+        current_frame_id = None
+        current_preds = []
+
+        async for pred in get_pred_from_frame_ids_and_class_ids([f.id for f in frames], list(ml_class_map_by_id), db):
+            fid = pred["frame_id"]
+
+            # When frame changes, flush previous frame row
+            if current_frame_id is not None and fid != current_frame_id:
+                await _add_frame_row(
+                    current_frame_id, current_preds, frame_map, frames_field, class_names, ml_class_map_by_id, filter_type, current_batch
+                )
+                current_preds = []
+
+                if len(current_batch["FileName"]) >= batch_size:
+                    async for chunk in flush_batch():
+                        yield chunk
+
+            current_frame_id = fid
+            current_preds.append(pred)
+
+        # Last frame after loop
+        if current_frame_id is not None:
+            await _add_frame_row(
+                current_frame_id, current_preds, frame_map, frames_field, class_names, ml_class_map_by_id, filter_type, current_batch
+            )
+
+        # Final flush
+        if current_batch["FileName"]:
+            async for chunk in flush_batch():
+                yield chunk
+
+
+async def _add_frame_row(frame_id, preds, frame_map, frames_field, class_names, ml_class_map_by_id, filter_type, batch):
+    """Build one CSV row for a single frame and add it to batch."""
+    frame = frame_map.get(frame_id)
+    if not frame:
+        return
+
+    row = {
+        "FileName": frame.filename,
+        **{fs: match_frame_header_and_attribut(fs, frame) for fs in frames_field},
+        "pred_doi": "",
+        **{cls: -1.0 for cls in class_names},
+    }
+
+    for pred in preds:
+        row["pred_doi"] = f"https://doi.org/10.5281/zenodo.{pred['version_doi']}" if pred["version_doi"] else ""
+        ml_class = ml_class_map_by_id.get(pred["ml_class_id"])
+        if ml_class:
             row[ml_class.name] = (
                 pred["score"] if filter_type == "score" else int(pred["score"] >= ml_class.threshold)
             )
 
-        # Append to current batch
-        for k in current_batch:
-            current_batch[k].append(row[k])
-
-        # Flush batch to DataFrame when we hit batch_size
-        if idx % batch_size == 0:
-            all_batches.append(
-                pl.DataFrame(current_batch, schema_overrides=typed_frames_header())
-            )
-            for k in current_batch:
-                current_batch[k] = []  # reset for next batch
-
-    # Final flush for remaining rows
-    if current_batch["FileName"]:
-        all_batches.append(
-            pl.DataFrame(current_batch, schema_overrides=typed_frames_header())
-        )
-
-    # Concatenate all batches into a single DataFrame
-    final_df = pl.concat(all_batches)
-
-    return final_df
+    for k in batch:
+        batch[k].append(row[k])
 
 
-def export_frames_without_classes(frames: list[Frame], frames_field: list) -> pl.DataFrame:
+def _df_to_csv_bytes(df: pl.DataFrame, include_header=True) -> bytes:
+    buf = io.StringIO()
+    df.write_csv(buf, include_header=include_header)
+    return buf.getvalue().encode("utf-8")
+
+
+def export_frames_without_classes(frames: list[Frame], frames_field: list):
     """ Retrieve only the frames with the metadata. """
-    frame_name, field_columns = [], {fs: [] for fs in frames_field}
- 
+    buffer = io.StringIO()
+    writer = csv.writer(buffer)
+
+    header = ["FileName", *frames_field]
+    writer.writerow(header)
+    yield buffer.getvalue().encode()
+    buffer.seek(0)
+    buffer.truncate(0)
+
+
     for frame in frames:
-        frame_name.append(frame.filename)
+        row = [
+            frame.filename,
+            *[match_frame_header_and_attribut(fs, frame) for fs in frames_field]
+        ]
 
-        # Frame fields
-        for fs in frames_field:
-            field_columns[fs].append(match_frame_header_and_attribut(fs, frame))
-
-    df_data = pl.DataFrame(
-        {"FileName": frame_name, **field_columns},
-        schema_overrides=typed_frames_header()
-    )
-    
-    return df_data
+        writer.writerow(row)
+        yield buffer.getvalue().encode()
+        buffer.seek(0)
+        buffer.truncate(0)

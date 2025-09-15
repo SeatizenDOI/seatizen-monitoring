@@ -63,7 +63,7 @@ async def get_frames_filter_by_position_platform_date(
         stmt = stmt.where(
             and_(
                 f.GPSPosition.isnot(None),
-                func.ST_Contains(select(combined_polygon.c.geom), f.GPSPosition),
+                func.ST_Contains(select(combined_polygon.c.geom).scalar_subquery(), f.GPSPosition),
             )
         )
     

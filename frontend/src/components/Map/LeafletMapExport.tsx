@@ -56,7 +56,7 @@ export default function LeafletMapExport({ deposits, polygons, onPolygonAdd, onP
 
         // Base layers
         L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
-            attribution: "&copy; OpenStreetMap contributors",
+            attribution: "&copy; Tiles © Esri",
             maxZoom: 28,
         }).addTo(map);
 

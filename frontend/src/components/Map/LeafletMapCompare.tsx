@@ -79,7 +79,7 @@ export default function LeafletMapCompare({ leftUrls, rightUrls, withASV }: Leaf
 
         // Setup the map backgound.
         L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
-            attribution: "&copy; OpenStreetMap contributors",
+            attribution: "&copy; Tiles © Esri",
             maxZoom: 28,
         }).addTo(map);
 
