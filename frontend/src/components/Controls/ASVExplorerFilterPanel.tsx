@@ -1,8 +1,8 @@
 import { useASVExplorerFilters } from "@/context/ASVExplorerFilterContext";
-import YearSelector from "./YearsSelector";
+import YearSelector from "@/components/SelectorExplorer/YearsSelector";
 import { useEffect, useState } from "react";
 import { COGFiltersASV } from "@/lib/definition";
-import SpecieSelector from "./DynamicSpeciesSelector";
+import SpecieSelector from "@/components/SelectorExplorer/DynamicSpeciesSelector";
 
 export default function ASVExplorerFilterPanel() {
     const { filters, setFilters } = useASVExplorerFilters();
