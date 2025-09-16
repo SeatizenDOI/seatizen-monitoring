@@ -25,6 +25,11 @@ export type COGServerResponse = {
     attribution: string;
 };
 
+export type COGFiltersASV = {
+    species: string[];
+    years: string[];
+};
+
 export type LinkType = {
     link: string;
     name: string;

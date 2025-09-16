@@ -110,7 +110,7 @@ export default function LeafletMapCompare({ leftUrls, rightUrls, withASV, withMa
     useEffect(() => {
         if (!mapRef.current) return;
         const map = mapRef.current as unknown as L.Map;
-        console.log(withMarker);
+
         // Remove the splitpane to redraw it later.
         if (splitRef.current) {
             try {

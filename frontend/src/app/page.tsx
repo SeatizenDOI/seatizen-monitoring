@@ -7,6 +7,7 @@ export default function Home() {
 
             <Link href={"/exporter"}>Exporter</Link>
             <Link href={"/explorer"}>Explorer</Link>
+            <Link href={"/explorer-asv"}>Explorer ASV</Link>
         </div>
     );
 }
