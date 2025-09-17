@@ -5,27 +5,57 @@
 @import "leaflet-measure/dist/leaflet-measure.css";
 @import "leaflet-draw/dist/leaflet.draw.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@theme {
 
-/* @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-foreground: #232C33;
+  --color-background: #fbfbfb;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-primary-50: #eaf4ff;
+  --color-primary-100: #d0e6ff;
+  --color-primary-200: #a7d0ff;
+  --color-primary-300: #75b7ff;
+  --color-primary-400: #3d9eff;
+  --color-primary-500: #0077b6;
+  --color-primary-600: #005f91;
+  --color-primary-700: #00476b;
+  --color-primary-800: #002f46;
+  --color-primary-900: #001821;
+
+  --color-secondary-50: #fff8e9;
+  --color-secondary-100: #ffefcc;
+  --color-secondary-200: #ffe1a3;
+  --color-secondary-300: #ffd16e;
+  --color-secondary-400: #ffbe3d;
+  --color-secondary-500: #ff9800;
+  --color-secondary-600: #cc7900;
+  --color-secondary-700: #995a00;
+  --color-secondary-800: #663b00;
+  --color-secondary-900: #331d00;
+
+  --color-success-50: #ecfdf5;
+  --color-success-100: #d1fae5;
+  --color-success-200: #a7f3d0;
+  --color-success-300: #6ee7b7;
+  --color-success-400: #34d399;
+  --color-success-500: #10b981;
+  --color-success-600: #059669;
+  --color-success-700: #047857;
+  --color-success-800: #065f46;
+  --color-success-900: #064e3b;
+
+  --color-danger-50: #fef2f2;
+  --color-danger-100: #fee2e2;
+  --color-danger-200: #fecaca;
+  --color-danger-300: #fca5a5;
+  --color-danger-400: #f87171;
+  --color-danger-500: #ef4444;
+  --color-danger-600: #dc2626;
+  --color-danger-700: #b91c1c;
+  --color-danger-800: #991b1b;
+  --color-danger-900: #7f1d1d;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-} */
+  color: var(--color-foreground);
+  background-color: var(--color-background) ;
+}

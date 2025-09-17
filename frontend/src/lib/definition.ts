@@ -1,3 +1,5 @@
+import { IconType } from "react-icons";
+
 export const DEFAULT_CENTER: [number, number] = [-21.170876, 55.286604];
 export const DEFAULT_ZOOM = 18;
 
@@ -11,6 +13,12 @@ export const SHADOW_SIZE: [number, number] = [41, 41]; // size of the shadow
 export const ICON_ANCHOR: [number, number] = [25, 82];
 export const SHADOW_ANCHOR: [number, number] = [20.5, 41]; // point of the icon which will correspond to marker's location
 export const POPUP_ANCHOR: [number, number] = [0, -50]; // point from which the popup should open relative to the iconAnchor
+
+export interface LinkItem {
+    name: string;
+    href: string;
+    icon?: IconType;
+}
 
 export type Layer = {
     name: string;

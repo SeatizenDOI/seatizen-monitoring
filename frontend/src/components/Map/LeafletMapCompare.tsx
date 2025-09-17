@@ -170,5 +170,5 @@ export default function LeafletMapCompare({ leftUrls, rightUrls, withASV, withMa
         manageMarkers();
     }, [leftUrls, rightUrls, withASV, withMarker]);
 
-    return <div ref={mapRef} style={{ height: "65vh", width: "100%" }}></div>;
+    return <div ref={mapRef} style={{ height: "65vh", width: "100%", zIndex: 1 }}></div>;
 }

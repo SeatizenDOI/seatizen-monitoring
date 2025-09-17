@@ -66,7 +66,7 @@ export default function PlatformSelector({ value, onChange }: PlatformSelectorPr
             <label className="block mb-2 font-semibold">Select Platform:</label>
             <select ref={selectRef} multiple>
                 {platforms.map((p) => (
-                    <option key={p} value={p}>
+                    <option key={p} value={p} className="cursor-pointer p-2 hover:bg-primary hover:text-white">
                         {p}
                     </option>
                 ))}
