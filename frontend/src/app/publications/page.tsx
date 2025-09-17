@@ -1,5 +1,11 @@
 import fs from "fs";
 import path from "path";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Publications",
+    description: "Scientific publications ",
+};
 
 type Publication = {
     citation: string;
