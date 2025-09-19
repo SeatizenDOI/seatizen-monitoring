@@ -1,7 +1,7 @@
 "use client";
 
 import MapExport from "@/components/Map/DynamicLeafletMapExport";
-import FilterPanel from "@/components/Controls/FilterPanel";
+import ExporterFilterPanel from "@/components/FilterPanel/FilterPanel";
 import { TOKEN_PAGE_EXPORTER } from "@/lib/definition";
 import { useFilters } from "@/context/FiltersContext";
 import React, { useState, useEffect } from "react";
@@ -100,7 +100,7 @@ export default function ExporterPage() {
                             Export your data
                         </button>
                     </div>
-                    <FilterPanel />
+                    <ExporterFilterPanel />
                 </div>
             }
             right_content={

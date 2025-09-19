@@ -10,7 +10,7 @@ import ModelSelector from "@/components/SelectorExport/MlModelSelector";
 import ClassSelector from "@/components/SelectorExport/DynamicMlClassSelector";
 import { Database, Layers, ChevronDown, ChevronRight } from "lucide-react";
 
-export default function FilterPanel() {
+export default function ExporterFilterPanel() {
     const { filters, setFilters } = useFilters();
 
     // State to toggle visibility
