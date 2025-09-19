@@ -3,6 +3,7 @@ import { outfit } from "@/app/ui/fonts";
 import "@/app/ui/globals.css";
 import "@/app/ui/leaflet-splitmap/layout.css";
 import "@/app/ui/leaflet-splitmap/range.css";
+import "@/app/ui/choices-custom.css";
 
 export const metadata: Metadata = {
     title: {

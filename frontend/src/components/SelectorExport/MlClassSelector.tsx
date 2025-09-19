@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Choices from "choices.js";
+import HelperTooltip from "../HelperTooltip";
 
 type MlClass = {
     id: number;
@@ -61,6 +62,7 @@ export default function ClassSelector({ modelId, onSelectClasses }: ClassSelecto
             itemSelectText: "",
             shouldSort: false,
             position: "bottom",
+            placeholderValue: "Select a class",
         });
 
         // Default select "All classes"
@@ -94,15 +96,18 @@ export default function ClassSelector({ modelId, onSelectClasses }: ClassSelecto
     if (error) return <p className="text-red-500">Error: {error}</p>;
 
     return (
-        <div className="p-4">
-            <label className="block mb-2 font-semibold">Select ML Classes:</label>
-            <select ref={selectRef} multiple>
-                {classes.map((cls) => (
-                    <option key={cls.id} value={cls.id}>
-                        {cls.name}
-                    </option>
-                ))}
-            </select>
+        <div className="relative w-full p-4">
+            <HelperTooltip text="Multilabel class of the choosen model. More information on the model's huggingface page." />
+            <label className="block font-medium text-sm md:text-md text-slate-700 mb-2">Multilabel Classes</label>
+            <div className="choices-wrapper">
+                <select multiple ref={selectRef} className="hidden">
+                    {classes.map((cls) => (
+                        <option key={cls.id} value={cls.id}>
+                            {cls.name}
+                        </option>
+                    ))}
+                </select>
+            </div>
         </div>
     );
 }

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Choices from "choices.js";
+import HelperTooltip from "../HelperTooltip";
 
 export interface PlatformSelectorProps {
     value: string[];
@@ -62,15 +63,19 @@ export default function PlatformSelector({ value, onChange }: PlatformSelectorPr
     }, [platforms, onChange, value]);
 
     return (
-        <div className="p-4">
-            <label className="block mb-2 font-semibold">Select Platform:</label>
-            <select ref={selectRef} multiple>
-                {platforms.map((p) => (
-                    <option key={p} value={p} className="cursor-pointer p-2 hover:bg-primary hover:text-white">
-                        {p}
-                    </option>
-                ))}
-            </select>
+        <div className="relative w-full p-4">
+            <label className="text-sm md:text-md text-slate-700 block mb-2 font-semibold">Acquisition platform</label>
+            <HelperTooltip text="This component allows the user to filter the desired acquisition platforms. An acquisition platform can correspond to a drone, a paddle, ..." />
+
+            <div className="choices-wrapper">
+                <select ref={selectRef} multiple>
+                    {platforms.map((p) => (
+                        <option key={p} value={p} className="cursor-pointer p-2 hover:bg-primary hover:text-white">
+                            {p}
+                        </option>
+                    ))}
+                </select>
+            </div>
         </div>
     );
 }

@@ -42,11 +42,11 @@ export default function Header() {
                         className="object-cover"
                     />
                 </div>
-                <span className="flex items-center text-4xl p-2 font-extrabold text-foreground">
+                <span className="flex items-center text-xl p-2 font-extrabold text-foreground md:text-4xl">
                     Seatizen Monitoring
                 </span>
             </Link>
-            <div className="to fixed left-0 top-0 z-10 flex h-20 w-full flex-row items-center justify-end ">
+            <div className="to fixed left-0 top-0 z-10 flex h-20 w-full flex-row items-center justify-end bg-background">
                 <nav>
                     <section className="flex px-8 2xl:hidden">
                         <div className="space-y-2" onClick={() => setIsNavOpen((prev) => !prev)}>

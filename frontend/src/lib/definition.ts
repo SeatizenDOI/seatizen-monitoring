@@ -14,10 +14,17 @@ export const ICON_ANCHOR: [number, number] = [25, 82];
 export const SHADOW_ANCHOR: [number, number] = [20.5, 41]; // point of the icon which will correspond to marker's location
 export const POPUP_ANCHOR: [number, number] = [0, -50]; // point from which the popup should open relative to the iconAnchor
 
+export const TOKEN_PAGE_EXPORTER = "token_page_exporter";
 export interface LinkItem {
     name: string;
     href: string;
     icon?: IconType;
+}
+
+export interface TutorialStep {
+    title: string;
+    description: string;
+    selector: string;
 }
 
 export type Layer = {

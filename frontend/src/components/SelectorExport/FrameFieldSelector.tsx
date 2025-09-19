@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Choices from "choices.js";
+import HelperTooltip from "../HelperTooltip";
 
 export interface FrameFieldSelectorProps {
     value: string[];
@@ -77,5 +78,13 @@ export default function FrameFieldSelector({ value, onChange }: FrameFieldSelect
         choicesRef.current.setChoiceByValue(value);
     }, [value]);
 
-    return <select ref={selectRef} multiple />;
+    return (
+        <div className="relative w-full p-4">
+            <HelperTooltip text="The chosen metadata will be added in the csv export. They correspond to the exif data of the images." />
+            <label className="text-sm md:text-md block font-medium text-slate-700 mb-2">Frames Metadata</label>
+            <div className="choices-wrapper">
+                <select multiple ref={selectRef} className="hidden"></select>
+            </div>
+        </div>
+    );
 }
