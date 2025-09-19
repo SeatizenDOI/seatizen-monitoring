@@ -1,12 +1,12 @@
 "use client";
 
 import { createContext, useContext, useState, ReactNode } from "react";
-
+import { SpecieWithColor } from "@/lib/definition";
 type ASVExplorerFilters = {
     left_year: string;
     right_year: string;
-    left_specie: string;
-    right_specie: string;
+    left_specie?: SpecieWithColor;
+    right_specie?: SpecieWithColor;
 };
 
 type ASVExplorerFilterContextType = {
@@ -20,8 +20,8 @@ export function FiltersProvider({ children }: { children: ReactNode }) {
     const [filters, setFilters] = useState<ASVExplorerFilters>({
         left_year: "2023",
         right_year: "2023",
-        left_specie: "",
-        right_specie: "",
+        left_specie: undefined,
+        right_specie: undefined,
     });
 
     return (

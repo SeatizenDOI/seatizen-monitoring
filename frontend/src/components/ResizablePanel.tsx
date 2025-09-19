@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect, ReactNode } from "react";
-import { ShipWheel, Menu, X } from "lucide-react";
+import { ShipWheel, Menu, X, Settings } from "lucide-react";
 import { useMediaQuery } from "react-responsive";
 
 export interface ResizablePanelProps {
@@ -17,6 +17,7 @@ export default function ResizablePanel({ left_content, right_content, right_titl
     const [isDragging, setIsDragging] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
     const isMobile = useMediaQuery({ maxWidth: 768 }); // Tailwind "md"
+    const [rightKey, setRightKey] = useState(0); // Use to force refresh for the right_content
 
     const toggleFullscreen = () => {
         setIsFullscreen(!isFullscreen);
@@ -34,6 +35,7 @@ export default function ResizablePanel({ left_content, right_content, right_titl
             // Clamp between 0 and 450px max
             newWidth = Math.max(0, Math.min(newWidth, 1200));
 
+            setRightKey((prev) => prev + 1);
             if (newWidth < 300) {
                 // Auto-close
                 setSidebarOpen(false);
@@ -46,7 +48,10 @@ export default function ResizablePanel({ left_content, right_content, right_titl
             setSidebarOpen(true);
         };
 
-        const handlePointerUp = () => setIsDragging(false);
+        const handlePointerUp = () => {
+            setRightKey((prev) => prev + 1);
+            setIsDragging(false);
+        };
 
         if (isDragging) {
             window.addEventListener("pointermove", handlePointerMove);
@@ -79,8 +84,19 @@ export default function ResizablePanel({ left_content, right_content, right_titl
                 <div className="p-6 h-full overflow-y-auto">
                     {/* Header */}
                     <div className="flex items-center justify-between mb-6">
-                        <h1 className="text-xl font-bold text-gray-800">Map Controls</h1>
-                        <button onClick={() => setSidebarOpen(false)} className="p-1 hover:bg-gray-100 rounded">
+                        <div className="flex flex-row ">
+                            <div className="w-8 h-8 flex items-center justify-center">
+                                <Settings className="w-8 h-8 text-gray-800" />
+                            </div>
+                            <h1 className="pl-4 text-xl font-bold text-gray-800">Map Controls</h1>
+                        </div>
+                        <button
+                            onClick={() => {
+                                setSidebarOpen(false);
+                                setRightKey((prev) => prev + 1);
+                            }}
+                            className="p-1 hover:bg-gray-100 rounded"
+                        >
                             <X className="w-5 h-5" />
                         </button>
                     </div>
@@ -107,6 +123,7 @@ export default function ResizablePanel({ left_content, right_content, right_titl
                             {(!sidebarOpen || isFullscreen) && (
                                 <button
                                     onClick={() => {
+                                        setRightKey((prev) => prev + 1);
                                         setSidebarOpen(true);
                                         setSidebarWidth(450); // default width on reopen
                                     }}
@@ -124,7 +141,9 @@ export default function ResizablePanel({ left_content, right_content, right_titl
                 </div>
 
                 {/* Maps Container */}
-                <div className={`flex h-full ${isFullscreen ? "fixed inset-0 z-20 pt-0" : ""}`}>{right_content}</div>
+                <div key={rightKey} className={`flex h-full ${isFullscreen ? "fixed inset-0 z-20 pt-0" : ""}`}>
+                    {right_content}
+                </div>
 
                 {/* Fullscreen Exit */}
                 {isFullscreen && (

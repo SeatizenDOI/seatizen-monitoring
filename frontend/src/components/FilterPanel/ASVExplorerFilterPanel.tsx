@@ -1,12 +1,12 @@
 import { useASVExplorerFilters } from "@/context/ASVExplorerFilterContext";
 import YearSelector from "@/components/SelectorExplorer/YearsSelector";
 import { useEffect, useState } from "react";
-import { COGFiltersASV } from "@/lib/definition";
+import { COGFiltersASV, SpecieWithColor } from "@/lib/definition";
 import SpecieSelector from "@/components/SelectorExplorer/DynamicSpeciesSelector";
 
 export default function ASVExplorerFilterPanel() {
     const { filters, setFilters } = useASVExplorerFilters();
-    const [species, setSpecies] = useState<string[]>([]);
+    const [species, setSpecies] = useState<SpecieWithColor[]>([]);
     const [years, setYears] = useState<string[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -32,13 +32,16 @@ export default function ASVExplorerFilterPanel() {
     if (loading) return <p>Loading filters...</p>;
 
     return (
-        <div className="m-4 pb-52 flex flex-row justify-between border-2 w-full">
-            <div className=" flex flex-col">
+        <div className="mx-4 my-8">
+            <div className=" flex flex-col pt-2 pb-10">
+                <div className="flex items-center gap-2 mb-8">
+                    <div className="w-3 h-6 bg-gradient-to-b from-blue-500 to-blue-600 rounded-full" />
+                    <h3 className="font-semibold text-gray-800 text-sm">Left panel</h3>
+                </div>
                 <SpecieSelector
                     species={species}
                     selected_specie={filters.left_specie}
                     onChange={(left_specie) => setFilters((f) => ({ ...f, left_specie }))}
-                    name="left"
                 />
                 <YearSelector
                     years={years}
@@ -48,11 +51,14 @@ export default function ASVExplorerFilterPanel() {
                 />
             </div>
             <div className="flex flex-col">
+                <div className="flex items-center gap-2 mb-3">
+                    <div className="w-3 h-6 bg-gradient-to-b from-blue-500 to-blue-600 rounded-full" />
+                    <h3 className="font-semibold text-gray-800 text-sm">Right panel</h3>
+                </div>
                 <SpecieSelector
                     species={species}
                     selected_specie={filters.right_specie}
                     onChange={(right_specie) => setFilters((f) => ({ ...f, right_specie }))}
-                    name="right"
                 />
                 <YearSelector
                     years={years}

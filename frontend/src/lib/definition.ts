@@ -40,8 +40,10 @@ export type COGServerResponse = {
     attribution: string;
 };
 
+export type SpecieWithColor = { name: string; color: string };
+
 export type COGFiltersASV = {
-    species: string[];
+    species: SpecieWithColor[];
     years: string[];
 };
 

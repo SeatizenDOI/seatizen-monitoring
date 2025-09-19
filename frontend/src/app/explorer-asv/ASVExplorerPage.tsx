@@ -6,8 +6,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 import ToggleButton from "@/components/Controls/ToggleButton";
 import MapCompare from "@/components/Map/DynamicLeafletMapCompare";
 import { COGServerResponse } from "@/lib/definition";
-import ASVExplorerFilterPanel from "@/components/Controls/ASVExplorerFilterPanel";
+import ASVExplorerFilterPanel from "@/components/FilterPanel/ASVExplorerFilterPanel";
 import { useASVExplorerFilters } from "@/context/ASVExplorerFilterContext";
+import ResizablePanel from "@/components/ResizablePanel";
 
 export default function ASVExplorerPage() {
     const router = useRouter();
@@ -47,13 +48,11 @@ export default function ASVExplorerPage() {
     useEffect(() => {
         async function fetchFilters() {
             try {
-                console.log(filters.left_specie, filters.right_specie, filters.left_year, filters.right_year);
-
-                if (filters.left_specie !== "") {
+                if (filters.left_specie) {
                     const params = new URLSearchParams();
 
                     params.append("year", filters.left_year);
-                    params.append("specie", filters.left_specie);
+                    params.append("specie", filters.left_specie.name);
 
                     const res = await fetch(`${process.env.NEXT_PUBLIC_URL_COG_SERVER}/get-layer?${params.toString()}`);
                     if (!res.ok) throw new Error(`HTTP ${res.status}, Cannot retrieve information for left layer`);
@@ -68,11 +67,11 @@ export default function ASVExplorerPage() {
                     }
                 }
 
-                if (filters.right_specie !== "") {
+                if (filters.right_specie) {
                     const params = new URLSearchParams();
 
                     params.append("year", filters.right_year);
-                    params.append("specie", filters.right_specie);
+                    params.append("specie", filters.right_specie.name);
 
                     const res = await fetch(`${process.env.NEXT_PUBLIC_URL_COG_SERVER}/get-layer?${params.toString()}`);
                     if (!res.ok) throw new Error(`HTTP ${res.status}, Cannot retrieve information for right layer`);
@@ -111,27 +110,31 @@ export default function ASVExplorerPage() {
         router.push(`?${params.toString()}`, { scroll: false });
     };
 
-
     if (loading) return <p>Loading layers...</p>;
 
     // The div is in reverse because the LayerDropDown need to be init before the map.
     return (
-        <div className="flex flex-col-reverse">
-            <div className="flex justify-center my-4">
-                <ToggleButton label="With Marker" defaultState={true} onToggle={(state) => setShowMarkers(state)} />
-            </div>
+        <ResizablePanel
+            left_content={
+                <div>
+                    <ToggleButton
+                        label="GCRMN & eDNA Marker"
+                        defaultState={true}
+                        onToggle={(state) => setShowMarkers(state)}
+                    />
 
-            <div className="flex flex-row justify-around">
-                <ASVExplorerFilterPanel />
-            </div>
-            <div className="min-h-4/6 max-h-4/6 h-fit">
+                    <ASVExplorerFilterPanel />
+                </div>
+            }
+            right_content={
                 <MapCompare
                     leftUrls={selectedLayersLeft}
                     rightUrls={selectedLayersRight}
                     withASV={false}
                     withMarker={showMarkers}
                 />
-            </div>
-        </div>
+            }
+            right_title="Compare ASV predictions by species and by date"
+        ></ResizablePanel>
     );
 }
