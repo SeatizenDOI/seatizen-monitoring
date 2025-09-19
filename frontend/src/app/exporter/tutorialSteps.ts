@@ -17,11 +17,6 @@ export const tutorialSteps = [
         selector: "#map-exporter",
     },
     {
-        title: "Drag and resize",
-        description: "You can drag and resize the map or the choices.",
-        selector: "#drag",
-    },
-    {
         title: "Export Button",
         description:
             "Click here to export your choices. Please note, depending on what you have selected it may take up to 2 minutes to start the download.",

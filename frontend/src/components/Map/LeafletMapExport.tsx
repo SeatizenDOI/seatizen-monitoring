@@ -197,5 +197,5 @@ export default function LeafletMapExport({ deposits, polygons, onPolygonAdd, onP
         // if (bounds.isValid()) map.fitBounds(bounds);
     }, [deposits]);
 
-    return <div ref={mapContainerRef} id="map-exporter" style={{ height: "90vh", width: "100%", zIndex: 1 }} />;
+    return <div ref={mapContainerRef} id="map-exporter" style={{ height: "85vh", width: "100%", zIndex: 1 }} />;
 }

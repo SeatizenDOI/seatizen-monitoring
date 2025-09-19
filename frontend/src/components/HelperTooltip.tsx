@@ -61,7 +61,7 @@ export default function HelperTooltip({ text }: HelperTooltipProps) {
                     style={{
                         top: position === "bottom" ? "calc(100% + 8px)" : undefined,
                         bottom: position === "top" ? "calc(100% + 8px)" : undefined,
-                        right: 0,
+                        right: -6,
                     }}
                 >
                     {text}

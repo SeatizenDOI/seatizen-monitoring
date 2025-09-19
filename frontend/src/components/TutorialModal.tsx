@@ -38,7 +38,7 @@ export default function TutorialModal({ description, tutorialSteps, local_storag
                 });
 
                 // Smooth scroll to center element
-                element.scrollIntoView({ behavior: "smooth", block: "center" });
+                element.scrollTo({ behavior: "smooth" });
                 return true;
             }
             return false;
@@ -51,7 +51,7 @@ export default function TutorialModal({ description, tutorialSteps, local_storag
 
             observer.observe(document.body, { childList: true, subtree: true });
 
-            const timeout = setTimeout(() => observer.disconnect(), 5000);
+            const timeout = setTimeout(() => observer.disconnect(), 10000);
             return () => {
                 observer.disconnect();
                 clearTimeout(timeout);
