@@ -6,5 +6,10 @@
 - [] Add stats when export is finish
 - [x] add a loading animation for waiting.
 - [x] Rename route
-- [] Add a server progress line
-- [] May be setup a comunication between server and client to get intermediate results
+- [X] Add a server progress line
+- [X] May be setup a comunication between server and client to get intermediate results
+- [] Find a color palette and harmonize color
+- [] ENhance YearSelector
+- [] Harmonize font on mobile device
+- [] Improve tutorial and tooltip text
+- [] Improve tutorial design box

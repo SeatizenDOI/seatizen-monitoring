@@ -15,6 +15,9 @@ export const SHADOW_ANCHOR: [number, number] = [20.5, 41]; // point of the icon 
 export const POPUP_ANCHOR: [number, number] = [0, -50]; // point from which the popup should open relative to the iconAnchor
 
 export const TOKEN_PAGE_EXPORTER = "token_page_exporter";
+export const TOKEN_PAGE_ASV_EXPLORER = "token_page_asv_explorer";
+export const TOKEN_PAGE_EXPLORER = "token_page_explorer";
+
 export interface LinkItem {
     name: string;
     href: string;
@@ -44,7 +47,7 @@ export type SpecieWithColor = { name: string; color: string };
 
 export type COGFiltersASV = {
     species: SpecieWithColor[];
-    years: string[];
+    years: number[];
 };
 
 export type LinkType = {

@@ -12,23 +12,6 @@ export default function HelperTooltip({ text }: HelperTooltipProps) {
     const buttonRef = useRef<SVGSVGElement>(null);
     const tooltipRef = useRef<HTMLDivElement>(null);
 
-    // Close tooltip on outside click
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (
-                tooltipRef.current &&
-                !tooltipRef.current.contains(event.target as Node) &&
-                buttonRef.current &&
-                !buttonRef.current.contains(event.target as Node)
-            ) {
-                setIsOpen(false);
-            }
-        };
-
-        if (isOpen) document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, [isOpen]);
-
     // Determine tooltip position based on space
     useEffect(() => {
         if (isOpen && buttonRef.current && tooltipRef.current) {
@@ -49,7 +32,8 @@ export default function HelperTooltip({ text }: HelperTooltipProps) {
         <div className="absolute top-2 right-2">
             <Info
                 ref={buttonRef}
-                onClick={() => setIsOpen(!isOpen)}
+                onPointerEnter={() => setIsOpen(true)}
+                onPointerLeave={() => setIsOpen(false)}
                 className="w-6 h-6 text-slate-500 hover:text-secondary-400"
                 aria-label="Helper tooltip"
             />
@@ -64,7 +48,7 @@ export default function HelperTooltip({ text }: HelperTooltipProps) {
                         right: -6,
                     }}
                 >
-                    {text}
+                    <div dangerouslySetInnerHTML={{ __html: text }} />
                     <div
                         className="absolute w-3 h-3 bg-white border-l border-t border-gray-200 rotate-45"
                         style={{

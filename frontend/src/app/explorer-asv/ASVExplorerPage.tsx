@@ -121,6 +121,7 @@ export default function ASVExplorerPage() {
                         label="GCRMN & eDNA Marker"
                         defaultState={true}
                         onToggle={(state) => setShowMarkers(state)}
+                        id="markers-explorer-asv"
                     />
 
                     <ASVExplorerFilterPanel />
@@ -134,7 +135,7 @@ export default function ASVExplorerPage() {
                     withMarker={showMarkers}
                 />
             }
-            right_title="Compare ASV predictions by species and by date"
+            right_title="Compare ASV predictions by taxon, substrate and by date."
         ></ResizablePanel>
     );
 }

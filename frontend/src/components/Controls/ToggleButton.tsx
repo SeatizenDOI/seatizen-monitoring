@@ -4,13 +4,20 @@ import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 
 interface ToggleButtonProps {
+    id: string;
     label: string;
     label_description?: string;
     onToggle?: (state: boolean) => void;
     defaultState?: boolean;
 }
 
-export default function ToggleButton({ label, label_description, onToggle, defaultState = false }: ToggleButtonProps) {
+export default function ToggleButton({
+    id,
+    label,
+    label_description,
+    onToggle,
+    defaultState = false,
+}: ToggleButtonProps) {
     const [isActive, setIsActive] = useState(defaultState);
 
     const handleClick = () => {
@@ -20,7 +27,7 @@ export default function ToggleButton({ label, label_description, onToggle, defau
     };
 
     return (
-        <div className="p-6 space-y-8">
+        <div id={id} className="p-6 space-y-8">
             {/* Enhanced Toggle Switch */}
             <div className="space-y-4">
                 <label className="flex items-center justify-between group cursor-pointer">

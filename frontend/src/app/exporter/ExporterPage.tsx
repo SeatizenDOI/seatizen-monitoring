@@ -44,11 +44,6 @@ export default function ExporterPage() {
         }
     };
 
-    const onClickToLoadTutorial = () => {
-        localStorage.removeItem(TOKEN_PAGE_EXPORTER);
-        window.location.reload();
-    };
-
     useEffect(() => {
         async function fetchDeposits() {
             setLoadingDeposits(true);
@@ -87,12 +82,6 @@ export default function ExporterPage() {
                     {/* Buttons */}
                     <div className="flex flex-row justify-around">
                         <button
-                            onClick={onClickToLoadTutorial}
-                            className="px-4 py-2 rounded-md text-white font-semibold bg-blue-600 hover:bg-blue-700 mb-4 max-w-1/2 self-center"
-                        >
-                            Show tutorial
-                        </button>
-                        <button
                             onClick={onClickRequest}
                             className="px-4 py-2 rounded-md text-white font-semibold bg-blue-600 hover:bg-blue-700 mb-4 max-w-1/2 self-center"
                             id="exporter-button"
@@ -111,7 +100,7 @@ export default function ExporterPage() {
                     onPolygonDelete={handlePolygonDelete}
                 />
             }
-            right_title="Flying solo, you have a fair workload"
+            right_title="Flying solo, you have a fair workload."
         ></ResizablePanel>
     );
 }

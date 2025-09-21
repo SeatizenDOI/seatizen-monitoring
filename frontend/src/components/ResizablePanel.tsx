@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect, ReactNode } from "react";
-import { ShipWheel, Menu, X, Settings } from "lucide-react";
+import { ShipWheel, Menu, X, Settings, CircleQuestionMark } from "lucide-react";
 import { useMediaQuery } from "react-responsive";
 
 export interface ResizablePanelProps {
@@ -75,10 +75,10 @@ export default function ResizablePanel({ left_content, right_content, right_titl
     }
 
     return (
-        <div ref={containerRef} className="flex relative">
+        <div ref={containerRef} className="flex relative max-h-[90vh] overflow-hidden">
             {/* Sidebar */}
             <div
-                className={`overflow-hidden bg-background shadow-lg relative`}
+                className={`overflow-hidden bg-background relative`}
                 style={{ width: sidebarOpen && !isFullscreen ? sidebarWidth : 0 }}
             >
                 <div className="p-6 h-full overflow-y-auto">
@@ -90,15 +90,26 @@ export default function ResizablePanel({ left_content, right_content, right_titl
                             </div>
                             <h1 className="pl-4 text-xl font-bold text-gray-800">Map Controls</h1>
                         </div>
-                        <button
-                            onClick={() => {
-                                setSidebarOpen(false);
-                                setRightKey((prev) => prev + 1);
-                            }}
-                            className="p-1 hover:bg-gray-100 rounded"
-                        >
-                            <X className="w-5 h-5" />
-                        </button>
+                        <div className="flex flex-row justify-end">
+                            <button
+                                onClick={() => {
+                                    localStorage.clear();
+                                    window.location.reload();
+                                }}
+                                className="p-1 hover:bg-gray-100 rounded"
+                            >
+                                <CircleQuestionMark className="w-5 h-5" />
+                            </button>
+                            <button
+                                onClick={() => {
+                                    setSidebarOpen(false);
+                                    setRightKey((prev) => prev + 1);
+                                }}
+                                className="p-1 hover:bg-gray-100 rounded"
+                            >
+                                <X className="w-5 h-5" />
+                            </button>
+                        </div>
                     </div>
                     {left_content}
                 </div>

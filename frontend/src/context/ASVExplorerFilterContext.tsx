@@ -3,8 +3,8 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 import { SpecieWithColor } from "@/lib/definition";
 type ASVExplorerFilters = {
-    left_year: string;
-    right_year: string;
+    left_year: number;
+    right_year: number;
     left_specie?: SpecieWithColor;
     right_specie?: SpecieWithColor;
 };
@@ -18,8 +18,8 @@ const ASVExplorerFiltersContext = createContext<ASVExplorerFilterContextType | u
 
 export function FiltersProvider({ children }: { children: ReactNode }) {
     const [filters, setFilters] = useState<ASVExplorerFilters>({
-        left_year: "2023",
-        right_year: "2023",
+        left_year: 2023,
+        right_year: 2023,
         left_specie: undefined,
         right_specie: undefined,
     });

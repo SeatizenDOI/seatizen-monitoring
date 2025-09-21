@@ -3,21 +3,24 @@
 import { useState } from "react";
 import { ChevronDown, Fish } from "lucide-react";
 import { SpecieWithColor } from "@/lib/definition";
+import HelperTooltip from "../HelperTooltip";
 
 export type SpecieSelectorProps = {
+    id: string;
     species: SpecieWithColor[];
     selected_specie?: SpecieWithColor;
     onChange: (specie: SpecieWithColor) => void;
 };
 
-export default function SpecieSelector({ species, selected_specie, onChange }: SpecieSelectorProps) {
+export default function SpecieSelector({ id, species, selected_specie, onChange }: SpecieSelectorProps) {
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
     return (
-        <div className="space-y-4 mb-4">
-            <div className="flex items-center gap-2 text-xs font-medium text-gray-600 uppercase tracking-wide">
+        <div id={id} className="space-y-4 relative mb-4 pt-4">
+            <HelperTooltip text="The taxon or the substrat come from the GCRMN report. You can found more detail in the <a href='https://doi.org/10.1038/s41597-024-04267-z' target='_blank'>SeatizenAtlas paper</a>." />
+            <div className="flex items-center gap-2 text-xs font-medium text-gray-600 tracking-wide">
                 <Fish className="w-3 h-3" />
-                Species
+                Taxon and substrate
             </div>
 
             <div className="relative">

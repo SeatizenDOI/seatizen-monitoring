@@ -105,8 +105,14 @@ export default function ExplorerPage() {
                     label="With Underwater orthophoto"
                     defaultState={true}
                     onToggle={(state) => setShowASV(state)}
+                    id="underwater-explorer"
                 />
-                <ToggleButton label="With Marker" defaultState={true} onToggle={(state) => setShowMarkers(state)} />
+                <ToggleButton
+                    label="With Marker"
+                    id="marker-explorer"
+                    defaultState={true}
+                    onToggle={(state) => setShowMarkers(state)}
+                />
             </div>
 
             <div className="flex flex-row justify-around">

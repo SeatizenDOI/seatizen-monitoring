@@ -3,11 +3,12 @@ import YearSelector from "@/components/SelectorExplorer/YearsSelector";
 import { useEffect, useState } from "react";
 import { COGFiltersASV, SpecieWithColor } from "@/lib/definition";
 import SpecieSelector from "@/components/SelectorExplorer/DynamicSpeciesSelector";
+import { Info, Layers } from "lucide-react";
 
 export default function ASVExplorerFilterPanel() {
     const { filters, setFilters } = useASVExplorerFilters();
     const [species, setSpecies] = useState<SpecieWithColor[]>([]);
-    const [years, setYears] = useState<string[]>([]);
+    const [years, setYears] = useState<number[]>([]);
     const [loading, setLoading] = useState(true);
 
     // Retrieve all the layers from the cog server.
@@ -32,40 +33,52 @@ export default function ASVExplorerFilterPanel() {
     if (loading) return <p>Loading filters...</p>;
 
     return (
-        <div className="mx-4 my-8">
-            <div className=" flex flex-col pt-2 pb-10">
-                <div className="flex items-center gap-2 mb-8">
-                    <div className="w-3 h-6 bg-gradient-to-b from-blue-500 to-blue-600 rounded-full" />
-                    <h3 className="font-semibold text-gray-800 text-sm">Left panel</h3>
+        <div className="mx-4 my-8" id="panel-explorer-asv">
+            <div className="bg-green-50 border border-green-100 rounded-lg mb-4">
+                <div className="bg-green-100 px-4 py-2 border-b border-green-200">
+                    <span className="text-sm font-semibold text-green-800 uppercase tracking-wide">Left Panel</span>
                 </div>
-                <SpecieSelector
-                    species={species}
-                    selected_specie={filters.left_specie}
-                    onChange={(left_specie) => setFilters((f) => ({ ...f, left_specie }))}
-                />
-                <YearSelector
-                    years={years}
-                    selected_year={filters.left_year}
-                    onChange={(left_year) => setFilters((f) => ({ ...f, left_year }))}
-                    name="left"
-                />
+
+                <div className="p-4 border-b border-green-100">
+                    <SpecieSelector
+                        id="specie-explorer-asv-left"
+                        species={species}
+                        selected_specie={filters.left_specie}
+                        onChange={(left_specie) => setFilters((f) => ({ ...f, left_specie }))}
+                    />
+                </div>
+
+                <div className="p-4">
+                    <YearSelector
+                        id="year-explorer-asv-left"
+                        years={years}
+                        selected_year={filters.left_year}
+                        onChange={(left_year) => setFilters((f) => ({ ...f, left_year }))}
+                    />
+                </div>
             </div>
-            <div className="flex flex-col">
-                <div className="flex items-center gap-2 mb-3">
-                    <div className="w-3 h-6 bg-gradient-to-b from-blue-500 to-blue-600 rounded-full" />
-                    <h3 className="font-semibold text-gray-800 text-sm">Right panel</h3>
+            <div className="bg-amber-50 border border-amber-100 rounded-lg mb-4 overflow-hidden">
+                <div className="bg-amber-100 px-4 py-2 border-b border-amber-200">
+                    <span className="text-sm font-semibold text-amber-800 uppercase tracking-wide">Right Panel</span>
                 </div>
-                <SpecieSelector
-                    species={species}
-                    selected_specie={filters.right_specie}
-                    onChange={(right_specie) => setFilters((f) => ({ ...f, right_specie }))}
-                />
-                <YearSelector
-                    years={years}
-                    selected_year={filters.right_year}
-                    onChange={(right_year) => setFilters((f) => ({ ...f, right_year }))}
-                    name="right"
-                />
+
+                <div className="p-4 border-b border-amber-100">
+                    <SpecieSelector
+                        id="specie-explorer-asv-right"
+                        species={species}
+                        selected_specie={filters.right_specie}
+                        onChange={(right_specie) => setFilters((f) => ({ ...f, right_specie }))}
+                    />
+                </div>
+
+                <div className="p-4">
+                    <YearSelector
+                        id="year-explorer-asv-right"
+                        years={years}
+                        selected_year={filters.right_year}
+                        onChange={(right_year) => setFilters((f) => ({ ...f, right_year }))}
+                    />
+                </div>
             </div>
         </div>
     );
