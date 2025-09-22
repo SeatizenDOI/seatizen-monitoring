@@ -27,8 +27,8 @@ export default function ExporterFilterPanel() {
                     className="flex items-center justify-between w-full p-2 md:p-6"
                 >
                     <div className="flex items-center space-x-3">
-                        <div className="p-2 bg-blue-100 rounded-lg">
-                            <Layers className="w-3 h-3 md:w-5 md:h-5 text-blue-600" />
+                        <div className="p-2 bg-cream-50 rounded-lg">
+                            <Layers className="w-3 h-3 md:w-5 md:h-5 text-cream-700" />
                         </div>
                         <h3 className="text-sm md:text-lg font-semibold text-slate-900">Model Configuration</h3>
                     </div>
@@ -64,8 +64,8 @@ export default function ExporterFilterPanel() {
                     className="flex items-center justify-between w-full p-2 md:p-6"
                 >
                     <div className="flex items-center space-x-3">
-                        <div className="p-2 bg-blue-100 rounded-lg">
-                            <Database className="w-3 h-3 md:w-5 md:h-5 text-purple-600" />
+                        <div className="p-2 bg-cream-50 rounded-lg">
+                            <Database className="w-3 h-3 md:w-5 md:h-5 text-cream-700" />
                         </div>
                         <h3 className="text-sm md:text-lg font-semibold text-slate-900">Data Configuration</h3>
                     </div>

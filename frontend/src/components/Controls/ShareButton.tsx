@@ -18,7 +18,7 @@ export default function ShareButton() {
 
     return (
         <div onClick={handleClick} className="flex justify-center" id="share-button">
-            <button className=" bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 px-6 rounded-xl font-semibold hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center justify-center gap-2 group">
+            <button className=" bg-gradient-to-r from-deepteal-300 to-deepteal-400 text-pearl-200 py-4 px-6 rounded-xl font-semibold hover:from-deepteal-400  hover:to-deepteal-700 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center justify-center gap-2 group">
                 {copied ? (
                     <>
                         <CopyCheck className="w-5 h-5" /> Copied

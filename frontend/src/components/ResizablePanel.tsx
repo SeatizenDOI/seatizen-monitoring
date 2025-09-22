@@ -96,18 +96,18 @@ export default function ResizablePanel({ left_content, right_content, right_titl
                                     localStorage.clear();
                                     window.location.reload();
                                 }}
-                                className="p-1 hover:bg-gray-100 rounded"
+                                className="p-1"
                             >
-                                <CircleQuestionMark className="w-5 h-5" />
+                                <CircleQuestionMark className="w-5 h-5 hover:text-sage-400" />
                             </button>
                             <button
                                 onClick={() => {
                                     setSidebarOpen(false);
                                     setRightKey((prev) => prev + 1);
                                 }}
-                                className="p-1 hover:bg-gray-100 rounded"
+                                className="p-1"
                             >
-                                <X className="w-5 h-5" />
+                                <X className="w-5 h-5 hover:text-sage-400" />
                             </button>
                         </div>
                     </div>
@@ -117,8 +117,8 @@ export default function ResizablePanel({ left_content, right_content, right_titl
                 {/* Drag Handle */}
                 {sidebarOpen && !isFullscreen && (
                     <div
-                        className={`absolute top-0 right-0 w-2 h-full cursor-col-resize bg-gray-200 hover:bg-gray-300 ${
-                            isDragging ? "bg-gray-400" : ""
+                        className={`absolute top-0 right-0 w-2 h-full cursor-col-resize bg-pearl-600 hover:bg-sage-400 ${
+                            isDragging ? "bg-sage-500" : ""
                         }`}
                         onPointerDown={() => setIsDragging(true)}
                     />
@@ -128,7 +128,7 @@ export default function ResizablePanel({ left_content, right_content, right_titl
             {/* Main Map Container */}
             <div className="flex-1 ">
                 {/* Top Bar */}
-                <div className="z-10 bg-white/90 backdrop-blur-sm border-b border-gray-200">
+                <div className="z-10 bg-pearl-200 backdrop-blur-sm border-b border-gray-200">
                     <div className="flex items-center justify-between px-4 py-3">
                         <div className="flex items-center gap-4">
                             {(!sidebarOpen || isFullscreen) && (
@@ -143,9 +143,9 @@ export default function ResizablePanel({ left_content, right_content, right_titl
                                     <Menu className="w-5 h-5" />
                                 </button>
                             )}
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2 ">
                                 <ShipWheel className="w-5 h-5 text-gray-600" />
-                                <span className="font-medium text-gray-800 italic">{right_title}</span>
+                                <span className="font-medium text-gray-800 italic ">{right_title}</span>
                             </div>
                         </div>
                     </div>

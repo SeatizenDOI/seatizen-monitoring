@@ -58,6 +58,18 @@ export default function ClassSelector({ modelId, selected_class_ids, onSelectCla
     if (loading) return <p className="text-gray-500">Loading classes...</p>;
     if (error) return <p className="text-red-500">Error: {error}</p>;
 
+    const handleSelectItems = (selectedFields: Item[]) => {
+        const selectedIds = selectedFields.map((f) => Number(f.id));
+
+        if (selectedIds.includes(0) && selectedIds.length > 1) {
+            // Remove "All classes" if other classes are selected
+            const filtered = selectedIds.filter((id) => id !== 0);
+            onSelectClasses(filtered);
+        } else {
+            onSelectClasses(selectedIds);
+        }
+    };
+
     return (
         <div className="relative w-full p-4">
             <HelperTooltip text="Multilabel class of the choosen model. More information on the model's huggingface page." />
@@ -67,9 +79,7 @@ export default function ClassSelector({ modelId, selected_class_ids, onSelectCla
                 placeholder="Select a multilabel class"
                 data={classes.map((d) => ({ id: d.id.toString(), name: d.name }))}
                 selected_items={selectedItems.map((d) => ({ id: d.id.toString(), name: d.name }))}
-                set_selected_items={(selectedFields: Item[]) =>
-                    onSelectClasses(selectedFields.map((vv) => Number(vv.id)))
-                }
+                set_selected_items={handleSelectItems}
             />
         </div>
     );

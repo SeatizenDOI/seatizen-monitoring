@@ -46,6 +46,7 @@ export default function PlatformSelector({ values, setSelectedValues }: Platform
     if (loading) return <p className="text-gray-500">Loading platforms...</p>;
     if (error) return <p className="text-red-500">Error: {error}</p>;
     if (platforms.length === 0) return "No platforms found";
+
     return (
         <div className="relative w-full p-4">
             <label className="text-sm md:text-md text-slate-700 block mb-2 font-semibold">Acquisition platform</label>

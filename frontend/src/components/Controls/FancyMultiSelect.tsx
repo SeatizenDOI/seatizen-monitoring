@@ -72,19 +72,24 @@ export default function FancyMultiSelect({
     // Get color classes based on group color
     const getColorClasses = (color: string) => {
         const colorMap: Record<string, ColorStruct> = {
-            blue: { bg: "bg-blue-100", text: "text-blue-600", border: "border-blue-200", ring: "ring-blue-500" },
-            green: { bg: "bg-green-100", text: "text-green-600", border: "border-green-200", ring: "ring-green-500" },
+            blue: {
+                bg: "bg-deepteal-100",
+                text: "text-deepteal-600",
+                border: "border-deepteal-200",
+                ring: "ring-deepteal-500",
+            },
+            green: { bg: "bg-ocean-100", text: "text-ocean-600", border: "border-ocean-200", ring: "ring-ocean-500" },
             purple: {
-                bg: "bg-purple-100",
-                text: "text-purple-600",
-                border: "border-purple-200",
-                ring: "ring-purple-500",
+                bg: "bg-sage-100",
+                text: "text-sage-600",
+                border: "border-sage-200",
+                ring: "ring-sage-500",
             },
             orange: {
-                bg: "bg-orange-100",
-                text: "text-orange-600",
-                border: "border-orange-200",
-                ring: "ring-orange-500",
+                bg: "bg-beige-100",
+                text: "text-beige-600",
+                border: "border-beige-200",
+                ring: "ring-beige-500",
             },
         };
         return colorMap[color] || colorMap.blue;
@@ -161,7 +166,7 @@ export default function FancyMultiSelect({
                     onClick={() => setIsOpen(!isOpen)}
                     className={`relative w-full bg-white border-2 rounded-xl p-4 cursor-pointer transition-all duration-200 ${
                         isOpen
-                            ? "border-blue-500 ring-4 ring-blue-100 shadow-lg"
+                            ? "border-sage-500 ring-4 ring-sage-100 shadow-lg"
                             : "border-gray-200 hover:border-gray-300 hover:shadow-md"
                     }`}
                 >
@@ -241,7 +246,7 @@ export default function FancyMultiSelect({
                                     placeholder="Search layers and data sources..."
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="w-full pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                                    className="w-full pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-transparent transition-all duration-200"
                                 />
                             </div>
                         </div>

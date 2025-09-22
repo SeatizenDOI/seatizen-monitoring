@@ -34,7 +34,7 @@ export default function HelperTooltip({ text }: HelperTooltipProps) {
                 ref={buttonRef}
                 onPointerEnter={() => setIsOpen(true)}
                 onPointerLeave={() => setIsOpen(false)}
-                className="w-6 h-6 text-slate-500 hover:text-secondary-400"
+                className="w-6 h-6 text-slate-500 hover:text-cream-400"
                 aria-label="Helper tooltip"
             />
 

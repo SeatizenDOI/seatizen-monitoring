@@ -15,7 +15,7 @@ export default function Footer() {
                 <div className="mb-4 flex flex-row justify-center gap-4 md:mb-0">
                     {footer_links.map((link) => {
                         return (
-                            <Link key={link.name} href={link.href} className="hover:text-blue-600">
+                            <Link key={link.name} href={link.href} className="hover:text-sage-500">
                                 {link.name}
                             </Link>
                         );

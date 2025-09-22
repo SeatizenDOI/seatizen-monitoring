@@ -61,7 +61,7 @@ export default function CustomMultiSelect({
         <div className="relative w-full" ref={dropdownRef}>
             {/* Input Area */}
             <div
-                className="min-h-[48px] px-3 py-2 bg-white border border-gray-300 rounded-lg cursor-pointer focus-within:ring-2 focus-within:ring-deepteal-300 focus-within:border-transparent"
+                className="min-h-[48px] px-3 py-2 bg-white border border-gray-300 rounded-lg cursor-pointer hover:ring-2 hover:ring-sage-500 hover:border-transparent transition-colors focus-within:ring-2 focus-within:ring-sage-300 focus-within:border-transparent"
                 onClick={() => setIsOpen(!isOpen)}
             >
                 <div className="flex flex-wrap gap-2 items-center">
@@ -69,7 +69,7 @@ export default function CustomMultiSelect({
                     {selected_items.map((item) => (
                         <div
                             key={item.id}
-                            className="flex items-center bg-deepteal-300 text-[#F9F7F4] px-3 py-1.5 rounded-full text-sm font-medium"
+                            className="flex items-center bg-[linear-gradient(135deg,#6BA097,#4D7C73)] text-pearl-100 px-3 py-1.5 rounded-full text-sm font-medium"
                         >
                             <span>{item.name}</span>
                             <button
@@ -77,7 +77,7 @@ export default function CustomMultiSelect({
                                     e.stopPropagation();
                                     handleRemoveItem(item);
                                 }}
-                                className="ml-2 hover:bg-white hover:bg-opacity-20 rounded-full p-0.5 transition-colors"
+                                className="ml-2 p-0.5 hover:scale-110"
                             >
                                 <X className="w-3 h-3" />
                             </button>
@@ -107,9 +107,9 @@ export default function CustomMultiSelect({
                             <div
                                 key={option.id}
                                 onClick={() => handleSelectItem(option)}
-                                className="px-4 py-3 hover:bg-deepteal-300 hover:bg-opacity-10 cursor-pointer transition-colors border-b border-gray-100 last:border-b-0"
+                                className="px-4 py-3 hover:bg-sage-100 hover:bg-opacity-10 cursor-pointer transition-colors border-b border-gray-100 last:border-b-0"
                             >
-                                <div className="font-medium text-gray-900">{option.name}</div>
+                                <div className="font-medium">{option.name}</div>
                             </div>
                         ))
                     )}

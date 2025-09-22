@@ -32,9 +32,9 @@ export default function ToggleButton({
             <div className="space-y-4">
                 <label className="flex items-center justify-between group cursor-pointer">
                     <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-gradient-to-br from-teal-100 to-teal-50 rounded-xl flex items-center justify-center">
+                        <div className="w-10 h-10 bg-cream-50 rounded-xl flex items-center justify-center">
                             {isActive ? (
-                                <Eye className="w-5 h-5 text-teal-600" />
+                                <Eye className="w-5 h-5 text-cream-700" />
                             ) : (
                                 <EyeOff className="w-5 h-5 text-gray-400" />
                             )}
@@ -53,7 +53,7 @@ export default function ToggleButton({
                         <div
                             className={`w-14 h-8 rounded-full transition-all duration-300 ease-in-out cursor-pointer shadow-inner flex ${
                                 isActive
-                                    ? "bg-gradient-to-r from-teal-200 to-teal-300 shadow-teal-200"
+                                    ? "bg-gradient-to-r from-cream-200 to-cream-300 shadow-cream-200"
                                     : "bg-gray-200 shadow-gray-100"
                             }`}
                         >
@@ -64,7 +64,7 @@ export default function ToggleButton({
                             >
                                 <div
                                     className={`w-2 h-2 rounded-full transition-colors duration-300 ${
-                                        isActive ? "bg-teal-300" : "bg-gray-300"
+                                        isActive ? "bg-cream-300" : "bg-gray-300"
                                     }`}
                                 />
                             </div>

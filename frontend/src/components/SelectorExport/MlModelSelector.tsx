@@ -57,7 +57,7 @@ export default function ModelSelector({ onSelectModel }: ModelSelectorProps) {
 
             <label className="block font-medium text-sm md:text-md text-slate-700 mb-2">Multilabel Model</label>
             <select
-                className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-transparent transition-colors"
                 value={selectedModel ?? ""}
                 onChange={handleChange}
             >
