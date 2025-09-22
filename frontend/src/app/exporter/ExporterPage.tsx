@@ -83,7 +83,7 @@ export default function ExporterPage() {
                     <div className="flex flex-row justify-around">
                         <button
                             onClick={onClickRequest}
-                            className="px-4 py-2 rounded-md text-white font-semibold bg-blue-600 hover:bg-blue-700 mb-4 max-w-1/2 self-center"
+                            className="px-4 py-2 rounded-md bg-deepteal-300 text-pearl-100 font-semibold hover:bg-deepteal-500 hover:scale-105 mb-4 max-w-1/2 self-center"
                             id="exporter-button"
                         >
                             Export your data

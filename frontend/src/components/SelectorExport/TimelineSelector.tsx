@@ -63,7 +63,7 @@ export default function TimelineSlider({ startDate, endDate, onChange }: Timelin
                         <div {...props} className="relative w-full h-2 rounded-full bg-gray-200">
                             <div
                                 ref={props.ref}
-                                className="absolute h-2 rounded-full bg-blue-500"
+                                className="absolute h-2 rounded-full bg-deepteal-300"
                                 style={{
                                     left: `${
                                         ((values[0] - minDate.getTime()) / (maxDate.getTime() - minDate.getTime())) *
@@ -81,7 +81,7 @@ export default function TimelineSlider({ startDate, endDate, onChange }: Timelin
                         <div
                             {...props}
                             key={props.key}
-                            className="w-5 h-5 bg-white border-2 border-blue-500 rounded-full shadow-md cursor-pointer"
+                            className="w-5 h-5 bg-white border-2 border-deepteal-300 rounded-full shadow-md cursor-pointer"
                         ></div>
                     )}
                 />

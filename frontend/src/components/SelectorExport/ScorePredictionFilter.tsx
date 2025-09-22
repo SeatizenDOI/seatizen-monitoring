@@ -18,7 +18,7 @@ export default function ScorePredictionFilter({ value, onChange }: ScorePredicti
                     className={`flex items-center gap-2 cursor-pointer px-4 py-2 rounded-lg transition text-sm md:text-md 
                     ${
                         value === "score"
-                            ? "hover:brightness-110 bg-[linear-gradient(135deg,#3b82f6,#1d4ed8)] text-white shadow-md"
+                            ? "hover:brightness-110 bg-[linear-gradient(135deg,#6BA097,#4D7C73)] text-pearl-200 shadow-md"
                             : "bg-white text-gray-700 border"
                     }`}
                 >
@@ -37,7 +37,7 @@ export default function ScorePredictionFilter({ value, onChange }: ScorePredicti
                     className={`flex items-center gap-2 cursor-pointer px-4 py-2 rounded-lg transition text-sm md:text-md 
                     ${
                         value === "prediction"
-                            ? "hover:brightness-110 bg-[linear-gradient(135deg,#3b82f6,#1d4ed8)] text-white shadow-md"
+                            ? "hover:brightness-110 bg-[linear-gradient(135deg,#6BA097,#4D7C73)] text-pearl-200 shadow-md"
                             : "bg-white text-gray-700 border"
                     }`}
                 >
