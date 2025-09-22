@@ -12,7 +12,7 @@ export interface ResizablePanelProps {
 
 export default function ResizablePanel({ left_content, right_content, right_title }: ResizablePanelProps) {
     const [sidebarOpen, setSidebarOpen] = useState(true);
-    const [sidebarWidth, setSidebarWidth] = useState(450);
+    const [sidebarWidth, setSidebarWidth] = useState(500);
     const [isFullscreen, setIsFullscreen] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);

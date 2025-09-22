@@ -1,5 +1,6 @@
 "use client";
 
+import { CopyCheck, Share2 } from "lucide-react";
 import { useState } from "react";
 
 export default function ShareButton() {
@@ -16,8 +17,18 @@ export default function ShareButton() {
     };
 
     return (
-        <button onClick={handleClick} className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
-            {copied ? "Copied!" : "Share"}
-        </button>
+        <div onClick={handleClick} className="flex justify-center" id="share-button">
+            <button className=" bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 px-6 rounded-xl font-semibold hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center justify-center gap-2 group">
+                {copied ? (
+                    <>
+                        <CopyCheck className="w-5 h-5" /> Copied
+                    </>
+                ) : (
+                    <>
+                        <Share2 className="w-5 h-5 group-hover:rotate-12 transition-transform duration-200" /> Share
+                    </>
+                )}
+            </button>
+        </div>
     );
 }

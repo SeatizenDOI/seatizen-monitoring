@@ -13,11 +13,7 @@ export const metadata: Metadata = {
 
 export default function Page() {
     const tutorial_description =
-        " \
-        Welcome to the Seatizen export page. \
-        This page allows you to browse the SeatizenAtlas database and export the selected information. \
-        This short guide will walk you through the main features of the interface step by step. \
-    ";
+        " The ASV Explorer page allows you to explore ASV multilabel prediction rasters by class and year.";
     return (
         <Suspense fallback={<p>Loading ASV explorer...</p>}>
             <FiltersProvider>

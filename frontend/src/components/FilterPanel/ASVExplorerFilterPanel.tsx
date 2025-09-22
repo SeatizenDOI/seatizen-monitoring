@@ -3,7 +3,6 @@ import YearSelector from "@/components/SelectorExplorer/YearsSelector";
 import { useEffect, useState } from "react";
 import { COGFiltersASV, SpecieWithColor } from "@/lib/definition";
 import SpecieSelector from "@/components/SelectorExplorer/DynamicSpeciesSelector";
-import { Info, Layers } from "lucide-react";
 
 export default function ASVExplorerFilterPanel() {
     const { filters, setFilters } = useASVExplorerFilters();

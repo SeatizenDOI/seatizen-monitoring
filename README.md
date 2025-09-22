@@ -13,3 +13,5 @@
 - [] Harmonize font on mobile device
 - [] Improve tutorial and tooltip text
 - [] Improve tutorial design box
+
+- [] Verify server CORS and end-point

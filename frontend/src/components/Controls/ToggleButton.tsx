@@ -41,7 +41,7 @@ export default function ToggleButton({
                         </div>
                         <div>
                             <span className="font-medium text-gray-800 text-sm">{label}</span>
-                            <p className="text-xs text-gray-500">
+                            <p className="text-xs text-gray-500 pr-2">
                                 {label_description ?? "Show location markers on map"}
                             </p>
                         </div>

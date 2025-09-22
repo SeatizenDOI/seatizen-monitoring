@@ -13,7 +13,7 @@ import ResizablePanel from "@/components/ResizablePanel";
 export default function ASVExplorerPage() {
     const router = useRouter();
     const searchParams = useSearchParams();
-    const { filters, setFilters } = useASVExplorerFilters();
+    const { filters } = useASVExplorerFilters();
     const [layersMap, setLayersMap] = useState<Map<string, COGServerResponse>>(new Map());
 
     const [selectedLayersLeft, setSelectedLayersLeft] = useState<COGServerResponse[]>([]);
@@ -51,7 +51,7 @@ export default function ASVExplorerPage() {
                 if (filters.left_specie) {
                     const params = new URLSearchParams();
 
-                    params.append("year", filters.left_year);
+                    params.append("year", filters.left_year.toString());
                     params.append("specie", filters.left_specie.name);
 
                     const res = await fetch(`${process.env.NEXT_PUBLIC_URL_COG_SERVER}/get-layer?${params.toString()}`);
@@ -70,7 +70,7 @@ export default function ASVExplorerPage() {
                 if (filters.right_specie) {
                     const params = new URLSearchParams();
 
-                    params.append("year", filters.right_year);
+                    params.append("year", filters.right_year.toString());
                     params.append("specie", filters.right_specie.name);
 
                     const res = await fetch(`${process.env.NEXT_PUBLIC_URL_COG_SERVER}/get-layer?${params.toString()}`);
