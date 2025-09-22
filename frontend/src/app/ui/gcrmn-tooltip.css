@@ -10,13 +10,10 @@
     padding: 0;
 }
 
-
 .gcrmn-popup .popup-group {
     background-color: #F9F7F4;
-    /* border: 2px solid #4A7A85; */
     border-radius: 12px;
     position: relative;
-
 }
 
 .gcrmn-popup .popup-header {
@@ -29,7 +26,6 @@
     position: relative;
     border-start-end-radius: 10px;
     border-start-start-radius: 10px;
-
 }
 
 .gcrmn-popup .popup-content {
