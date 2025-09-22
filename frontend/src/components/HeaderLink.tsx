@@ -4,12 +4,12 @@ import { clsx } from "clsx";
 import { usePathname } from "next/navigation";
 import { LinkItem } from "@/lib/definition";
 import Link from "next/link";
-import { AiFillCloud } from "react-icons/ai";
+import { Cloud } from "lucide-react";
 
 /** Build a single link in nav header. */
 export function HeaderLink(link: LinkItem, isDesktop: boolean) {
     const pathname = usePathname();
-    const LinkIcon = link.icon ?? AiFillCloud;
+    const LinkIcon = link.icon ?? Cloud;
 
     return (
         <Link

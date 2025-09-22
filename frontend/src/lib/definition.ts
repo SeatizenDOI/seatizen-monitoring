@@ -1,4 +1,4 @@
-import { IconType } from "react-icons";
+import type { LucideProps } from "lucide-react";
 
 export const DEFAULT_CENTER: [number, number] = [-21.170876, 55.286604];
 export const DEFAULT_ZOOM = 18;
@@ -34,7 +34,7 @@ export interface DepositSearchTerms {
 export interface LinkItem {
     name: string;
     href: string;
-    icon?: IconType;
+    icon?: React.ComponentType<LucideProps>;
 }
 
 export interface TutorialStep {

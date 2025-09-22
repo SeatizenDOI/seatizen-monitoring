@@ -5,26 +5,24 @@ import "@/app/ui/header.css";
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
-import { GiTurtleShell } from "react-icons/gi";
-import { CiExport } from "react-icons/ci";
-import { MdOutlineExplore, MdArticle } from "react-icons/md";
 
 import { LinkItem } from "@/lib/definition";
 import { HeaderLink } from "@/components/HeaderLink";
+import { Upload, Compass, DraftingCompass, ScrollText } from "lucide-react";
 
 const url_paths: LinkItem[] = [
     {
         name: "Exporter",
         href: "/exporter",
-        icon: CiExport,
+        icon: Upload,
     },
-    { name: "Explorer", href: "/explorer", icon: MdOutlineExplore },
+    { name: "Explorer", href: "/explorer", icon: Compass },
     {
         name: "Explorer ASV data",
         href: "/explorer-asv",
-        icon: GiTurtleShell,
+        icon: DraftingCompass,
     },
-    { name: "Publications", href: "/publications", icon: MdArticle },
+    { name: "Publications", href: "/publications", icon: ScrollText },
 ];
 
 export default function Header() {
