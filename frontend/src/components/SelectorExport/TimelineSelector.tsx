@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Range } from "react-range";
 import HelperTooltip from "../HelperTooltip";
+import { DepositSearchTerms } from "@/lib/definition";
 
 interface TimelineSliderProps {
     startDate: string;
@@ -14,11 +15,18 @@ export default function TimelineSlider({ startDate, endDate, onChange }: Timelin
     const [minDate, setMinDate] = useState<Date | null>(null);
     const [maxDate, setMaxDate] = useState<Date | null>(null);
     const [values, setValues] = useState<number[]>([0, 0]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        fetch(`${process.env.NEXT_PUBLIC_URL_BACKEND_SERVER}/api/v1/deposits/search`)
-            .then((res) => res.json())
-            .then((data) => {
+        async function fetchTimeline() {
+            setLoading(true);
+            setError(null);
+            try {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_URL_BACKEND_SERVER}/api/v1/deposits/search`);
+                if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+                const data: DepositSearchTerms = await res.json();
+
                 const min = new Date(data.timeline.min);
                 const max = new Date(data.timeline.max);
                 const selected_min = new Date(startDate);
@@ -26,9 +34,18 @@ export default function TimelineSlider({ startDate, endDate, onChange }: Timelin
                 setMinDate(min);
                 setMaxDate(max);
                 setValues([selected_min.getTime(), selected_max.getTime()]);
-            });
+            } catch (err) {
+                setError((err as Error).message);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        fetchTimeline();
     }, [startDate, endDate]);
 
+    if (loading) return <p className="text-gray-500">Loading timeline...</p>;
+    if (error) return <p className="text-red-500">Error: {error}</p>;
     if (!minDate || !maxDate) {
         return <div className="p-4 text-gray-500">Loading timeline...</div>;
     }

@@ -2,12 +2,12 @@
 
 import { useState } from "react";
 import { useFilters } from "@/context/FiltersContext";
-import PlatformSelector from "@/components/SelectorExport/DynamicPlatformSelector";
+import PlatformSelector from "@/components/SelectorExport/PlatformSelector";
 import TimelineSelector from "@/components/SelectorExport/TimelineSelector";
 import ScorePredictionFilter from "../SelectorExport/ScorePredictionFilter";
-import FrameFieldSelector from "../SelectorExport/DynamicFrameFieldSelector";
+import FrameFieldSelector from "../SelectorExport/FrameFieldSelector";
 import ModelSelector from "@/components/SelectorExport/MlModelSelector";
-import ClassSelector from "@/components/SelectorExport/DynamicMlClassSelector";
+import ClassSelector from "@/components/SelectorExport/MlClassSelector";
 import { Database, Layers, ChevronDown, ChevronRight } from "lucide-react";
 
 export default function ExporterFilterPanel() {
@@ -45,6 +45,7 @@ export default function ExporterFilterPanel() {
                         <ModelSelector onSelectModel={(id) => setFilters((f) => ({ ...f, selectedModelId: id }))} />
                         <ClassSelector
                             modelId={filters.selectedModelId}
+                            selected_class_ids={filters.selectedClassIds}
                             onSelectClasses={(ids) => setFilters((f) => ({ ...f, selectedClassIds: ids }))}
                         />
                         <ScorePredictionFilter
@@ -79,8 +80,8 @@ export default function ExporterFilterPanel() {
                 {showDataConfig && (
                     <div className="flex flex-col  items-center justify-between px-6 pb-6">
                         <PlatformSelector
-                            value={filters.platform}
-                            onChange={(platform) => setFilters((f) => ({ ...f, platform }))}
+                            values={filters.platform}
+                            setSelectedValues={(platform) => setFilters((f) => ({ ...f, platform }))}
                         />
                         <TimelineSelector
                             startDate={filters.startDate}
@@ -88,8 +89,8 @@ export default function ExporterFilterPanel() {
                             onChange={(start, end) => setFilters((f) => ({ ...f, startDate: start, endDate: end }))}
                         />
                         <FrameFieldSelector
-                            value={filters.selectedFields}
-                            onChange={(selectedFields) => setFilters((f) => ({ ...f, selectedFields }))}
+                            values={filters.selectedFields}
+                            setSelectedValues={(selectedFields) => setFilters((f) => ({ ...f, selectedFields }))}
                         />
                     </div>
                 )}

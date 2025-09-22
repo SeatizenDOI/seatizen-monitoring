@@ -9,8 +9,6 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@types/leaflet-side-by-side": "^2.2.3",
-    "choices.js": "^11.1.0",
     "clsx": "^2.1.1",
     "leaflet": "^1.9.4",
     "leaflet-draw": "^1.0.4",

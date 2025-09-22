@@ -1,26 +1,25 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import Choices from "choices.js";
+import { useEffect, useMemo, useState } from "react";
+
+import { Item } from "@/lib/definition";
 import HelperTooltip from "../HelperTooltip";
+import CustomMultiSelect from "../CustomMultiSelect";
 
 type MlClass = {
     id: number;
     name: string;
 };
-
 export interface ClassSelectorProps {
     modelId: number | null;
+    selected_class_ids: number[];
     onSelectClasses: (classIds: number[]) => void;
 }
 
-export default function ClassSelector({ modelId, onSelectClasses }: ClassSelectorProps) {
+export default function ClassSelector({ modelId, selected_class_ids, onSelectClasses }: ClassSelectorProps) {
     const [classes, setClasses] = useState<MlClass[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-
-    const selectRef = useRef<HTMLSelectElement | null>(null);
-    const choicesInstance = useRef<Choices | null>(null);
 
     // Fetch classes when modelId changes
     useEffect(() => {
@@ -51,45 +50,9 @@ export default function ClassSelector({ modelId, onSelectClasses }: ClassSelecto
         fetchClasses();
     }, [modelId]);
 
-    // Initialize Choices.js
-    useEffect(() => {
-        if (!selectRef.current) return;
-
-        choicesInstance.current?.destroy();
-        choicesInstance.current = new Choices(selectRef.current, {
-            removeItemButton: true,
-            searchEnabled: true,
-            itemSelectText: "",
-            shouldSort: false,
-            position: "bottom",
-            placeholderValue: "Select a class",
-        });
-
-        // Default select "All classes"
-        choicesInstance.current.setChoiceByValue("0");
-
-        // Listen for changes
-        const handler = () => {
-            const selected = Array.from(selectRef.current!.selectedOptions).map((o) => Number(o.value));
-
-            if (selected.includes(0) && selected.length > 1) {
-                // If "All classes" + others → remove "All classes"
-                const filtered = selected.filter((id) => id !== 0);
-                onSelectClasses(filtered);
-                choicesInstance.current?.removeActiveItemsByValue("0");
-            } else {
-                onSelectClasses(selected);
-            }
-        };
-
-        selectRef.current.addEventListener("change", handler);
-
-        return () => {
-            selectRef.current?.removeEventListener("change", handler);
-            choicesInstance.current?.destroy();
-            choicesInstance.current = null;
-        };
-    }, [classes]);
+    const selectedItems = useMemo(() => {
+        return classes.filter((field) => selected_class_ids.includes(field.id));
+    }, [classes, selected_class_ids]);
 
     if (!modelId) return <p>Please select a model first.</p>;
     if (loading) return <p className="text-gray-500">Loading classes...</p>;
@@ -99,15 +62,15 @@ export default function ClassSelector({ modelId, onSelectClasses }: ClassSelecto
         <div className="relative w-full p-4">
             <HelperTooltip text="Multilabel class of the choosen model. More information on the model's huggingface page." />
             <label className="block font-medium text-sm md:text-md text-slate-700 mb-2">Multilabel Classes</label>
-            <div className="choices-wrapper">
-                <select multiple ref={selectRef} className="hidden">
-                    {classes.map((cls) => (
-                        <option key={cls.id} value={cls.id}>
-                            {cls.name}
-                        </option>
-                    ))}
-                </select>
-            </div>
+
+            <CustomMultiSelect
+                placeholder="Select a multilabel class"
+                data={classes.map((d) => ({ id: d.id.toString(), name: d.name }))}
+                selected_items={selectedItems.map((d) => ({ id: d.id.toString(), name: d.name }))}
+                set_selected_items={(selectedFields: Item[]) =>
+                    onSelectClasses(selectedFields.map((vv) => Number(vv.id)))
+                }
+            />
         </div>
     );
 }
