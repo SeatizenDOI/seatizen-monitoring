@@ -8,11 +8,11 @@ export const DEFAULT_SELECTED_START_DATE = "2023-06-11";
 export const DEFAULT_SELECTED_END_DATE = "2025-06-20";
 export const DEFAULT_SELECTED_FRAMES_FIELDS = ["GPSLatitude", "GPSLongitude", "version_doi", "relative_file_path"];
 
-export const ICON_SIZE: [number, number] = [50, 82]; // size of the icon
+export const ICON_SIZE: [number, number] = [30, 37.5]; // size of the icon
 export const SHADOW_SIZE: [number, number] = [41, 41]; // size of the shadow
-export const ICON_ANCHOR: [number, number] = [25, 82];
+export const ICON_ANCHOR: [number, number] = [15, 37.5];
 export const SHADOW_ANCHOR: [number, number] = [20.5, 41]; // point of the icon which will correspond to marker's location
-export const POPUP_ANCHOR: [number, number] = [0, -50]; // point from which the popup should open relative to the iconAnchor
+export const POPUP_ANCHOR: [number, number] = [0, -30]; // point from which the popup should open relative to the iconAnchor
 
 export const TOKEN_PAGE_EXPORTER = "token_page_exporter";
 export const TOKEN_PAGE_ASV_EXPLORER = "token_page_asv_explorer";
@@ -41,6 +41,7 @@ export type COGServerResponse = {
     url: string;
     name: string;
     attribution: string;
+    description: string;
 };
 
 export type SpecieWithColor = { name: string; color: string };

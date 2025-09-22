@@ -13,14 +13,14 @@ export async function load_gcrmn_data(map: L.Map) {
         const gcrmn_data: GCRMNPointType[] = await response.json();
 
         var coral_icon = L.icon({
-            iconUrl: "/leaflet/marker_coral_crop.svg", // TODO Change for apnea
+            iconUrl: "/leaflet/marker_platier.svg",
             iconSize: ICON_SIZE,
             iconAnchor: ICON_ANCHOR,
             popupAnchor: POPUP_ANCHOR,
         });
 
         var externe_icon = L.icon({
-            iconUrl: "/leaflet/marker_externe_crop.svg", // TODO Change for scuba diving
+            iconUrl: "/leaflet/marker_pe.svg",
             iconSize: ICON_SIZE,
             iconAnchor: ICON_ANCHOR,
             popupAnchor: POPUP_ANCHOR,
@@ -28,12 +28,34 @@ export async function load_gcrmn_data(map: L.Map) {
 
         gcrmn_data.forEach((gcrmn) => {
             const popup = new L.Popup({
+                className: "gcrmn-popup",
                 content: `
-                            <span style="color:red;"><b>${gcrmn.label}</b></span><br>
-                            <b>Position:</b> ${gcrmn.latitude.toFixed(5)}, ${gcrmn.longitude.toFixed(5)}<br>
-                            <b>Mnemonic:</b> ${gcrmn.mnemonic}<br>
-                            <b>Creation date:</b> ${gcrmn.creation_date}<br>
-                            <b>Update date:</b> ${gcrmn.update_date}<br>`,
+                <div class="popup-group">
+                    <div class="popup-header">
+                       ${gcrmn.label}
+                    </div>
+                    <div class="popup-content">
+                        <div class="popup-field">
+                            <span class="popup-label">Position:</span>
+                            <span class="popup-value popup-coordinates">${gcrmn.latitude.toFixed(
+                                5
+                            )}, ${gcrmn.longitude.toFixed(5)}</span>
+                        </div>
+                        <div class="popup-field">
+                            <span class="popup-label">Mnemonic:</span>
+                            <span class="popup-value popup-mnemonic">${gcrmn.mnemonic}</span>
+                        </div>
+                        <div class="popup-field">
+                            <span class="popup-label">Creation date:</span>
+                            <span class="popup-value">${gcrmn.creation_date}</span>
+                        </div>
+                        <div class="popup-field">
+                            <span class="popup-label">Update date:</span>
+                            <span class="popup-value">${gcrmn.update_date}</span>
+                        </div>
+                    </div>
+                </div>
+                `,
                 closeOnClick: true,
                 autoClose: true,
                 closeButton: true,

@@ -13,7 +13,7 @@ export async function load_edna_data(map: L.Map) {
         const edna_data: EdnaDataType[] = await response.json();
 
         var edna_icon = L.icon({
-            iconUrl: "/leaflet/marker_edna_crop.svg",
+            iconUrl: "/leaflet/marker_edna.svg",
             iconSize: ICON_SIZE,
             iconAnchor: ICON_ANCHOR,
             popupAnchor: POPUP_ANCHOR,
@@ -21,14 +21,53 @@ export async function load_edna_data(map: L.Map) {
 
         edna_data.forEach((edna) => {
             const popup = new L.Popup({
+                className: "edna-popup", // Add custom class
                 content: `
-                            <span style="color: red; font-weight: bold; font-size: 16px">${edna.place} - ${edna.date}</span><br>
-                            <b>Position:</b> ${edna.GPSLatitude}, ${edna.GPSLongitude}<br>
-                            <b>Publication:</b> <a href="${edna.publication.link}" target="_blank"> ${edna.publication.name}</a><br>
-                            <b>Data:</b> <a href="${edna.data.link}" target="_blank"> ${edna.data.name}</a><br>
-                            <b>Description:</b> ${edna.description}<br>
-                            <img src="${edna.thumbnail}" width="400">`,
-                maxWidth: 600,
+                <div class="popup-content">
+                    <div class="popup-header">
+                        <h3 class="popup-title">${edna.place}</h3>
+                        <div class="popup-location">${edna.date}</div>
+                    </div>
+                
+                    <div class="popup-body">
+                        <div class="popup-left">
+                            <div class="popup-info">
+                                <div class="info-item">
+                                    <div class="info-label">Position</div>
+                                    <div class="info-value">${edna.GPSLatitude}, ${edna.GPSLongitude}</div>
+                                </div>
+                            
+                                <div class="info-item">
+                                    <div class="info-label">Publication</div>
+                                    <div class="info-value">
+                                        <a href="${edna.publication.link}" target="_blank">${edna.publication.name}</a>
+                                    </div>
+                                </div>
+                            
+                                <div class="info-item">
+                                    <div class="info-label">Data Source</div>
+                                    <div class="info-value">
+                                        <a href="${edna.data.link}" target="_blank">${edna.data.name}</a>
+                                    </div>
+                                </div>
+                            
+                                <div class="info-item">
+                                    <div class="info-label">Description</div>
+                                    <div class="info-value">${edna.description}</div>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="popup-right">
+                            <div class="popup-image-container">
+                                <div class="popup-image">
+                                    <img src="${edna.thumbnail}" alt="eDNA Data">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `,
                 closeOnClick: true,
                 autoClose: true,
                 closeButton: true,

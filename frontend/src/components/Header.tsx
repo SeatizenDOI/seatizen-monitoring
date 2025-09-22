@@ -35,7 +35,7 @@ export default function Header() {
             <Link className="fixed left-0 top-0 z-20 flex bg-transparent p-2" href="/">
                 <div className="h-16 w-16 overflow-hidden rounded-full shadow-md animate-pulse">
                     <Image
-                        src="/logo3.png"
+                        src="/logo.png"
                         width={96}
                         height={96}
                         alt="Logo seatizen monitoring"
