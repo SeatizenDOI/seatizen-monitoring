@@ -16,6 +16,11 @@
     },
     {
         "category": "Artificial Intelligence",
+        "citation": "Contini, M., Illien, V., Poulain, S., Bernard, S., Barde, J., Bonhommeau, S., & Joly, A. (2025). The point is the mask: scaling coral reef segmentation with weak supervision. arXiv preprint arXiv:2508.18958.",
+        "doi": "http://dx.doi.org/10.48550/arXiv.2508.18958"
+    },
+    {
+        "category": "Artificial Intelligence",
         "citation": "Contini, Matteo, et al. From underwater to drone: A novel multi-scale knowledge distillation approach for coral reef monitoring. Ecological Informatics (2025): 103149.",
         "doi": "https://doi.org/10.1016/j.ecoinf.2025.103149"
     },
