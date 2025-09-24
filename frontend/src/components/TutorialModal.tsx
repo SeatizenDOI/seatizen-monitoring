@@ -123,7 +123,6 @@ export default function TutorialModal({ description, tutorialSteps, local_storag
 
     // ✅ 2. If still overflowing right side, try top/bottom
     if (tooltipLeft + tooltipWidth > window.innerWidth - padding) {
-        const spaceAbove = elementTop;
         const spaceBelow = window.innerHeight - (elementTop + elementHeight);
 
         if (spaceBelow > tooltipHeight + padding) {

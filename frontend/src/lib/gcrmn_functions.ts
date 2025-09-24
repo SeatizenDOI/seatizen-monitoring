@@ -2,7 +2,7 @@ import { GCRMNPointType, ICON_ANCHOR, ICON_SIZE, POPUP_ANCHOR } from "./definiti
 import L from "leaflet";
 
 export async function load_gcrmn_data(map: L.Map) {
-    let gcrmnMarkers: L.Marker[] = [];
+    const gcrmnMarkers: L.Marker[] = [];
 
     try {
         const response = await fetch("/points_gcrmn.json");
@@ -12,14 +12,14 @@ export async function load_gcrmn_data(map: L.Map) {
 
         const gcrmn_data: GCRMNPointType[] = await response.json();
 
-        var coral_icon = L.icon({
+        const coral_icon = L.icon({
             iconUrl: "/leaflet/marker_platier.svg",
             iconSize: ICON_SIZE,
             iconAnchor: ICON_ANCHOR,
             popupAnchor: POPUP_ANCHOR,
         });
 
-        var externe_icon = L.icon({
+        const externe_icon = L.icon({
             iconUrl: "/leaflet/marker_pe.svg",
             iconSize: ICON_SIZE,
             iconAnchor: ICON_ANCHOR,

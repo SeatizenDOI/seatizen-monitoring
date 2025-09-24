@@ -68,7 +68,7 @@ export default function LeafletMapCompare({ leftUrls, rightUrls, withASV, withMa
             fullscreenControl: true,
         });
 
-        const measure_control = L.control
+        L.control
             // @ts-ignore (no correct types)
             .measure({
                 position: "topleft",

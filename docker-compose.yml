@@ -2,34 +2,34 @@ version: "3.9"
 
 services:
   db:
-    image: postgis/postgis:17-3.5
-    container_name: db
-    env_file:
-      - ./.env
+    build: ./db
+    container_name: postgis
     environment:
-      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_DB: mydb
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
     volumes:
-      - ./data:/data
-      - ./db/init.sh:/docker-entrypoint-initdb.d/init.sh:ro
+      - db_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
 
   backend:
     build: ./backend
-    container_name: backend
+    container_name: fastapi
     depends_on:
       - db
-    env_file:
-      - ./.env
+    environment:
+      DATABASE_URL: postgresql://myuser:mypassword@db:5432/mydb
     ports:
-      - "8000:8000"
+      - "3001:3001"
 
   frontend:
     build: ./frontend
-    container_name: frontend
+    container_name: nextjs
     depends_on:
       - backend
-    env_file:
-      - ./.env
     ports:
       - "3000:3000"
+
+volumes:
+  db_data:

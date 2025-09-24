@@ -2,7 +2,7 @@ import { EdnaDataType, ICON_ANCHOR, ICON_SIZE, POPUP_ANCHOR } from "./definition
 import L from "leaflet";
 
 export async function load_edna_data(map: L.Map) {
-    let ednaMarkers: L.Marker[] = [];
+    const ednaMarkers: L.Marker[] = [];
 
     try {
         const response = await fetch("/edna_data.json");
@@ -12,7 +12,7 @@ export async function load_edna_data(map: L.Map) {
 
         const edna_data: EdnaDataType[] = await response.json();
 
-        var edna_icon = L.icon({
+        const edna_icon = L.icon({
             iconUrl: "/leaflet/marker_edna.svg",
             iconSize: ICON_SIZE,
             iconAnchor: ICON_ANCHOR,

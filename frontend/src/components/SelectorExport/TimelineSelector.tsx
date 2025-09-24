@@ -94,7 +94,7 @@ export default function TimelineSlider({ startDate, endDate, onChange }: Timelin
                             {children}
                         </div>
                     )}
-                    renderThumb={({ props, index }) => (
+                    renderThumb={({ props }) => (
                         <div
                             {...props}
                             key={props.key}

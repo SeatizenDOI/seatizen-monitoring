@@ -1,36 +1,24 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import {
-    Github,
     Database,
     Waves,
     Fish,
-    Globe,
     BarChart3,
     Camera,
-    MapPin,
-    ArrowRight,
     ExternalLink,
-    Users,
-    Award,
     Microscope,
-    Satellite,
-    BookOpen,
-    Code,
-    Heart,
     ChevronLeft,
     ChevronRight,
-    ScrollText,
     Cpu,
-    ChevronDown,
     Download,
     Eye,
     Map,
     Zap,
     Archive,
 } from "lucide-react";
-import { divIcon } from "leaflet";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Page() {
     // Logo carousel state
@@ -595,7 +583,12 @@ export default function Page() {
                                                     .map((partner, index) => (
                                                         <div key={index} className="flex flex-col items-center">
                                                             <div className="w-20 h-20 bg-pearl-100 rounded-xl flex items-center justify-center mb-2 hover:bg-pearl-200 transition-colors">
-                                                                <img src={partner.logo} alt={`Logo ${partner.name}`} />
+                                                                <Image
+                                                                    width={100}
+                                                                    height={100}
+                                                                    src={partner.logo}
+                                                                    alt={`Logo ${partner.name}`}
+                                                                />
                                                             </div>
                                                             <span className="text-xs text-pearl-500 text-center">
                                                                 {partner.name}

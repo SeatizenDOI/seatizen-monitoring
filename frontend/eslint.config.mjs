@@ -11,7 +11,7 @@ const compat = new FlatCompat({
 
 const eslintConfig = [
     ...compat.config({
-        extends: ["next/core-web-vitals", "next/typescript", "prettier"],
+        extends: ["next", "next/core-web-vitals", "next/typescript", "prettier"],
         rules: {
             semi: ["error"],
             "@typescript-eslint/no-explicit-any": "off",

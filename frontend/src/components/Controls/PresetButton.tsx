@@ -1,16 +1,12 @@
 "use client";
 
 import React from "react";
-import { useRouter } from "next/navigation";
-
 interface PresetButtonProps {
     urlString: string;
     buttonName: string;
 }
 
 export default function PresetButton({ urlString, buttonName }: PresetButtonProps) {
-    const router = useRouter();
-
     const handleClick = () => {
         window.location.href = urlString;
     };

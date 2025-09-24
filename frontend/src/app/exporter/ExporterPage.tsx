@@ -2,7 +2,6 @@
 
 import MapExport from "@/components/Map/DynamicLeafletMapExport";
 import ExporterFilterPanel from "@/components/FilterPanel/ExporterFilterPanel";
-import { TOKEN_PAGE_EXPORTER } from "@/lib/definition";
 import { useFilters } from "@/context/FiltersContext";
 import React, { useState, useEffect } from "react";
 

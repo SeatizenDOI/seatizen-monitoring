@@ -7,15 +7,15 @@ export $(grep -v '^#' .env | xargs)
 # Now you can use $DB_NAME, $DB_USER, etc.
 echo "Database name is $DB_NAME"
 
-# mkdir -p "$(dirname "$GPKG_PATH")"
+mkdir -p "$(dirname "$GPKG_PATH")"
 
-# REDIRECT=$(curl -s https://zenodo.org/api/records/11125847)
+REDIRECT=$(curl -s https://zenodo.org/api/records/11125847)
 
-# NEW_ID=$(echo "$REDIRECT" | grep -oP '(?<=>/api/records/)\d+')
+NEW_ID=$(echo "$REDIRECT" | grep -oP '(?<=>/api/records/)\d+')
 
-# echo "🔹 Downloading new geopackage from ${NEW_ID}..."
+echo "🔹 Downloading new geopackage from ${NEW_ID}..."
 
-# curl -L -o $GPKG_PATH "https://zenodo.org/records/${NEW_ID}/files/seatizen_atlas_db.gpkg?download=1"
+curl -L -o $GPKG_PATH "https://zenodo.org/records/${NEW_ID}/files/seatizen_atlas_db.gpkg?download=1"
 
 # === POSTGRES SUPERUSER ===
 
