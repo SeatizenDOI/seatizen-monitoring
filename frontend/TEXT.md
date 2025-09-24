@@ -105,3 +105,11 @@ nombre de platformes d'acquisition
 
 
 12Tb de données
+
+# stats
+
+Nombre de sessions
+Nombre d'images
+Nombre d'image par platform
+Nombre de sessions par platform
+Nombre d'image en Q1 pour les ASV (pourcentage)

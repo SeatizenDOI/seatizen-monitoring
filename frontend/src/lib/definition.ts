@@ -23,6 +23,22 @@ export interface Item {
     name: string;
 }
 
+export interface PlatformCount {
+    platform_type: string;
+    count: number;
+}
+export interface HeavyStats {
+    nb_deposits: number;
+    nb_frames: number;
+    nb_frames_q1_asv: number;
+    frames_by_platform: PlatformCount[];
+    deposit_by_platform: PlatformCount[];
+}
+
+export interface LightStats {
+    nb_deposits: number;
+    nb_frames: number;
+}
 export interface DepositSearchTerms {
     platforms: string[];
     timeline: {
