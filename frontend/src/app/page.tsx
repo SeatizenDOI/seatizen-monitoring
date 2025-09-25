@@ -45,10 +45,11 @@ export default function Page() {
     // Partner logos - replace with actual logos
     const partnerLogos = [
         { name: "IFREMER", logo: "/partners/ifremer.jpg" },
-        { name: "CNRS", logo: "/partners/cnrs.png" },
         { name: "LIRMM", logo: "/partners/lirmm.jpg" },
-        { name: "IRD", logo: "/partners/ird.jpg" },
+        { name: "CNRS", logo: "/partners/cnrs.png" },
         { name: "INIRIA", logo: "/partners/inria.png" },
+        { name: "IRD", logo: "/partners/ird.jpg" },
+        { name: "COOOL", logo: "/partners/coool.svg" },
         { name: "ID OCEAN", logo: "/partners/idocean.jpg" },
         { name: "PPR", logo: "/partners/ppr.png" },
         { name: "Région Réunion", logo: "/partners/region-reunion-logo.png" },
