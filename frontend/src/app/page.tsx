@@ -104,7 +104,6 @@ export default function Page() {
         );
     };
 
-    if (error) return "No stats to fetch";
     return (
         <div className="min-h-screen ">
             {/* Hero Section */}

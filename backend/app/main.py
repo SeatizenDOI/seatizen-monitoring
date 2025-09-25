@@ -28,7 +28,7 @@ else :
 
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["https://seatizenmonitoring.ifremer.re", "http://localhost:8053"],  # Allows all origins (for development - be more specific in production)
+        allow_origins=["http://seatizenmonitoring.ifremer.re", "https://seatizenmonitoring.ifremer.re", "http://localhost:8053", "http://ifremer.re:8053"],
         allow_credentials=False,
         allow_methods=["GET", "OPTIONS", "POST"],
         allow_headers=["*"]
