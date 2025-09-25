@@ -3,10 +3,13 @@ import type { LucideProps } from "lucide-react";
 export const DEFAULT_CENTER: [number, number] = [-21.170876, 55.286604];
 export const DEFAULT_ZOOM = 18;
 
+// ! I know this is ugly but who are you to judge me ?
 export const DEFAULT_SELECTED_PLATFORMS = ["ASV"];
 export const DEFAULT_SELECTED_START_DATE = "2023-06-11";
 export const DEFAULT_SELECTED_END_DATE = "2025-06-20";
 export const DEFAULT_SELECTED_FRAMES_FIELDS = ["GPSLatitude", "GPSLongitude", "version_doi", "relative_file_path"];
+export const DEFAULT_MODEL_ID = 1; // Select the first model in DB.
+export const DEFAULT_CLASS_SELECTED = [0]; // Select all the classes by default.
 
 export const ICON_SIZE: [number, number] = [30, 37.5]; // size of the icon
 export const SHADOW_SIZE: [number, number] = [41, 41]; // size of the shadow

@@ -57,7 +57,7 @@ export default function ASVExplorerFilterPanel() {
                     />
                 </div>
             </div>
-            <div className="bg-beige-50 border border-beige-100 rounded-lg mb-4 overflow-hidden">
+            <div className="bg-beige-50 border border-beige-100 rounded-lg mb-4">
                 <div className="bg-beige-100 px-4 py-2 border-b border-beige-200">
                     <span className="text-sm font-semibold text-beige-800 uppercase tracking-wide">Right Panel</span>
                 </div>

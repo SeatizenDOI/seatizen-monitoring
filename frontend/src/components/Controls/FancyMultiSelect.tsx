@@ -43,13 +43,13 @@ export default function FancyMultiSelect({
             items: [],
         },
         ortho: {
-            group: "Aerial Imagery",
+            group: "Aerial Imagery 40 - 60m",
             icon: Camera,
             color: "green",
             items: [],
         },
         ign: {
-            group: "Satellite Data",
+            group: "Aerial imagery 1500 - 3000m",
             icon: Satellite,
             color: "purple",
             items: [],

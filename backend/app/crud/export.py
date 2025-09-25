@@ -66,18 +66,25 @@ async def stream_export_data(filters: dict, user_areas: list) -> AsyncGenerator[
             for k in current_batch:
                 current_batch[k] = []
 
-        # --- Streaming and grouping logic ---
+        # Create a set of frame IDs that have predictions
+        frames_with_preds = set()
+        
+        # Track current frame processing
         current_frame_id = None
         current_preds = []
-
+        processed_frame_ids = set()
+        
+        # Process predictions as they come
         async for pred in get_pred_from_frame_ids_and_class_ids([f.id for f in frames], list(ml_class_map_by_id), db):
             fid = pred["frame_id"]
-
+            frames_with_preds.add(fid)
+            
             # When frame changes, flush previous frame row
             if current_frame_id is not None and fid != current_frame_id:
                 await _add_frame_row(
                     current_frame_id, current_preds, frame_map, frames_field, class_names, ml_class_map_by_id, filter_type, current_batch
                 )
+                processed_frame_ids.add(current_frame_id)
                 current_preds = []
 
                 if len(current_batch["FileName"]) >= batch_size:
@@ -87,11 +94,24 @@ async def stream_export_data(filters: dict, user_areas: list) -> AsyncGenerator[
             current_frame_id = fid
             current_preds.append(pred)
 
-        # Last frame after loop
+        # Last frame with predictions after loop
         if current_frame_id is not None:
             await _add_frame_row(
                 current_frame_id, current_preds, frame_map, frames_field, class_names, ml_class_map_by_id, filter_type, current_batch
             )
+            processed_frame_ids.add(current_frame_id)
+
+
+        for frame in frames:
+            if frame.id not in processed_frame_ids:
+                # This frame has no predictions, add it with -1 values
+                await _add_frame_row(
+                    frame.id, [], frame_map, frames_field, class_names, ml_class_map_by_id, filter_type, current_batch
+                )
+
+                if len(current_batch["FileName"]) >= batch_size:
+                    async for chunk in flush_batch():
+                        yield chunk
 
         # Final flush
         if current_batch["FileName"]:
@@ -109,16 +129,19 @@ async def _add_frame_row(frame_id, preds, frame_map, frames_field, class_names, 
         "FileName": frame.filename,
         **{fs: match_frame_header_and_attribut(fs, frame) for fs in frames_field},
         "pred_doi": "",
-        **{cls: -1.0 for cls in class_names},
+        **{cls: -1.0 for cls in class_names},  # Default to -1 for all classes
     }
 
-    for pred in preds:
-        row["pred_doi"] = f"https://doi.org/10.5281/zenodo.{pred['version_doi']}" if pred["version_doi"] else ""
-        ml_class = ml_class_map_by_id.get(pred["ml_class_id"])
-        if ml_class:
-            row[ml_class.name] = (
-                pred["score"] if filter_type == "score" else int(pred["score"] >= ml_class.threshold)
-            )
+    # If there are predictions for this frame, update the values
+    if preds:
+        for pred in preds:
+            row["pred_doi"] = f"https://doi.org/10.5281/zenodo.{pred['version_doi']}" if pred["version_doi"] else ""
+            ml_class = ml_class_map_by_id.get(pred["ml_class_id"])
+            if ml_class:
+                row[ml_class.name] = (
+                    pred["score"] if filter_type == "score" else int(pred["score"] >= ml_class.threshold)
+                )
+    # If no predictions, row already has -1.0 values for all classes
 
     for k in batch:
         batch[k].append(row[k])
@@ -140,7 +163,6 @@ def export_frames_without_classes(frames: list[Frame], frames_field: list):
     yield buffer.getvalue().encode()
     buffer.seek(0)
     buffer.truncate(0)
-
 
     for frame in frames:
         row = [

@@ -2,6 +2,8 @@
 
 import { createContext, useContext, useState, ReactNode } from "react";
 import {
+    DEFAULT_CLASS_SELECTED,
+    DEFAULT_MODEL_ID,
     DEFAULT_SELECTED_END_DATE,
     DEFAULT_SELECTED_FRAMES_FIELDS,
     DEFAULT_SELECTED_PLATFORMS,
@@ -14,7 +16,7 @@ type Filters = {
     endDate: string;
     filterType: "score" | "prediction";
     selectedFields: string[];
-    selectedModelId: number | null;
+    selectedModelId: number;
     selectedClassIds: number[];
 };
 
@@ -32,8 +34,8 @@ export function FiltersProvider({ children }: { children: ReactNode }) {
         endDate: DEFAULT_SELECTED_END_DATE,
         filterType: "score",
         selectedFields: DEFAULT_SELECTED_FRAMES_FIELDS,
-        selectedModelId: null,
-        selectedClassIds: [],
+        selectedModelId: DEFAULT_MODEL_ID,
+        selectedClassIds: DEFAULT_CLASS_SELECTED,
     });
 
     return <FiltersContext.Provider value={{ filters, setFilters }}>{children}</FiltersContext.Provider>;

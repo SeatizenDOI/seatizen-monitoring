@@ -1,27 +1,49 @@
-version: "3.9"
-
 services:
   db:
-    build: ./db
+    image: postgis/postgis:17-3.5
     container_name: postgis
+    volumes:
+      - db_data:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: mydb
       POSTGRES_USER: myuser
       POSTGRES_PASSWORD: mypassword
+      POSTGRES_MAX_WAL_SIZE: 1GB
+      POSTGRES_CHECKPOINT_TIMEOUT: 10min
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+  
+  gdal:
+    build: ./db
+    container_name: gdal
+    depends_on:
+      - db
+    env_file: .env
     volumes:
-      - db_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
+      - ./data:/tmp/data
+    command: >
+      /tmp/generate_database.sh
+    user: "${PROD_UID}:${PROD_GID}"  # ensures files are created as your user
+    healthcheck:
+      test: ["CMD", "test", "-f", "/tmp/data/READY"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
 
   backend:
     build: ./backend
     container_name: fastapi
+    env_file: .env
     depends_on:
-      - db
-    environment:
-      DATABASE_URL: postgresql://myuser:mypassword@db:5432/mydb
+      gdal:
+        condition: service_completed_successfully
+      db:
+        condition: service_healthy
     ports:
-      - "3001:3001"
+      - "3801:8000"
 
   frontend:
     build: ./frontend
@@ -29,7 +51,7 @@ services:
     depends_on:
       - backend
     ports:
-      - "3000:3000"
+      - "8050:3000"
 
 volumes:
   db_data:

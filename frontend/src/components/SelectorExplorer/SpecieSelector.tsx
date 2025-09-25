@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ChevronDown, Fish } from "lucide-react";
 import { SpecieWithColor } from "@/lib/definition";
 import HelperTooltip from "../HelperTooltip";
@@ -14,9 +14,25 @@ export type SpecieSelectorProps = {
 
 export default function SpecieSelector({ id, species, selected_specie, onChange }: SpecieSelectorProps) {
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            const target = event.target as Node | null;
+            if (dropdownRef.current && target && !dropdownRef.current.contains(target)) {
+                setDropdownOpen(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
     return (
-        <div id={id} className="space-y-4 relative mb-4 pt-4">
+        <div id={id} ref={dropdownRef} className="space-y-4 relative mb-4 pt-4">
             <HelperTooltip text="The taxon or the substrat come from the GCRMN report. You can found more detail in the <a href='https://doi.org/10.1038/s41597-024-04267-z' target='_blank'>SeatizenAtlas paper</a>." />
             <div className="flex items-center gap-2 text-xs font-medium text-gray-600 tracking-wide">
                 <Fish className="w-3 h-3" />

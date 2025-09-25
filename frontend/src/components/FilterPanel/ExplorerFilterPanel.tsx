@@ -105,7 +105,7 @@ export default function ExplorerFilterPanel() {
                             urlString="/explorer?lat=-21.17536&lng=55.29213&zoom=16&left=ortho_2023%2Cbathy_2023&right=ortho_2025%2Cbathy_2025"
                         />
                         <PresetButton
-                            buttonName="Habitat map 2023"
+                            buttonName="Habitat map / Orthophoto 2023"
                             urlString="/explorer?lat=-21.17536&lng=55.29213&zoom=16&left=ortho_2023%2Cpred_drone_2023&right=ortho_2023"
                         />
                         <PresetButton

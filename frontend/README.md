@@ -39,3 +39,5 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 ## Docker build
 
 docker build -t seatizenmonitoring:latest .
+
+docker run --rm --name seatizenmonitoring-website -d -p 3004:3000 seatizenmonitoring:latest

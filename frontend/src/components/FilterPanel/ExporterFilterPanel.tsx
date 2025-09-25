@@ -14,7 +14,7 @@ export default function ExporterFilterPanel() {
     const { filters, setFilters } = useFilters();
 
     // State to toggle visibility
-    const [showModelConfig, setShowModelConfig] = useState(false);
+    const [showModelConfig, setShowModelConfig] = useState(false); // If set to false and the user export, modelID and Class will not be defined.
     const [showDataConfig, setShowDataConfig] = useState(true);
 
     return (

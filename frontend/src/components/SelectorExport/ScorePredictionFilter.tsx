@@ -10,7 +10,7 @@ interface ScorePredictionFilterProps {
 export default function ScorePredictionFilter({ value, onChange }: ScorePredictionFilterProps) {
     return (
         <div className="relative w-full p-4">
-            <HelperTooltip text="This component allows the user to toggle the feature on and off." />
+            <HelperTooltip text="The score are the raw value from the model. The prediction are the score with the theshold class apply." />
             <label className="text-sm md:text-md block font-medium text-slate-700 mb-2">Prediction Type</label>
 
             <div className="flex items-center gap-4">
