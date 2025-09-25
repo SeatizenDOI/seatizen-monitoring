@@ -40,7 +40,7 @@ export default function Page() {
     const [lightStats, setLightStats] = useState<LightStats>(DEFAULT_LIGHT_STATS);
     const [heavyStats, setHeavyStats] = useState<HeavyStats>(DEFAULT_HEAVY_STATS);
 
-    const [error, setError] = useState<string | null>(null);
+    const [, setError] = useState<string | null>(null);
 
     // Partner logos - replace with actual logos
     const partnerLogos = [
