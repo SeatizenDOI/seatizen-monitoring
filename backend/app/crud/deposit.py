@@ -47,8 +47,6 @@ async def get_deposits_filtered(
             if isinstance(fp, str):
                 fp = WKBElement(unhexlify(fp), srid=4326)
 
-            print(fp)
-            print(type(fp))
             shape = to_shape(fp)  # Converts WKB to Shapely geometry
             poly_area, poly_perimeter = geod.geometry_area_perimeter(shape)
             d.area = f"{round(poly_area , 2)} m²"
