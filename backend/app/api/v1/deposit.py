@@ -1,5 +1,5 @@
 from datetime import date
-from typing import List, Optional
+from typing import Optional
 from fastapi import APIRouter, Depends, Query
 
 from sqlalchemy import select, func
@@ -8,7 +8,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_db
 from app.models.deposit import Deposit
 from app.crud.deposit import get_deposits_filtered
-from app.schemas.deposit import DepositResponse
 
 
 router = APIRouter()

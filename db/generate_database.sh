@@ -16,7 +16,7 @@ if [ ! -f $GPKG_PATH ]; then
 
     echo "🔹 Downloading new geopackage from ${NEW_ID}..."
 
-    curl -L -o $GPKG_PATH "https://zenodo.org/records/${NEW_ID}/files/seatizen_atlas_db.gpkg?download=1"
+    curl --no-buffer --progress-bar -L -o $GPKG_PATH "https://zenodo.org/records/${NEW_ID}/files/seatizen_atlas_db.gpkg?download=1" 2>&1
 fi
 
 

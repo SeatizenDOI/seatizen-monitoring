@@ -1,7 +1,9 @@
+from pyproj import Geod
 from datetime import date
 from typing import Optional
+from binascii import unhexlify
 from geoalchemy2.shape import to_shape
-from pyproj import Geod
+from geoalchemy2.elements import WKBElement
 
 
 from sqlalchemy import select
@@ -39,7 +41,13 @@ async def get_deposits_filtered(
     for d in deposits:
 
         if d.footprint and d.platform_type not in PLATFORMS_AS_LINESTRING:
-            shape = to_shape(d.footprint)  # Converts WKB to Shapely geometry
+            fp = d.footprint
+
+            # If asyncpg returned a string (hex WKB), convert it to WKBElement
+            if isinstance(fp, str):
+                fp = WKBElement(unhexlify(fp), srid=4326)
+
+            shape = to_shape(fp)  # Converts WKB to Shapely geometry
             poly_area, poly_perimeter = geod.geometry_area_perimeter(shape)
             d.area = f"{round(poly_area , 2)} m²"
             d.footprint = shape.__geo_interface__  # GeoJSON format
@@ -48,8 +56,15 @@ async def get_deposits_filtered(
             d.area = None
             d.footprint = None
 
+
         if d.deposit_linestring.footprint_linestring and d.platform_type in PLATFORMS_AS_LINESTRING:
-            shape = to_shape(d.deposit_linestring.footprint_linestring)  # Converts WKB to Shapely geometry
+            fl = d.deposit_linestring.footprint_linestring
+
+            # If asyncpg returned a string (hex WKB), convert it to WKBElement
+            if isinstance(fl, str):
+                fl = WKBElement(unhexlify(fl), srid=4326)
+
+            shape = to_shape(fl)  # Converts WKB to Shapely geometry
             poly_area, poly_perimeter = geod.geometry_area_perimeter(shape)
             d.deposit_linestring.footprint_linestring = shape.__geo_interface__  # GeoJSON format
             d.perimeter = f"{round(poly_perimeter / 2)} m" # Magic smoke.

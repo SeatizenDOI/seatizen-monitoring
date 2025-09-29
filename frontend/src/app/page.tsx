@@ -57,6 +57,9 @@ export default function Page() {
         { name: "OFB", logo: "/partners/ofb.jpg" },
         { name: "Parc naturel marin", logo: "/partners/parc_naturel_marin.jpeg" },
         { name: "Union Européenne", logo: "/partners/ue.png" },
+        // Aldabra
+        // Monaco,
+        // IFHMS (amaoros),
     ];
 
     useEffect(() => {
@@ -133,7 +136,9 @@ export default function Page() {
                             <div className="text-deepteal-700">Sessions</div>
                         </div>
                         <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-sage-200 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                            <div className="text-3xl font-bold text-sage-600 mb-2">{lightStats.nb_frames}</div>
+                            <div className="text-3xl font-bold text-sage-600 mb-2">
+                                {lightStats.nb_frames.toLocaleString()}
+                            </div>{" "}
                             <div className="text-deepteal-700">Images</div>
                         </div>
                         <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-deepteal-200 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
@@ -402,7 +407,7 @@ export default function Page() {
                         <div className="text-center mb-16">
                             <h2 className="text-4xl font-bold text-deepteal-600 mb-6">Artificial Intelligence</h2>
                             <p className="text-xl text-sage-600 max-w-3xl mx-auto">
-                                AI models are trained to detect coral morphotypes, benthic substrates, and habitats.
+                                AI models are trained to detect coral morphotypes and benthic organisms.
                             </p>
                         </div>
 
