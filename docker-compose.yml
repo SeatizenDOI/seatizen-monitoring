@@ -22,8 +22,8 @@ services:
     depends_on:
       - db
     env_file: .env
-    # volumes:
-    #   - ./data:/tmp/data
+    volumes:
+      - ./data:/tmp/data
     command: >
       /tmp/generate_database.sh
     user: "${PROD_UID}:${PROD_GID}"  # ensures files are created as your user
