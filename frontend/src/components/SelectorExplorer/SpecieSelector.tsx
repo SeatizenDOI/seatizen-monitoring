@@ -50,7 +50,7 @@ export default function SpecieSelector({ id, species, selected_specie, onChange 
                             style={{ backgroundColor: selected_specie?.color ?? "#d1d5dc" }}
                         />
                         <span className="text-sm font-medium text-gray-700">
-                            {selected_specie?.name ?? "Select a species"}
+                            {selected_specie?.name ?? "Select a taxon group or a substrat"}
                         </span>
                     </div>
                     <ChevronDown

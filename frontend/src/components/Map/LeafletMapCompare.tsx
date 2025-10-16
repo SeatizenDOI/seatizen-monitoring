@@ -68,6 +68,9 @@ export default function LeafletMapCompare({ leftUrls, rightUrls, withASV, withMa
             fullscreenControl: true,
         });
 
+        // Add scale at the bottom of the map.
+        L.control.scale({ maxWidth: 150, imperial: false }).addTo(map);
+
         L.control
             // @ts-ignore (no correct types)
             .measure({

@@ -57,9 +57,9 @@ export default function Page() {
         { name: "OFB", logo: "/partners/ofb.jpg" },
         { name: "Parc naturel marin", logo: "/partners/parc_naturel_marin.jpeg" },
         { name: "Union Européenne", logo: "/partners/ue.png" },
-        // Aldabra
-        // Monaco,
-        // IFHMS (amaoros),
+        { name: "Institut Halieutique et des sciences marines", logo: "/partners/ihsm.png" },
+        { name: "Exploration de Monaco", logo: "/partners/monaco.png" },
+        { name: "Seychelles Islands Foundation", logo: "/partners/sif.png" },
     ];
 
     useEffect(() => {
@@ -94,7 +94,7 @@ export default function Page() {
     useEffect(() => {
         const timer = setInterval(() => {
             setCurrentLogoSlide((prev) => (prev + 1) % Math.ceil(partnerLogos.length / 4));
-        }, 3000);
+        }, 6000);
         return () => clearInterval(timer);
     }, [partnerLogos.length]);
 
@@ -114,7 +114,7 @@ export default function Page() {
             <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-deepteal-200 to-ocean-800 text-cream-50">
                 <div className="relative text-center px-6 max-w-6xl mx-auto">
                     <div className="mb-8">
-                        <div className="mb-6">
+                        <div className="mb-6 mt-4">
                             <Cpu className="w-20 h-20 mx-auto mb-4 text-sage-300" />
                         </div>
                         <h1 className="text-5xl md:text-7xl font-bold text-cream-100 bg-clip-text mb-6 leading-tight">
@@ -133,17 +133,17 @@ export default function Page() {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 max-w-4xl mx-auto">
                         <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-ocean-200 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
                             <div className="text-3xl font-bold text-ocean-600 mb-2">{lightStats.nb_deposits}</div>
-                            <div className="text-deepteal-700">Sessions</div>
+                            <div className="text-ocean-700">Sessions</div>
                         </div>
-                        <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-sage-200 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                            <div className="text-3xl font-bold text-sage-600 mb-2">
+                        <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-ocean-200 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+                            <div className="text-3xl font-bold text-ocean-600 mb-2">
                                 {lightStats.nb_frames.toLocaleString()}
                             </div>{" "}
-                            <div className="text-deepteal-700">Images</div>
+                            <div className="text-ocean-700">Images</div>
                         </div>
-                        <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-deepteal-200 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                            <div className="text-3xl font-bold text-deepteal-600 mb-2">12TB</div>
-                            <div className="text-deepteal-700">Data</div>
+                        <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-ocean-200 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+                            <div className="text-3xl font-bold text-ocean-600 mb-2">12TB</div>
+                            <div className="text-ocean-700">Data</div>
                         </div>
                     </div>
 
@@ -270,14 +270,14 @@ export default function Page() {
                             </div>
 
                             {/* Processed Data */}
-                            <div className="bg-gradient-to-br from-sage-50 to-sage-100 rounded-3xl p-8 border border-sage-200 shadow-xl hover:shadow-2xl transition-all duration-300">
+                            <div className="bg-gradient-to-br from-deepteal-50 to-deepteal-100 rounded-3xl p-8 border border-deepteal-200 shadow-xl hover:shadow-2xl transition-all duration-300">
                                 <div className="flex items-center mb-6">
-                                    <div className="w-12 h-12 bg-sage-500 rounded-xl flex items-center justify-center mr-4">
+                                    <div className="w-12 h-12 bg-deepteal-500 rounded-xl flex items-center justify-center mr-4">
                                         <Zap className="w-6 h-6 text-white" />
                                     </div>
-                                    <h3 className="text-2xl font-bold text-sage-700">Processed Data</h3>
+                                    <h3 className="text-2xl font-bold text-deepteal-700">Processed Data</h3>
                                 </div>
-                                <ul className="space-y-2 text-sage-600 mb-4">
+                                <ul className="space-y-2 text-deepteal-600 mb-4">
                                     <li>
                                         • <strong>Photogrammetry</strong>
                                     </li>
@@ -295,7 +295,7 @@ export default function Page() {
                                         detection)
                                     </li>
                                 </ul>
-                                <div className="text-sm text-sage-500 bg-sage-50 p-4 rounded-lg">
+                                <div className="text-sm text-deepteal-500 bg-deepteal-50 p-4 rounded-lg">
                                     <p>
                                         Processed data are archived on Zenodo, each assigned a unique DOI. Their
                                         metadata are compiled into a <strong>GeoPackage</strong> (SQLite with spatial
@@ -316,6 +316,37 @@ export default function Page() {
                                     Seatizen Atlas Nature
                                 </Link>
                             </p>
+                        </div>
+                    </div>
+                </section>
+
+                <section className="py-20" id="videos">
+                    <div className="max-w-7xl mx-auto px-6">
+                        <div className="text-center mb-16">
+                            <h2 className="text-4xl font-bold text-deepteal-600 mb-6">
+                                A window to the underwater world
+                            </h2>
+                        </div>
+
+                        <div className="flex flex-row justify-between">
+                            <iframe
+                                width="560"
+                                height="315"
+                                src="https://www.youtube.com/embed/kM8BlmeyVmg?si=VW3dKqpcw0jfcJNG"
+                                title="YouTube video player"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                referrerPolicy="strict-origin-when-cross-origin"
+                                allowFullScreen
+                            ></iframe>
+                            <iframe
+                                width="560"
+                                height="315"
+                                src="https://www.youtube.com/embed/kM8BlmeyVmg?si=VW3dKqpcw0jfcJNG"
+                                title="YouTube video player"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                referrerPolicy="strict-origin-when-cross-origin"
+                                allowFullScreen
+                            ></iframe>
                         </div>
                     </div>
                 </section>
@@ -433,14 +464,14 @@ export default function Page() {
                                     />
                                 </div>
                                 <div className="space-y-3 text-ocean-600">
-                                    <div className="flex items-center">
-                                        <div className="w-2 h-2 max-w-2 min-w-2 bg-ocean-500 rounded-full mr-3"></div>
+                                    <div className="flex">
+                                        <div className="w-2 h-2 max-w-2 min-w-2 bg-ocean-500 rounded-full mr-3 mt-2"></div>
                                         <span>
                                             <strong>14,492</strong> ASV & SCUBA images manually annotated using FiftyOne
                                         </span>
                                     </div>
-                                    <div className="flex items-center">
-                                        <div className="w-2 h-2 max-w-2 min-w-2 bg-ocean-500 rounded-full mr-3"></div>
+                                    <div className="flex">
+                                        <div className="w-2 h-2 max-w-2 min-w-2 bg-ocean-500 rounded-full mr-3 mt-2"></div>
                                         <span>
                                             Fine-tuned <strong>DINOv2 Transformers</strong> for multilabel predictions
                                         </span>
@@ -469,14 +500,14 @@ export default function Page() {
                                     />
                                 </div>
                                 <div className="space-y-3 text-sage-600">
-                                    <div className="flex items-center">
-                                        <div className="w-2 h-2 max-w-2 min-w-2 bg-sage-500 rounded-full mr-3"></div>
+                                    <div className="flex">
+                                        <div className="w-2 h-2 max-w-2 min-w-2 bg-sage-500 rounded-full mr-3 mt-2"></div>
                                         <span>
                                             Used ASV predictions as <em>pseudo-labels</em> for drone orthophotos
                                         </span>
                                     </div>
-                                    <div className="flex items-center">
-                                        <div className="w-2 h-2 max-w-2 min-w-2 bg-sage-500 rounded-full mr-3"></div>
+                                    <div className="flex">
+                                        <div className="w-2 h-2 max-w-2 min-w-2 bg-sage-500 rounded-full mr-3 mt-2"></div>
                                         <span>
                                             <strong>Multilabel classification</strong>:{" "}
                                             <Link
@@ -488,8 +519,8 @@ export default function Page() {
                                             </Link>
                                         </span>
                                     </div>
-                                    <div className="flex items-center">
-                                        <div className="w-2 h-2 max-w-2 min-w-2 bg-sage-500 rounded-full mr-3"></div>
+                                    <div className="flex">
+                                        <div className="w-2 h-2 max-w-2 min-w-2 bg-sage-500 rounded-full mr-3 mt-2"></div>
                                         <span>
                                             <strong>Weakly supervised semantic segmentation</strong> to generate habitat
                                             maps:{" "}
@@ -515,17 +546,14 @@ export default function Page() {
                                         <h3 className="text-xl font-medium text-deepteal-700">Satellite</h3>
                                     </div>
                                 </div>
-                                {/* <div className="bg-gray-300 rounded-xl h-32 mb-6 flex items-center justify-center border border-gray-400">
-                                    <span className="text-gray-600 font-medium">Scale Comparison Chart</span>
-                                </div>
-                                <p className="text-deepteal-600 leading-relaxed">
-                                    This approach allows us to combine the <strong>precision of ASV surveys</strong>{" "}
-                                    with the <strong>coverage of drones</strong>, producing detailed ecological maps at
-                                    scale.
-                                </p> */}
-
-                                <div className=" flex mb-6 justify-center">
-                                    <TrafficCone className="w-92 h-92 text-deepteal-500 " />
+                                <div className=" rounded-xl mb-6 flex items-center justify-center">
+                                    <Image
+                                        alt="Ign prediction"
+                                        src={"/homepage/ign_pred.jpeg"}
+                                        width={600}
+                                        height={400}
+                                        className="border rounded-3xl border-deepteal-200"
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -667,6 +695,7 @@ export default function Page() {
                         </div>
                     </div>
                 </section>
+
                 {/* Partner Carousel */}
                 <section className="mb-20">
                     <h2 className="text-4xl font-bold text-deepteal-800 text-center mb-12">

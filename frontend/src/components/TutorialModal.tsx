@@ -92,7 +92,7 @@ export default function TutorialModal({ description, tutorialSteps, local_storag
                         </button>
                         <button
                             onClick={handleStart}
-                            className="px-4 py-2 rounded-md bg-gradient-to-r from-cream-500 to-cream-700 text-white font-semibold shadow hover:opacity-90 transition"
+                            className="px-4 py-2 rounded-md bg-gradient-to-r from-ocean-500 to-ocean-700 text-white font-semibold shadow hover:opacity-90 transition"
                         >
                             Start
                         </button>
@@ -144,7 +144,7 @@ export default function TutorialModal({ description, tutorialSteps, local_storag
         <div className="fixed inset-0 z-50 pointer-events-none">
             <div className="absolute inset-0 bg-black/50 pointer-events-auto" />
             <div
-                className="absolute border-4 border-cream-400 rounded-lg pointer-events-none transition-all duration-300"
+                className="absolute border-4 border-ocean-700 rounded-lg pointer-events-none transition-all duration-300"
                 style={highlightStyle}
             />
             <div
@@ -160,7 +160,7 @@ export default function TutorialModal({ description, tutorialSteps, local_storag
                 <div className="flex flex-row justify-between">
                     <button
                         onClick={nextStep}
-                        className="bg-gradient-to-r from-cream-500 to-cream-700 hover:opacity-90 text-white px-4 py-2 rounded-md font-semibold transition"
+                        className="bg-gradient-to-r from-ocean-500 to-ocean-700 hover:opacity-90 text-white px-4 py-2 rounded-md font-semibold transition"
                     >
                         {stepIndex === tutorialSteps.length - 1 ? "Done" : "Next"}
                     </button>

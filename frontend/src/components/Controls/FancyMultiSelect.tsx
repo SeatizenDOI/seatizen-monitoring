@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { ChevronDown, X, Search, Check, Ruler, Earth, Camera, Satellite } from "lucide-react";
+import { ChevronDown, X, Search, Check, Ruler, Earth, Camera, Satellite, Info } from "lucide-react";
 import { COGServerResponse } from "@/lib/definition";
 
 export interface FancyMultiSelectProps {
@@ -13,6 +13,7 @@ interface LayerGroup {
     group: string;
     icon: React.ComponentType<any>;
     color: string;
+    description: string;
     items: COGServerResponse[];
 }
 
@@ -41,24 +42,28 @@ export default function FancyMultiSelect({
             icon: Ruler,
             color: "blue",
             items: [],
+            description: "Bathymetry data acquire by ASV using single-beam echosounder.",
         },
         ortho: {
             group: "Aerial Imagery 40 - 60m",
             icon: Camera,
             color: "green",
             items: [],
+            description: "Orthophoto using drone or ASV build by Structure from motion technique.",
         },
         ign: {
             group: "Aerial imagery 1500 - 3000m",
             icon: Satellite,
             color: "purple",
             items: [],
+            description: "Aerial imagery from IGN BD Ortho.",
         },
         pred: {
             group: "Habitat map",
             icon: Earth,
             color: "orange",
             items: [],
+            description: "Habitat map by aerial imagery using a multilabel semantic segmentation model.",
         },
     };
 
@@ -266,12 +271,21 @@ export default function FancyMultiSelect({
                                     return (
                                         <div key={group.group} className="border-b border-gray-100 last:border-b-0">
                                             {/* Group Header */}
-                                            <div className={`px-4 py-3 ${colors.bg} border-l-4 ${colors.border}`}>
+                                            <div
+                                                className={`px-4 py-3 ${colors.bg} border-l-4 ${colors.border} flex items-center w-full justify-between`}
+                                            >
                                                 <div className="flex items-center gap-2">
                                                     <IconComponent className={`w-4 h-4 ${colors.text}`} />
                                                     <span className={`font-semibold text-sm ${colors.text}`}>
                                                         {group.group}
                                                     </span>
+                                                </div>
+                                                <div className="group relative">
+                                                    <Info className="w-4 h-4 text-gray-400 hover:text-gray-600 cursor-help" />
+                                                    <div className="invisible group-hover:visible absolute -right-1 top-6 z-10 w-64 p-3 bg-gray-900 text-white text-sm rounded-lg shadow-lg">
+                                                        {group.description}
+                                                        <div className="absolute -top-1 right-2 w-2 h-2 bg-gray-900 transform rotate-45"></div>
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -284,7 +298,7 @@ export default function FancyMultiSelect({
                                                     <div
                                                         key={item.id}
                                                         onClick={() => handleItemToggle(item.id)}
-                                                        className={`flex items-center justify-between p-4 cursor-pointer transition-all duration-150 ${
+                                                        className={`flex items-center justify-between p-4 cursor-pointer ${
                                                             isSelected
                                                                 ? `${colors.bg} border-l-4 ${colors.border}`
                                                                 : "hover:bg-gray-50"
@@ -293,7 +307,7 @@ export default function FancyMultiSelect({
                                                         <div className="flex-1">
                                                             <div className="flex items-center gap-3">
                                                                 <div
-                                                                    className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-all duration-200 ${
+                                                                    className={`w-5 h-5 rounded border-2 flex items-center justify-center ${
                                                                         isSelected
                                                                             ? `${colors.border} bg-white`
                                                                             : "border-gray-300"
@@ -315,9 +329,6 @@ export default function FancyMultiSelect({
                                                                                 #{selectedIndex + 1}
                                                                             </span>
                                                                         )}
-                                                                    </p>
-                                                                    <p className="text-sm text-gray-500 mt-0.5">
-                                                                        {item.description}
                                                                     </p>
                                                                 </div>
                                                             </div>

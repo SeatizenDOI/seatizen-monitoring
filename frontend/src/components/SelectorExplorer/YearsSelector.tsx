@@ -21,7 +21,7 @@ export default function YearSelector({ id, years, selected_year, onChange, color
     const MIN = 0;
     const MAX = years.length - 1;
     const colorMap: Record<string, ColorClass> = {
-        beige: { bg: "bg-beige-400", text: "text-beige-800" },
+        deepteal: { bg: "bg-deepteal-400", text: "text-deepteal-800" },
         ocean: { bg: "bg-ocean-400", text: "text-ocean-800" },
     };
 

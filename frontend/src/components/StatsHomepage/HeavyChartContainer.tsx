@@ -1,6 +1,18 @@
 import { HeavyStats, PlatformCount } from "@/lib/definition";
 import React from "react";
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from "recharts";
+import {
+    PieChart,
+    Pie,
+    Cell,
+    ResponsiveContainer,
+    Tooltip,
+    Legend,
+    Bar,
+    BarChart,
+    CartesianGrid,
+    XAxis,
+    YAxis,
+} from "recharts";
 
 // Color palette from your CSS variables
 const colors = {
@@ -21,7 +33,7 @@ const StatCard = ({ title, value, subtitle }: { title: string; value: number | s
     </div>
 );
 
-const DonutChart = ({
+const BarChartComponent = ({
     data,
     title,
     colorPalette,
@@ -30,12 +42,13 @@ const DonutChart = ({
     title: string;
     colorPalette: string[];
 }) => {
+    data = data.sort((a, b) => b.count - a.count);
     const total = data.reduce((sum, item) => sum + item.count, 0);
 
     const chartData = data.map((item) => ({
         ...item,
-        value: item.count, // Recharts expects 'value'
-        name: item.platform_type, // Recharts expects 'name' for labels
+        value: item.count,
+        name: item.platform_type,
     }));
 
     const CustomTooltip = ({ active, payload }: any) => {
@@ -60,33 +73,29 @@ const DonutChart = ({
             <h3 className="text-xl font-semibold text-center mb-4 text-deepteal-500">{title}</h3>
             <div className="h-80">
                 <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                        <Pie
-                            data={chartData}
-                            cx="50%"
-                            cy="50%"
-                            labelLine={false}
-                            outerRadius={100}
-                            innerRadius={40}
-                            fill="#8884d8"
-                            dataKey="count"
-                        >
-                            {data.map((entry, index) => (
-                                <Cell
-                                    key={`cell-${index}`}
-                                    fill={colorPalette[index % colorPalette.length]}
-                                    stroke="white"
-                                    strokeWidth={2}
-                                />
-                            ))}
-                        </Pie>
-                        <Tooltip content={<CustomTooltip />} />
-                        <Legend
-                            verticalAlign="bottom"
-                            height={36}
-                            formatter={(value) => <span style={{ color: "#2D4A45", fontSize: "14px" }}>{value}</span>}
+                    <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                        <XAxis
+                            dataKey="platform_type"
+                            tick={{ fill: "#2D4A45", fontSize: 12 }}
+                            angle={-45}
+                            textAnchor="end"
+                            height={80}
                         />
-                    </PieChart>
+                        <YAxis
+                            scale="log"
+                            domain={["auto", "auto"]}
+                            tick={{ fill: "#2D4A45", fontSize: 8 }}
+                            label={{ value: "Count (log scale)", angle: -90, position: "insideLeft", fill: "#2D4A45" }}
+                            tickFormatter={(value) => value.toLocaleString()}
+                        />
+                        <Tooltip content={<CustomTooltip />} />
+                        <Bar dataKey="value" radius={[8, 8, 0, 0]}>
+                            {chartData.map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={colorPalette[index % colorPalette.length]} />
+                            ))}
+                        </Bar>
+                    </BarChart>
                 </ResponsiveContainer>
             </div>
             <div className="text-center mt-4">
@@ -112,26 +121,27 @@ export default function HeavyStatsSection({ stats }: { stats: HeavyStats }) {
 
                 {/* Main Statistics Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-                    <StatCard title="Total Deposits" value={stats.nb_deposits} subtitle="Across all platforms" />
-                    <StatCard title="Total Frames" value={stats.nb_frames} subtitle="" />
+                    <StatCard title="Total Sessions" value={stats.nb_deposits} subtitle="Across all platforms" />
+                    <StatCard title="Total Images" value={stats.nb_frames} subtitle="" />
                     <StatCard
-                        title="Q1 Frames"
+                        title="Q1 Images"
                         value={stats.nb_frames_q1_asv.toFixed(1) + ` %`}
-                        subtitle="Number of frames with centimeter accuracy"
+                        subtitle="Number of images with centimeter accuracy"
                     />
                 </div>
 
                 {/* Donut Charts */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <DonutChart
+                    <BarChartComponent
+                        data={stats.frames_by_platform}
+                        title="Images by Platform"
+                        colorPalette={colors.deepteal}
+                    />
+
+                    <BarChartComponent
                         data={stats.deposit_by_platform}
                         title="Deposits by Platform"
                         colorPalette={colors.ocean}
-                    />
-                    <DonutChart
-                        data={stats.frames_by_platform}
-                        title="Frames by Platform"
-                        colorPalette={colors.deepteal}
                     />
                 </div>
             </div>

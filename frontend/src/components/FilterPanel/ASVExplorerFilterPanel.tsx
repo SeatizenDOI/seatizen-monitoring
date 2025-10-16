@@ -57,12 +57,12 @@ export default function ASVExplorerFilterPanel() {
                     />
                 </div>
             </div>
-            <div className="bg-beige-50 border border-beige-100 rounded-lg mb-4">
-                <div className="bg-beige-100 px-4 py-2 border-b border-beige-200">
-                    <span className="text-sm font-semibold text-beige-800 uppercase tracking-wide">Right Panel</span>
+            <div className="bg-deepteal-50 border border-deepteal-100 rounded-lg mb-4">
+                <div className="bg-deepteal-100 px-4 py-2 border-b border-deepteal-200">
+                    <span className="text-sm font-semibold text-deepteal-800 uppercase tracking-wide">Right Panel</span>
                 </div>
 
-                <div className="p-4 border-b border-beige-100">
+                <div className="p-4 border-b border-deepteal-100">
                     <SpecieSelector
                         id="specie-explorer-asv-right"
                         species={species}
@@ -77,7 +77,7 @@ export default function ASVExplorerFilterPanel() {
                         years={years}
                         selected_year={filters.right_year}
                         onChange={(right_year) => setFilters((f) => ({ ...f, right_year }))}
-                        color="beige"
+                        color="deepteal"
                     />
                 </div>
             </div>

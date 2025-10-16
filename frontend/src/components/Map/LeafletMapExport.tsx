@@ -54,6 +54,9 @@ export default function LeafletMapExport({ deposits, polygons, onPolygonAdd, onP
             fullscreenControl: true,
         });
 
+        // Add scale at the bottom of the map.
+        L.control.scale({ maxWidth: 150, imperial: false }).addTo(map);
+
         // Base layers
         L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
             attribution: "&copy; Tiles © Esri",
