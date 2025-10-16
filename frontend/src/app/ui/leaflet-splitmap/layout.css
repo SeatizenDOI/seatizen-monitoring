@@ -15,3 +15,21 @@
     pointer-events: none;
     z-index: 999;
 }
+
+.leaflet-sbs-panel {
+    position: absolute;
+    bottom: 0;
+    background: var(--color-sage-200);
+    color: var(--color-sage-900);
+    opacity: 0.8;
+    padding: 8px;
+    border-radius: 4px;
+    pointer-events: auto;
+    white-space: nowrap;
+    font-weight: bold;
+}
+
+.leaflet-sbs-panel-left {
+    right: 0px;
+}
+

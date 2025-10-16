@@ -139,6 +139,15 @@ Control.SplitMap = Control.extend({
         this._map = map;
         var container = (this._container = DomUtil.create("div", "leaflet-sbs", map._controlContainer));
         this._divider = DomUtil.create("div", "leaflet-sbs-divider", container);
+
+        // Add left panel
+        this._leftPanel = DomUtil.create("div", "leaflet-sbs-panel leaflet-sbs-panel-left", this._divider);
+        this._leftPanel.innerHTML = "Left panel";
+
+        // Add right panel
+        this._rightPanel = DomUtil.create("div", "leaflet-sbs-panel leaflet-sbs-panel-right", this._divider);
+        this._rightPanel.innerHTML = "Right panel";
+
         var range = (this._range = DomUtil.create("input", "leaflet-sbs-range", container));
         range.type = "range";
         range.min = 0;
