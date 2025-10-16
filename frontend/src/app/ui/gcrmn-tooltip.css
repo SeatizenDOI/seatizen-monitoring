@@ -44,6 +44,18 @@
     margin-bottom: 0;
 }
 
+.gcrmn-popup .popup-description {
+    font-size: x-small;
+    color: #4A7A85;
+    text-align: justify;   
+}
+
+.gcrmn-popup .popup-description-link {
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    font-weight: 600;
+}
+
 .gcrmn-popup .popup-label {
     font-weight: 600;
     color: #4A7A85;

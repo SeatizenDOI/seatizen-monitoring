@@ -413,20 +413,22 @@ export default function Page() {
 
                             {/* GCRMN & eDNA */}
                             <div className="bg-white rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 border border-cream-300">
-                                <div className="flex items-start">
-                                    <div className="w-14 h-14 bg-gradient-to-br from-cream-700 to-cream-800 rounded-xl flex items-center justify-center mr-4 flex-shrink-0">
-                                        <Microscope className="w-7 h-7 text-white" />
+                                <Link href={"https://gcrmn.net/"} target="_blank">
+                                    <div className="flex items-start">
+                                        <div className="w-14 h-14 bg-gradient-to-br from-cream-700 to-cream-800 rounded-xl flex items-center justify-center mr-4 flex-shrink-0">
+                                            <Microscope className="w-7 h-7 text-white" />
+                                        </div>
+                                        <div>
+                                            <h3 className="text-2xl font-semibold text-cream-800 mb-3">
+                                                GCRMN & eDNA Points
+                                            </h3>
+                                            <p className="text-cream-700">
+                                                Locate long-term monitoring sites (GCRMN) and eDNA sampling points with
+                                                protocol details and results.
+                                            </p>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <h3 className="text-2xl font-semibold text-cream-800 mb-3">
-                                            GCRMN & eDNA Points
-                                        </h3>
-                                        <p className="text-cream-700">
-                                            Locate long-term monitoring sites (GCRMN) and eDNA sampling points with
-                                            protocol details and results.
-                                        </p>
-                                    </div>
-                                </div>
+                                </Link>
                             </div>
                         </div>
                     </div>
