@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import ShareButton from "@/components/Controls/ShareButton";
 import { COGServerResponse } from "@/lib/definition";
 import PresetButton from "@/components/Controls/PresetButton";
 import { useExplorerFilters } from "@/context/ExplorerFilterContext";
@@ -68,7 +67,6 @@ export default function ExplorerFilterPanel() {
 
     return (
         <div>
-            <ShareButton />
             <div className="my-4 flex flex-col " id="layers-selectors">
                 <FancyMultiSelect
                     opt_layers={layers}

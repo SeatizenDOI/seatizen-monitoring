@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect, ReactNode } from "react";
-import { ShipWheel, Menu, X, Settings, CircleQuestionMark } from "lucide-react";
+import { ShipWheel, Menu, X, Settings, CircleQuestionMark, CopyCheck, Share2 } from "lucide-react";
 import { useMediaQuery } from "react-responsive";
 
 export interface ResizablePanelProps {
@@ -18,6 +18,17 @@ export default function ResizablePanel({ left_content, right_content, right_titl
     const containerRef = useRef<HTMLDivElement>(null);
     const isMobile = useMediaQuery({ maxWidth: 768 }); // Tailwind "md"
     const [rightKey, setRightKey] = useState(0); // Use to force refresh for the right_content
+    const [copied, setCopied] = useState(false);
+
+    const handleClickShare = async () => {
+        try {
+            await navigator.clipboard.writeText(window.location.href);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000); // reset after 2s
+        } catch (err) {
+            console.error("Failed to copy URL:", err);
+        }
+    };
 
     const toggleFullscreen = () => {
         setIsFullscreen(!isFullscreen);
@@ -91,6 +102,9 @@ export default function ResizablePanel({ left_content, right_content, right_titl
                             <h1 className="pl-4 text-xl font-bold text-gray-800">Map Controls</h1>
                         </div>
                         <div className="flex flex-row justify-end">
+                            <button onClick={handleClickShare} className="p-1 hover:text-sage-400">
+                                {copied ? <CopyCheck className="w-5 h-5" /> : <Share2 className="w-5 h-5 " />}
+                            </button>
                             <button
                                 onClick={() => {
                                     localStorage.clear();
