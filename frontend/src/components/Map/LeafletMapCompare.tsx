@@ -5,6 +5,8 @@ import { useEffect, useRef } from "react";
 import "@/lib/leaflet-splitmap";
 import "leaflet-fullscreen";
 import "leaflet-measure";
+import "leaflet-easyprint";
+
 import { COGServerResponse, Deposit } from "@/lib/definition";
 import { load_edna_data } from "@/lib/edna_functions";
 import { bindMapMoveToUrl, bindMapRequestPredOrDepthAtClick, getInitialView } from "@/utils/mapUtils";
@@ -98,6 +100,15 @@ export default function LeafletMapCompare({
                 localization: "fr",
             })
             .addTo(map);
+
+        // @ts-ignore (no correct types)
+        L.easyPrint({
+            position: "topright",
+            sizeModes: ["Current", "A4Portrait", "A4Landscape"],
+            filename: "seatizen-monitoring-map",
+            exportOnly: true,
+            hideControlContainer: false,
+        }).addTo(map);
 
         // Setup the map backgound.
         L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
