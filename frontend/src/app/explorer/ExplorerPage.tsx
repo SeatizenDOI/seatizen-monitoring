@@ -6,6 +6,7 @@ import MapCompare from "@/components/Map/DynamicLeafletMapCompare";
 import ResizablePanel from "@/components/ResizablePanel";
 import ExplorerFilterPanel from "@/components/FilterPanel/ExplorerFilterPanel";
 import { useExplorerFilters } from "@/context/ExplorerFilterContext";
+import LegendPanel from "@/components/LegendPanel";
 
 export default function ExplorerPage() {
     const [showASV, setShowASV] = useState(true);
@@ -17,6 +18,7 @@ export default function ExplorerPage() {
         <ResizablePanel
             left_content={
                 <div className="flex flex-col">
+                    <LegendPanel />
                     <ExplorerFilterPanel />
                     <ToggleButton
                         label="Underwater orthophoto"

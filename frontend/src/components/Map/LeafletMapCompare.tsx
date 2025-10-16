@@ -73,7 +73,6 @@ export default function LeafletMapCompare({
 
     useEffect(() => {
         if (!mapRef.current) return;
-        console.log("Mega resfresh");
 
         const { lat, lng, zoom } = getInitialView();
 

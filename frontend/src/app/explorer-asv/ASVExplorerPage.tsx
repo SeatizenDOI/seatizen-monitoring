@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
 
 import ToggleButton from "@/components/Controls/ToggleButton";
 import MapCompare from "@/components/Map/DynamicLeafletMapCompare";
@@ -11,8 +10,6 @@ import { useASVExplorerFilters } from "@/context/ASVExplorerFilterContext";
 import ResizablePanel from "@/components/ResizablePanel";
 
 export default function ASVExplorerPage() {
-    const router = useRouter();
-    const searchParams = useSearchParams();
     const { filters } = useASVExplorerFilters();
     const [layersMap, setLayersMap] = useState<Map<string, COGServerResponse>>(new Map());
 

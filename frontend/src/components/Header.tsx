@@ -8,7 +8,7 @@ import { useState } from "react";
 
 import { LinkItem } from "@/lib/definition";
 import { HeaderLink } from "@/components/HeaderLink";
-import { Upload, Compass, DraftingCompass, ScrollText } from "lucide-react";
+import { Upload, Compass, DraftingCompass, ScrollText, HelpingHand } from "lucide-react";
 
 const url_paths: LinkItem[] = [
     {
@@ -23,6 +23,7 @@ const url_paths: LinkItem[] = [
         icon: DraftingCompass,
     },
     { name: "Publications", href: "/publications", icon: ScrollText },
+    { name: "Tutorials", href: "/docs", icon: HelpingHand },
 ];
 
 export default function Header() {
