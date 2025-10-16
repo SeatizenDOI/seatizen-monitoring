@@ -187,7 +187,14 @@ export default function Page() {
                                 </p>
                                 <p className="text-lg text-deepteal-600 leading-relaxed">
                                     All sessions are stored in a <strong>unified directory structure</strong>,
-                                    regardless of how the data was collected, and archived on <strong>Zenodo</strong>{" "}
+                                    regardless of how the data was collected, and archived on{" "}
+                                    <Link
+                                        href="https://doi.org/10.5281/zenodo.11125847"
+                                        target="_blank"
+                                        className="font-bold animate-pulse"
+                                    >
+                                        Zenodo
+                                    </Link>{" "}
                                     for open access.
                                 </p>
                                 <p className="text-lg text-sage-600 mt-6 leading-relaxed">
@@ -233,7 +240,7 @@ export default function Page() {
                 <section className="py-20" id="data">
                     <div className="max-w-7xl mx-auto px-6">
                         <div className="text-center mb-16">
-                            <h2 className="text-4xl font-bold text-deepteal-600 mb-6">What Data is Available?</h2>
+                            <h2 className="text-4xl font-bold text-deepteal-600 mb-6">Which Data is Available?</h2>
                             <p className="text-xl text-sage-600 max-w-3xl mx-auto">
                                 Seatizen Atlas provides both raw and processed data
                             </p>
@@ -341,7 +348,7 @@ export default function Page() {
                             <iframe
                                 width="560"
                                 height="315"
-                                src="https://www.youtube.com/embed/kM8BlmeyVmg?si=VW3dKqpcw0jfcJNG"
+                                src="https://www.youtube.com/embed/3PjCr2l7P6I?si=90ATnJ72XMNPecHh"
                                 title="YouTube video player"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                                 referrerPolicy="strict-origin-when-cross-origin"
@@ -358,7 +365,7 @@ export default function Page() {
                             <h2 className="text-4xl font-bold text-deepteal-600 mb-6">Explore the Data</h2>
                             <p className="text-xl text-deepteal-600 max-w-4xl mx-auto">
                                 This makes it easy to understand <strong>where</strong>, <strong>when</strong>, and{" "}
-                                <strong>what</strong> has been observed — from a single dive to a large-scale lagoon
+                                <strong>what</strong> has been observed : from a single dive to a large-scale lagoon
                                 mapping campaign.
                             </p>
                         </div>
@@ -469,13 +476,28 @@ export default function Page() {
                                     <div className="flex">
                                         <div className="w-2 h-2 max-w-2 min-w-2 bg-ocean-500 rounded-full mr-3 mt-2"></div>
                                         <span>
-                                            <strong>14,492</strong> ASV & SCUBA images manually annotated using FiftyOne
+                                            <strong>14,492</strong> ASV & SCUBA images manually annotated using{" "}
+                                            <Link
+                                                href="https://voxel51.com/"
+                                                target="_blank"
+                                                className="font-bold animate-pulse"
+                                            >
+                                                FiftyOne
+                                            </Link>
                                         </span>
                                     </div>
                                     <div className="flex">
                                         <div className="w-2 h-2 max-w-2 min-w-2 bg-ocean-500 rounded-full mr-3 mt-2"></div>
                                         <span>
-                                            Fine-tuned <strong>DINOv2 Transformers</strong> for multilabel predictions
+                                            Fine-tuned{" "}
+                                            <Link
+                                                href="https://arxiv.org/abs/2304.07193"
+                                                target="_blank"
+                                                className="font-bold animate-pulse"
+                                            >
+                                                DINOv2
+                                            </Link>{" "}
+                                            model for multilabel predictions
                                         </span>
                                     </div>
                                 </div>
@@ -516,28 +538,28 @@ export default function Page() {
                                                 href="https://doi.org/10.1016/j.ecoinf.2025.103149"
                                                 className="text-sage-700 animate-pulse"
                                             >
-                                                From underwater to drone: A novel multi-scale knowledge distillation
-                                                approach for coral reef monitoring
+                                                &quot;From underwater to drone: A novel multi-scale knowledge
+                                                distillation approach for coral reef monitoring&quot;
                                             </Link>
                                         </span>
                                     </div>
                                     <div className="flex">
                                         <div className="w-2 h-2 max-w-2 min-w-2 bg-sage-500 rounded-full mr-3 mt-2"></div>
                                         <span>
-                                            <strong>Weakly supervised semantic segmentation</strong> to generate habitat
-                                            maps:{" "}
+                                            <strong>Weakly supervised semantic segmentation</strong>:{" "}
                                             <Link
                                                 href="http://dx.doi.org/10.48550/arXiv.2508.18958"
                                                 className="text-sage-700 animate-pulse"
                                             >
-                                                the point is the mask
+                                                &quot;The point is the mask: scaling coral reef segmentation with weak
+                                                supervision &quot;
                                             </Link>
                                         </span>
                                     </div>
                                 </div>
                             </div>
 
-                            {/* AI Approach */}
+                            {/* Sattelite Approach */}
                             <div className="bg-gradient-to-br from-deepteal-50 to-deepteal-100 rounded-3xl p-8 border border-deepteal-200 shadow-xl">
                                 <div className="flex items-center mb-6">
                                     <div className="w-12 h-12 bg-deepteal-500 rounded-xl flex items-center justify-center mr-4">
@@ -556,6 +578,28 @@ export default function Page() {
                                         height={400}
                                         className="border rounded-3xl border-deepteal-200"
                                     />
+                                </div>
+                                <div className="space-y-3 text-deepteal-600">
+                                    <div className="flex">
+                                        <div className="w-2 h-2 max-w-2 min-w-2 bg-deepteal-500 rounded-full mr-3 mt-2"></div>
+                                        <span>
+                                            Aerial orthophotos from{" "}
+                                            <Link
+                                                href="https://geoservices.ign.fr/bdortho"
+                                                className="text-deepteal-700 animate-pulse"
+                                            >
+                                                IGN BDOrtho
+                                            </Link>{" "}
+                                            covering the entire French territory, with temporal coverage from 1950 to
+                                            2022
+                                        </span>
+                                    </div>
+                                    <div className="flex">
+                                        <div className="w-2 h-2 max-w-2 min-w-2 bg-deepteal-500 rounded-full mr-3 mt-2"></div>
+                                        <span>
+                                            Used UAV predictions as <em>labels</em> for IGN orthophotos
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
