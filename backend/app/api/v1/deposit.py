@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
 from app.models.deposit import Deposit
-from app.crud.deposit import get_deposits_filtered
+from app.crud.deposit import get_deposits_filtered, get_deposit_by_year
 
 
 router = APIRouter()
@@ -41,4 +41,13 @@ async def get_deposit_filter_by_date_and_platforms(
         db: AsyncSession = Depends(get_db)
     ):
     deposits = await get_deposits_filtered(platforms, start_date, end_date, db)
+    return deposits
+
+
+@router.get("/footprint")
+async def get_asv_footprint_by_year(
+        year: str,
+        db: AsyncSession = Depends(get_db)
+    ):
+    deposits = await get_deposit_by_year(year, db)
     return deposits

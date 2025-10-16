@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 import ToggleButton from "@/components/Controls/ToggleButton";
 import MapCompare from "@/components/Map/DynamicLeafletMapCompare";
-import { COGServerResponse } from "@/lib/definition";
+import { COGServerResponse, Deposit } from "@/lib/definition";
 import ASVExplorerFilterPanel from "@/components/FilterPanel/ASVExplorerFilterPanel";
 import { useASVExplorerFilters } from "@/context/ASVExplorerFilterContext";
 import ResizablePanel from "@/components/ResizablePanel";
@@ -19,8 +19,41 @@ export default function ASVExplorerPage() {
     const [selectedLayersLeft, setSelectedLayersLeft] = useState<COGServerResponse[]>([]);
     const [selectedLayersRight, setSelectedLayersRight] = useState<COGServerResponse[]>([]);
 
+    const [selectedDepositsLeft, setSelectedDepositsLeft] = useState<Deposit[]>([]);
+    const [selectedDepositsRight, setSelectedDepositsRight] = useState<Deposit[]>([]);
+
     const [loading, setLoading] = useState(true);
     const [showMarkers, setShowMarkers] = useState(true);
+
+    async function get_layers(year: string, specie: string): Promise<COGServerResponse[]> {
+        const params = new URLSearchParams();
+
+        params.append("year", year);
+        params.append("specie", specie);
+
+        const res = await fetch(`${process.env.NEXT_PUBLIC_URL_COG_SERVER}/get-layer?${params.toString()}`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}, Cannot retrieve information for left layer`);
+        const layer: COGServerResponse = await res.json();
+
+        const background_map = layersMap.get(`ortho_${filters.left_year}`);
+
+        if (background_map) {
+            return [background_map, layer];
+        }
+        return [layer];
+    }
+
+    async function get_deposits(year: string): Promise<Deposit[]> {
+        const params = new URLSearchParams();
+        params.append("year", year);
+        const res = await fetch(
+            `${process.env.NEXT_PUBLIC_URL_BACKEND_SERVER}/api/v1/deposits/footprint?${params.toString()}`
+        );
+
+        if (!res.ok) throw new Error(`HTTP ${res.status}, Cannot retrieve information for left layer`);
+        const deposits: Deposit[] = await res.json();
+        return deposits;
+    }
 
     useEffect(() => {
         async function fetchLayers() {
@@ -49,41 +82,14 @@ export default function ASVExplorerPage() {
         async function fetchFilters() {
             try {
                 if (filters.left_specie) {
-                    const params = new URLSearchParams();
-
-                    params.append("year", filters.left_year.toString());
-                    params.append("specie", filters.left_specie.name);
-
-                    const res = await fetch(`${process.env.NEXT_PUBLIC_URL_COG_SERVER}/get-layer?${params.toString()}`);
-                    if (!res.ok) throw new Error(`HTTP ${res.status}, Cannot retrieve information for left layer`);
-                    const layer: COGServerResponse = await res.json();
-
-                    const background_map = layersMap.get(`ortho_${filters.left_year}`);
-
-                    if (background_map !== undefined) {
-                        setSelectedLayersLeft([background_map, layer]);
-                    } else {
-                        setSelectedLayersLeft([layer]);
-                    }
+                    // ! Called setDeposit before setLayer. Elif deposits will be show on map with a delay.
+                    setSelectedDepositsLeft(await get_deposits(filters.left_year.toString()));
+                    setSelectedLayersLeft(await get_layers(filters.left_year.toString(), filters.left_specie.name));
                 }
 
                 if (filters.right_specie) {
-                    const params = new URLSearchParams();
-
-                    params.append("year", filters.right_year.toString());
-                    params.append("specie", filters.right_specie.name);
-
-                    const res = await fetch(`${process.env.NEXT_PUBLIC_URL_COG_SERVER}/get-layer?${params.toString()}`);
-                    if (!res.ok) throw new Error(`HTTP ${res.status}, Cannot retrieve information for right layer`);
-                    const layer: COGServerResponse = await res.json();
-
-                    const background_map = layersMap.get(`ortho_${filters.right_year}`);
-
-                    if (background_map !== undefined) {
-                        setSelectedLayersRight([background_map, layer]);
-                    } else {
-                        setSelectedLayersRight([layer]);
-                    }
+                    setSelectedDepositsRight(await get_deposits(filters.right_year.toString()));
+                    setSelectedLayersRight(await get_layers(filters.right_year.toString(), filters.right_specie.name));
                 }
             } catch (error) {
                 console.error(error);
@@ -93,22 +99,6 @@ export default function ASVExplorerPage() {
         }
         fetchFilters();
     }, [filters.left_specie, filters.right_specie, filters.left_year, filters.right_year]);
-
-    // Update the url based on the selected layers for each side.
-    useEffect(() => {
-        updateURL(selectedLayersLeft, selectedLayersRight);
-    }, [selectedLayersLeft, selectedLayersRight]);
-
-    const updateURL = (left: COGServerResponse[], right: COGServerResponse[]) => {
-        const params = new URLSearchParams(searchParams.toString());
-        if (left.length !== 0) params.set("left", left.map((l) => l.id).join(","));
-        else params.delete("left");
-
-        if (right.length !== 0) params.set("right", right.map((l) => l.id).join(","));
-        else params.delete("right");
-
-        router.push(`?${params.toString()}`, { scroll: false });
-    };
 
     if (loading) return <p>Loading layers...</p>;
 
@@ -133,6 +123,8 @@ export default function ASVExplorerPage() {
                     rightUrls={selectedLayersRight}
                     withASV={false}
                     withMarker={showMarkers}
+                    leftDeposits={selectedDepositsLeft}
+                    rightDeposits={selectedDepositsRight}
                 />
             }
             right_title="Compare ASV predictions by taxon, substrate and by date."

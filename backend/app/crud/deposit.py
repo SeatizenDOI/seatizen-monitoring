@@ -6,7 +6,7 @@ from geoalchemy2.shape import to_shape
 from geoalchemy2.elements import WKBElement
 
 
-from sqlalchemy import select
+from sqlalchemy import select, extract
 from sqlalchemy.orm import joinedload
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -72,5 +72,38 @@ async def get_deposits_filtered(
             d.deposit_linestring.footprint_linestring = None
             d.perimeter = None
             
+
+    return deposits
+
+async def get_deposit_by_year(
+        year: str,
+        db: AsyncSession
+):
+    if not year.isnumeric(): return []
+    stmt = select(Deposit).filter(Deposit.platform_type == "ASV").filter(extract("year", Deposit.session_date) == int(year))
+
+    result = await db.execute(stmt)
+    deposits = result.scalars().all()
+
+    # Convert geometry to GeoJSON
+    geod = Geod(ellps="WGS84")
+
+    for d in deposits:
+
+        if d.footprint:
+            fp = d.footprint
+
+            # If asyncpg returned a string (hex WKB), convert it to WKBElement
+            if isinstance(fp, str):
+                fp = WKBElement(unhexlify(fp), srid=4326)
+
+            shape = to_shape(fp)  # Converts WKB to Shapely geometry
+            poly_area, poly_perimeter = geod.geometry_area_perimeter(shape)
+            d.area = f"{round(poly_area , 2)} m²"
+            d.footprint = shape.__geo_interface__  # GeoJSON format
+            
+        else:
+            d.area = None
+            d.footprint = None
 
     return deposits

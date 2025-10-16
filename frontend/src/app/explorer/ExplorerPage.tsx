@@ -39,6 +39,8 @@ export default function ExplorerPage() {
                     rightUrls={filters.selected_right_layers}
                     withASV={showASV}
                     withMarker={showMarkers}
+                    leftDeposits={[]}
+                    rightDeposits={[]}
                 />
             }
             right_title="Explore raster data from the Seatizen Atlas database."

@@ -1,20 +1,26 @@
 "use client";
 
-import L, { LatLngTuple } from "leaflet";
+import L, { LatLngTuple, GeoJSON as LeafletGeoJSON } from "leaflet";
 import { useEffect, useRef } from "react";
 import "@/lib/leaflet-splitmap";
 import "leaflet-fullscreen";
 import "leaflet-measure";
-import { COGServerResponse } from "@/lib/definition";
+import { COGServerResponse, Deposit } from "@/lib/definition";
 import { load_edna_data } from "@/lib/edna_functions";
 import { bindMapMoveToUrl, bindMapRequestPredOrDepthAtClick, getInitialView } from "@/utils/mapUtils";
 import { load_gcrmn_data } from "@/lib/gcrmn_functions";
+import { create_deposits_geojson } from "@/lib/geojson_functions";
+
+const LEFT_GEOJSON_PANE_NAME = "leftGeojsonPane";
+const RIGHT_GEOJSON_PANE_NAME = "rightGeojsonPane";
 
 export interface LeafletSplitMapProps {
     leftUrls: COGServerResponse[];
     rightUrls: COGServerResponse[];
     withASV: boolean;
     withMarker: boolean;
+    leftDeposits: Deposit[];
+    rightDeposits: Deposit[];
 }
 
 // Fix marker icons if needed
@@ -42,20 +48,30 @@ L.Control.Measure.include({
     },
 });
 
-export default function LeafletMapCompare({ leftUrls, rightUrls, withASV, withMarker }: LeafletSplitMapProps) {
+export default function LeafletMapCompare({
+    leftUrls,
+    rightUrls,
+    withASV,
+    withMarker,
+    leftDeposits,
+    rightDeposits,
+}: LeafletSplitMapProps) {
     const mapRef = useRef<HTMLDivElement>(null);
     const splitRef = useRef<any>(null);
     const layersRef = useRef<L.TileLayer[]>([]);
     const urlsRef = useRef({ left: leftUrls, right: rightUrls, with_asv: withASV, with_marker: withMarker });
     const markersRef = useRef<L.Marker[]>([]);
+    const geoJsonLayerRef = useRef<LeafletGeoJSON[]>([]);
 
     // Update this value to always get the new one.
+    // ! I don't set deposits because we just need to update deposits before layers to avoid an unnecessary refresh
     useEffect(() => {
         urlsRef.current = { left: leftUrls, right: rightUrls, with_asv: withASV, with_marker: withMarker };
     }, [leftUrls, rightUrls, withASV]);
 
     useEffect(() => {
         if (!mapRef.current) return;
+        console.log("Mega resfresh");
 
         const { lat, lng, zoom } = getInitialView();
 
@@ -101,6 +117,10 @@ export default function LeafletMapCompare({ leftUrls, rightUrls, withASV, withMa
         // Keep ref to map.
         mapRef.current = map as any;
 
+        // Create two custom panes before adding layers.
+        map.createPane(LEFT_GEOJSON_PANE_NAME);
+        map.createPane(RIGHT_GEOJSON_PANE_NAME);
+
         return () => {
             cleanupMoveHandler();
             cleanupClickHandler();
@@ -127,6 +147,10 @@ export default function LeafletMapCompare({ leftUrls, rightUrls, withASV, withMa
         layersRef.current.forEach((layer) => map.removeLayer(layer));
         layersRef.current = [];
 
+        // Remove previous GeoJSON
+        geoJsonLayerRef.current.forEach((geo) => map.removeLayer(geo));
+        geoJsonLayerRef.current = [];
+
         // Append the left layers.
         const left_layers = [];
         for (const layer of leftUrls) {
@@ -138,6 +162,12 @@ export default function LeafletMapCompare({ leftUrls, rightUrls, withASV, withMa
             layersRef.current.push(tile);
         }
 
+        const geoJsonLayer_left = create_deposits_geojson(leftDeposits, map, LEFT_GEOJSON_PANE_NAME);
+        if (geoJsonLayer_left) {
+            left_layers.push(geoJsonLayer_left);
+            geoJsonLayerRef.current.push(geoJsonLayer_left);
+        }
+
         // Append the right layers.
         const right_layers = [];
         for (const layer of rightUrls) {
@@ -147,6 +177,12 @@ export default function LeafletMapCompare({ leftUrls, rightUrls, withASV, withMa
             }).addTo(map);
             right_layers.push(tile2);
             layersRef.current.push(tile2);
+        }
+
+        const geoJsonLayer_right = create_deposits_geojson(rightDeposits, map, RIGHT_GEOJSON_PANE_NAME);
+        if (geoJsonLayer_right) {
+            right_layers.push(geoJsonLayer_right);
+            geoJsonLayerRef.current.push(geoJsonLayer_right);
         }
 
         // Redraw the central splitpane.
