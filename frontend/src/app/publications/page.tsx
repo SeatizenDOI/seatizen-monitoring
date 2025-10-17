@@ -1,7 +1,8 @@
 import fs from "fs";
 import path from "path";
 import { Metadata } from "next";
-
+import Workflow from "@/components/Workflow";
+import Link from "next/link";
 export const metadata: Metadata = {
     title: "Publications",
     description: "Scientific publications ",
@@ -63,6 +64,29 @@ export default async function PublicationsPage() {
                     );
                 })}
             </div>
+
+            <div className="my-48 border-2 rounded-xl relative p-12 flex items-center justify-center bg-gradient-to-br from-deepteal-200 to-ocean-800 text-cream-50">
+                <div className="relative text-center px-6 max-w-6xl mx-auto">
+                    <div className="mb-8">
+                        <h1 className="text-6xl font-bold text-background bg-clip-text mb-6 leading-tight">
+                            Join the Seatizen Atlas Community
+                        </h1>
+                        <p className="text-xl md:text-2xl text-beige-200 max-w-4xl mx-auto leading-relaxed mb-12">
+                            Discover, visualize, and download the data produced by the Seatizen Team. Access
+                            georeferenced frames, habitat predictions, and more.
+                        </p>
+                        <Link
+                            href="https://zenodo.org/communities/seatizen-data/"
+                            target="_blank"
+                            className="bg-gradient-to-r from-ocean-500 to-ocean-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:from-ocean-600 hover:to-ocean-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl "
+                        >
+                            Join us
+                        </Link>
+                    </div>
+                </div>
+            </div>
+
+            <Workflow />
         </main>
     );
 }

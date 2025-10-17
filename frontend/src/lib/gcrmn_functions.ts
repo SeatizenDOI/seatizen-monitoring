@@ -54,8 +54,8 @@ export async function load_gcrmn_data(map: L.Map) {
                             <span class="popup-value">${gcrmn.update_date}</span>
                         </div>
                         <div class="popup-field">
-                            <span class="popup-description"> The data are stored in the <a class="popup-description-link" href="https://quadrige.ifremer.fr/support/" target="_blanck"> Quadrige information system</a>.
-                            <br>Contact the <a class="popup-description-link" href="https://www.reservemarinereunion.fr/" target="_blanck"> RNMR</a> to obtain them. </span>
+                            <span class="popup-description"> The data are stored in the <a class="popup-description-link" href="https://quadrige.ifremer.fr/support/" target="_blank"> Quadrige information system</a>.
+                            <br>Contact the <a class="popup-description-link" href="https://www.reservemarinereunion.fr/" target="_blank"> RNMR</a> to obtain them. </span>
                         </div>
                     </div>
                 </div>
