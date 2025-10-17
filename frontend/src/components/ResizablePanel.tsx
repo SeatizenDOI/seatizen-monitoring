@@ -102,7 +102,7 @@ export default function ResizablePanel({ left_content, right_content, right_titl
                             <h1 className="pl-4 text-xl font-bold text-gray-800">Map Controls</h1>
                         </div>
                         <div className="flex flex-row justify-end">
-                            <button onClick={handleClickShare} className="p-1 hover:text-sage-400">
+                            <button id="share-button" onClick={handleClickShare} className="p-1 hover:text-sage-400">
                                 {copied ? <CopyCheck className="w-5 h-5" /> : <Share2 className="w-5 h-5 " />}
                             </button>
                             <button

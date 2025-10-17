@@ -11,6 +11,7 @@ import LegendPanel from "@/components/LegendPanel";
 export default function ExplorerPage() {
     const [showASV, setShowASV] = useState(true);
     const [showMarkers, setShowMarkers] = useState(true);
+    const [showComparison, setComparison] = useState(false);
 
     const { filters } = useExplorerFilters();
 
@@ -33,6 +34,12 @@ export default function ExplorerPage() {
                         defaultState={true}
                         onToggle={(state) => setShowMarkers(state)}
                     />
+                    <ToggleButton
+                        label="Precompute comparison zone"
+                        id="comparison-graph"
+                        defaultState={false}
+                        onToggle={(state) => setComparison(state)}
+                    />
                 </div>
             }
             right_content={
@@ -41,6 +48,7 @@ export default function ExplorerPage() {
                     rightUrls={filters.selected_right_layers}
                     withASV={showASV}
                     withMarker={showMarkers}
+                    withComparisonMap={showComparison}
                     leftDeposits={[]}
                     rightDeposits={[]}
                 />

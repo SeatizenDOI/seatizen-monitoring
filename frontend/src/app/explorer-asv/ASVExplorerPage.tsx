@@ -120,6 +120,7 @@ export default function ASVExplorerPage() {
                     rightUrls={selectedLayersRight}
                     withASV={false}
                     withMarker={showMarkers}
+                    withComparisonMap={false}
                     leftDeposits={selectedDepositsLeft}
                     rightDeposits={selectedDepositsRight}
                 />

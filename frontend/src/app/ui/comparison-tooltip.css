@@ -1,0 +1,20 @@
+.comparison-popup .leaflet-popup-content {
+    margin: 0;
+    padding: 0;
+    line-height: 1.5;
+    width: 600px !important;
+}
+
+.comparison-popup .leaflet-popup-content-wrapper {
+    margin: 0;
+    padding: 0;
+}
+
+.comparison-popup .popup-group {
+    background-color: #F9F7F4;
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+    border: solid 1px #F9F7F4;
+    border-radius: 10px;
+}

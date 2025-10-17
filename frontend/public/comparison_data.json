@@ -1,0 +1,10 @@
+[
+    {
+        "zone": "/comparison/langue_sable.geojson",
+        "figure": "/comparison/langue_sable.png"
+    },
+    {
+        "zone": "/comparison/syringodium.geojson",
+        "figure": "/comparison/syringodium.png"
+    }
+]

@@ -12,6 +12,7 @@ import { load_edna_data } from "@/lib/edna_functions";
 import { bindMapMoveToUrl, bindMapRequestPredOrDepthAtClick, getInitialView } from "@/utils/mapUtils";
 import { load_gcrmn_data } from "@/lib/gcrmn_functions";
 import { create_deposits_geojson } from "@/lib/geojson_functions";
+import { load_comparison_zones } from "@/lib/comparison_functions";
 
 const LEFT_GEOJSON_PANE_NAME = "leftGeojsonPane";
 const RIGHT_GEOJSON_PANE_NAME = "rightGeojsonPane";
@@ -21,6 +22,7 @@ export interface LeafletSplitMapProps {
     rightUrls: COGServerResponse[];
     withASV: boolean;
     withMarker: boolean;
+    withComparisonMap: boolean;
     leftDeposits: Deposit[];
     rightDeposits: Deposit[];
 }
@@ -55,6 +57,7 @@ export default function LeafletMapCompare({
     rightUrls,
     withASV,
     withMarker,
+    withComparisonMap,
     leftDeposits,
     rightDeposits,
 }: LeafletSplitMapProps) {
@@ -63,6 +66,8 @@ export default function LeafletMapCompare({
     const layersRef = useRef<L.TileLayer[]>([]);
     const urlsRef = useRef({ left: leftUrls, right: rightUrls, with_asv: withASV, with_marker: withMarker });
     const markersRef = useRef<L.Marker[]>([]);
+    const comparisonZonesRef = useRef<LeafletGeoJSON[]>([]);
+
     const geoJsonLayerRef = useRef<LeafletGeoJSON[]>([]);
 
     // Update this value to always get the new one.
@@ -216,8 +221,19 @@ export default function LeafletMapCompare({
             }
         };
 
+        const manageComparisonZones = async () => {
+            if (withComparisonMap && comparisonZonesRef.current.length === 0) {
+                const comparison_zones = await load_comparison_zones(map);
+                comparisonZonesRef.current = comparisonZonesRef.current.concat(comparison_zones);
+            } else if (!withComparisonMap && comparisonZonesRef.current.length !== 0) {
+                comparisonZonesRef.current.forEach((geo) => geo.remove());
+                comparisonZonesRef.current = [];
+            }
+        };
+
         manageMarkers();
-    }, [leftUrls, rightUrls, withASV, withMarker]);
+        manageComparisonZones();
+    }, [leftUrls, rightUrls, withASV, withMarker, withComparisonMap]);
 
     return <div ref={mapRef} id="map-compare" style={{ height: "85vh", width: "100%", zIndex: 1 }}></div>;
 }

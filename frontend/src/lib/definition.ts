@@ -135,3 +135,8 @@ export const depositPlatformColorMap: Record<string, string> = {
     UVC: "red",
     default: "gray",
 };
+
+export type ComparisonItem = {
+    zone: string;
+    figure: string;
+};
