@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Info } from "lucide-react";
 
 type DepthLegendItem = { depth: number; color: string };
 type HabitatLegend = Record<string, string>;
@@ -39,7 +38,6 @@ function buildDepthGradient(depthLegend: { depth: number; color: string }[]) {
 }
 
 export default function LegendPanel() {
-    const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(true);
     const [legends, setLegends] = useState<LegendGroup[]>([]);
 
@@ -63,55 +61,44 @@ export default function LegendPanel() {
     if (loading) return <p>Loading Legends...</p>;
 
     return (
-        <div className="absolute bottom-4 left-4 z-[1000]">
-            {open && (
-                <div className="mb-3 p-4 bg-white/95 backdrop-blur-md rounded-2xl shadow-lg border border-gray-200 w-80 max-h-[60vh] overflow-y-auto">
-                    {legends.map((group, idx) => (
-                        <div key={idx} className="mb-6 last:mb-0">
-                            <h3 className="text-sm font-semibold text-gray-700 mb-1">{group.title}</h3>
-                            {group.description && <p className="text-xs text-gray-500 mb-2">{group.description}</p>}
+        <div>
+            {legends.map((group, idx) => (
+                <div key={idx} className="p-4">
+                    <h3 className="text-sm font-semibold text-gray-700 mb-1">{group.title}</h3>
+                    {group.description && <p className="text-xs text-gray-500 mb-2">{group.description}</p>}
 
-                            {"length" in group.legend ? (
-                                // Depth legend (continuous)
-                                <div>
-                                    <div
-                                        className="h-4 w-full rounded-lg border border-gray-300"
-                                        style={{ background: buildDepthGradient(group.legend as DepthLegend) }}
-                                    ></div>
-                                    <div className="flex justify-between text-[10px] text-gray-600 mt-1">
-                                        {(group.legend as DepthLegend)
-                                            .slice()
-                                            .sort((a, b) => a.depth - b.depth)
-                                            .map((l, i) => (
-                                                <span key={i}>{l.depth}</span>
-                                            ))}
-                                    </div>
-                                </div>
-                            ) : (
-                                // Habitat legend (categorical)
-                                <ul className="space-y-1 mt-1">
-                                    {Object.entries(group.legend as HabitatLegend).map(([label, color]) => (
-                                        <li key={label} className="flex items-center gap-2 text-sm text-gray-700">
-                                            <span
-                                                className="inline-block w-4 h-4 rounded-sm border border-gray-300"
-                                                style={{ backgroundColor: color }}
-                                            ></span>
-                                            {label}
-                                        </li>
+                    {"length" in group.legend ? (
+                        // Depth legend (continuous)
+                        <div>
+                            <div
+                                className="h-4 w-full rounded-lg border border-gray-300"
+                                style={{ background: buildDepthGradient(group.legend as DepthLegend) }}
+                            ></div>
+                            <div className="flex justify-between text-[10px] text-gray-600 mt-1">
+                                {(group.legend as DepthLegend)
+                                    .slice()
+                                    .sort((a, b) => a.depth - b.depth)
+                                    .map((l, i) => (
+                                        <span key={i}>{l.depth}</span>
                                     ))}
-                                </ul>
-                            )}
+                            </div>
                         </div>
-                    ))}
+                    ) : (
+                        // Habitat legend (categorical)
+                        <ul className="space-y-1 mt-1">
+                            {Object.entries(group.legend as HabitatLegend).map(([label, color]) => (
+                                <li key={label} className="flex items-center gap-2 text-sm text-gray-700">
+                                    <span
+                                        className="inline-block w-4 h-4 rounded-sm border border-gray-300"
+                                        style={{ backgroundColor: color }}
+                                    ></span>
+                                    {label}
+                                </li>
+                            ))}
+                        </ul>
+                    )}
                 </div>
-            )}
-            <button
-                onClick={() => setOpen(!open)}
-                className="flex items-center gap-2 bg-white/80 backdrop-blur-sm text-gray-800 px-3 py-2 rounded-xl shadow hover:bg-white transition-all"
-            >
-                <Info className="w-5 h-5" />
-                <span className="font-medium">Legend</span>
-            </button>
+            ))}
         </div>
     );
 }

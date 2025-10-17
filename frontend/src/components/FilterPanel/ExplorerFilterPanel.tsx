@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { COGServerResponse } from "@/lib/definition";
-import PresetButton from "@/components/Controls/PresetButton";
 import { useExplorerFilters } from "@/context/ExplorerFilterContext";
 import FancyMultiSelect from "../Controls/FancyMultiSelect";
-import { ChevronDown, ChevronRight } from "lucide-react";
+import AccordionComponent from "../Accordion";
+import { SquareStack } from "lucide-react";
 
 export default function ExplorerFilterPanel() {
     const router = useRouter();
@@ -13,7 +13,6 @@ export default function ExplorerFilterPanel() {
     const { filters, setFilters } = useExplorerFilters();
     const [layers, setLayers] = useState<COGServerResponse[]>([]);
     const [loading, setLoading] = useState(true);
-    const [showPreset, setShowPreset] = useState(false);
 
     // Retrieve all the layers from the cog server.
     useEffect(() => {
@@ -66,53 +65,32 @@ export default function ExplorerFilterPanel() {
     if (!layers.length) return <p>No layers available</p>;
 
     return (
-        <div>
-            <div className="my-4 flex flex-col " id="layers-selectors">
-                <FancyMultiSelect
-                    opt_layers={layers}
-                    setSelectedLayers={(selected_left_layers) => setFilters((f) => ({ ...f, selected_left_layers }))}
-                    selected_layers={filters.selected_left_layers}
-                    title="Left layers"
-                />
-                <FancyMultiSelect
-                    opt_layers={layers}
-                    setSelectedLayers={(selected_right_layers) => setFilters((f) => ({ ...f, selected_right_layers }))}
-                    selected_layers={filters.selected_right_layers}
-                    title="Right layers"
-                />
-            </div>
-
-            <div className="rounded-lg my-4" id="preset-container">
-                <button
-                    onClick={() => setShowPreset((prev) => !prev)}
-                    className="flex items-center justify-between w-full p-2 md:p-4"
-                >
-                    <h3 className="text-lg font-semibold text-[#232C33] mb-1 flex items-center">Preset Tools</h3>
-
-                    {showPreset ? (
-                        <ChevronDown className="w-5 h-5 text-slate-600" />
-                    ) : (
-                        <ChevronRight className="w-5 h-5 text-slate-600" />
-                    )}
-                </button>
-
-                {showPreset && (
-                    <div className="p-4 space-y-3">
-                        <PresetButton
-                            buttonName="Bathy 2023/2025 comparison"
-                            urlString="/explorer?lat=-21.17536&lng=55.29213&zoom=16&left=ortho_2023%2Cbathy_2023&right=ortho_2025%2Cbathy_2025"
+        <div className="z-2" id="layers-selectors">
+            <AccordionComponent
+                icon={SquareStack}
+                defaultOpen
+                title="Map Layers"
+                content={
+                    <>
+                        <FancyMultiSelect
+                            opt_layers={layers}
+                            setSelectedLayers={(selected_left_layers) =>
+                                setFilters((f) => ({ ...f, selected_left_layers }))
+                            }
+                            selected_layers={filters.selected_left_layers}
+                            title="Left panel"
                         />
-                        <PresetButton
-                            buttonName="Habitat map / Orthophoto 2023"
-                            urlString="/explorer?lat=-21.17536&lng=55.29213&zoom=16&left=ortho_2023%2Cpred_drone_2023&right=ortho_2023"
+                        <FancyMultiSelect
+                            opt_layers={layers}
+                            setSelectedLayers={(selected_right_layers) =>
+                                setFilters((f) => ({ ...f, selected_right_layers }))
+                            }
+                            selected_layers={filters.selected_right_layers}
+                            title="Right panel"
                         />
-                        <PresetButton
-                            buttonName="IGN 2022 vs Drone Orthophoto 2023"
-                            urlString="/explorer?lat=-21.17536&lng=55.29213&zoom=16&right=ortho_2023&left=ign_2022"
-                        />
-                    </div>
-                )}
-            </div>
+                    </>
+                }
+            />
         </div>
     );
 }

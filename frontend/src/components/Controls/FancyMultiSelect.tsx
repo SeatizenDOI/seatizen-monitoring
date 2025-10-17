@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { ChevronDown, X, Search, Check, Ruler, Earth, Camera, Satellite, Info } from "lucide-react";
+import { ChevronDown, X, Search, Check, Ruler, Earth, Camera, Satellite, Info, Layers } from "lucide-react";
 import { COGServerResponse } from "@/lib/definition";
 
 export interface FancyMultiSelectProps {
@@ -164,7 +164,12 @@ export default function FancyMultiSelect({
 
     return (
         <div className="w-full max-w-2xl mx-auto p-4">
-            <span className="block font-medium text-md md:text-xl  mb-2">{title}</span>
+            <div className="flex flex-row items-center justify-baseline mb-2">
+                <div className="p-2 bg-ocean-50 rounded-lg">
+                    <Layers className="w-3 h-3 md:w-5 md:h-5 text-ocean-700" />
+                </div>
+                <span className="pl-4 block font-medium text-md md:text-lg ">{title}</span>
+            </div>
             <div className="relative" ref={selectRef}>
                 {/* Main Select Button */}
                 <div
@@ -240,7 +245,7 @@ export default function FancyMultiSelect({
 
                 {/* Dropdown */}
                 {isOpen && (
-                    <div className="absolute top-full left-0 right-0 z-50 mt-2 bg-white border-2 border-gray-200 rounded-xl shadow-2xl overflow-hidden">
+                    <div className="absolute top-full left-0 right-0 z-50 mt-2 bg-white border-2 border-gray-200 rounded-xl shadow-2xl">
                         {/* Search Bar */}
                         <div className="p-4 border-b border-gray-100 bg-gray-50">
                             <div className="relative">

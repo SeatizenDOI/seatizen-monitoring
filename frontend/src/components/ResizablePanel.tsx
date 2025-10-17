@@ -86,10 +86,10 @@ export default function ResizablePanel({ left_content, right_content, right_titl
     }
 
     return (
-        <div ref={containerRef} className="flex relative max-h-[90vh] overflow-hidden">
+        <div ref={containerRef} className="flex relative max-h-[90vh] ">
             {/* Sidebar */}
             <div
-                className={`overflow-hidden bg-background relative`}
+                className={` bg-background relative`}
                 style={{ width: sidebarOpen && !isFullscreen ? sidebarWidth : 0 }}
             >
                 <div className="p-6 h-full overflow-y-auto">
