@@ -66,7 +66,7 @@ const RectangleBox = ({ id, title, items, url }: { id: string; title: string; it
 
                     <p className="text-xs mb-4 text-foreground">
                         {items.map((item, i) => (
-                            <div key={i}>{item}</div>
+                            <span key={i}>{item}</span>
                         ))}
                     </p>
 
@@ -532,7 +532,7 @@ export default function Workflow() {
     return (
         <div className="w-full min-h-screen p-8">
             <h1 className="text-lg md:text-3xl font-bold mb-6 text-center">Seatizen Workflow</h1>
-            <p className="text-md md:text-2xl font-medium mb-18 text-center">
+            <p className="text-md md:text-2xl font-medium mb-18 text-center mx-64">
                 The Seatizen workflow manages every step from data acquisition to publication, in full accordance with
                 the FAIR principles. Raw data are organized, processed, and versioned on Zenodo with a DOI, ensuring
                 transparency, traceability, and reproducible visualizations. All source code is hosted on GitHub, along

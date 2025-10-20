@@ -22,7 +22,10 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="fr">
-            <body className={`${outfit.className} antialiased`}>{children}</body>
+            <body className={`${outfit.className} antialiased`}>
+                {children}
+                <p className="hidden"> Made by Victor ILLIEN - https://github.com/Gouderg</p>
+            </body>
         </html>
     );
 }
