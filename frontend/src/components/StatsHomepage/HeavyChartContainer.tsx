@@ -1,18 +1,6 @@
 import { HeavyStats, PlatformCount } from "@/lib/definition";
 import React from "react";
-import {
-    PieChart,
-    Pie,
-    Cell,
-    ResponsiveContainer,
-    Tooltip,
-    Legend,
-    Bar,
-    BarChart,
-    CartesianGrid,
-    XAxis,
-    YAxis,
-} from "recharts";
+import { Cell, ResponsiveContainer, Tooltip, Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 // Color palette from your CSS variables
 const colors = {

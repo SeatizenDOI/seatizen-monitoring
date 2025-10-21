@@ -15,7 +15,7 @@ import {
     Archive,
     Drone,
     Satellite,
-    TrafficCone,
+    MessageCircleQuestionMark,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -45,12 +45,12 @@ export default function Page() {
     // Partner logos - replace with actual logos
     const partnerLogos = [
         { name: "IFREMER", logo: "/partners/ifremer.jpg" },
+        { name: "COOOL", logo: "/partners/coool.svg" },
+        { name: "IRD", logo: "/partners/ird.jpg" },
         { name: "LIRMM", logo: "/partners/lirmm.jpg" },
         { name: "CNRS", logo: "/partners/cnrs.png" },
-        { name: "INIRIA", logo: "/partners/inria.png" },
-        { name: "IRD", logo: "/partners/ird.jpg" },
-        { name: "COOOL", logo: "/partners/coool.svg" },
-        { name: "ID OCEAN", logo: "/partners/idocean.jpg" },
+        { name: "INRIA", logo: "/partners/inria.png" },
+        { name: "IDOCEAN", logo: "/partners/idocean.jpg" },
         { name: "PPR", logo: "/partners/ppr.png" },
         { name: "Région Réunion", logo: "/partners/region-reunion-logo.png" },
         { name: "Gouvernement français", logo: "/partners/gouvernement.png" },
@@ -149,11 +149,19 @@ export default function Page() {
 
                     <p className="text-lg text-cream-100 mb-8">
                         From autonomous surface vehicles to AI-powered habitat mapping, discover lagoon ecosystems like
-                        never before
+                        never before.
                     </p>
 
                     {/* CTA Buttons */}
                     <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+                        <Link
+                            href="https://doi.org/10.5281/zenodo.11125847"
+                            target="_blank"
+                            className="bg-white/80 backdrop-blur-sm text-deepteal-700 px-8 py-4 rounded-full text-lg font-semibold border border-deepteal-300 hover:bg-white hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+                        >
+                            <Download className="w-5 h-5" />
+                            Explore Dataset
+                        </Link>
                         <Link
                             href="/explorer"
                             className="bg-gradient-to-r from-ocean-500 to-ocean-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:from-ocean-600 hover:to-ocean-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
@@ -162,12 +170,11 @@ export default function Page() {
                             Explore Data Now
                         </Link>
                         <Link
-                            href="https://doi.org/10.5281/zenodo.11125847"
-                            target="_blank"
+                            href="/docs"
                             className="bg-white/80 backdrop-blur-sm text-deepteal-700 px-8 py-4 rounded-full text-lg font-semibold border border-deepteal-300 hover:bg-white hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
                         >
-                            <Download className="w-5 h-5" />
-                            Explore Dataset
+                            <MessageCircleQuestionMark className="w-5 h-5" />
+                            Tutorials
                         </Link>
                     </div>
                 </div>

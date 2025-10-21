@@ -3,6 +3,7 @@ import path from "path";
 import { Metadata } from "next";
 import Workflow from "@/components/Workflow";
 import Link from "next/link";
+
 export const metadata: Metadata = {
     title: "Publications",
     description: "Scientific publications ",
@@ -76,7 +77,7 @@ export default async function PublicationsPage() {
                             georeferenced frames, habitat predictions, and more.
                         </p>
                         <Link
-                            href="https://zenodo.org/communities/seatizen-data/"
+                            href="https://zenodo.org/communities/seatizen-data/records?q=&l=list&p=1&s=10&sort=newest"
                             target="_blank"
                             className="bg-gradient-to-r from-ocean-500 to-ocean-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:from-ocean-600 hover:to-ocean-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl "
                         >
