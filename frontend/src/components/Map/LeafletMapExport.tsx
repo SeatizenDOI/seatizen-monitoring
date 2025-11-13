@@ -170,12 +170,43 @@ export default function LeafletMapExport({ deposits, polygons, onPolygonAdd, onP
 
                 const text_length_or_surface = props.perimeter ? `Length: ${props.perimeter}` : `Area: ${props.area}`;
 
+                let easter_eggs = "";
+                if (props.name === "20231202_REU-TROU-DEAU_UAV-01_01") {
+                    easter_eggs = String.raw`
+                    <pre>
+              (Zioboia)
+             /
+            /   
+       ____  __.---""---.__  ____
+      /####\/              \/####\
+     (   /\ )              ( /\   )
+     \____/                \____/
+    __/                          \__
+ .-"    .                      .    "-.
+ |  |   \.._                _../   |  |
+  \  \    \."-.__________.-"./    /  /
+    \  \    "--.________.--"    /  /
+  ___\  \_                    _/  /___
+./    )))))                  (((((    \.
+\                                      /
+ \           \_          _/           /
+   \    \____/""-.____.-""\____/    /
+     \    \                  /    /
+      \.  .|                |.  ./
+    ." / |  \              /  | \  ".
+ ."  /   |   \            /   |   \   ".
+/.-./.--.|.--.\          /.--.|.--.\.-.|
+</pre>
+  `;
+                }
+
                 layer.bindPopup(`
                     <strong>${props.name}</strong><br/>
                     DOI:  <a href="https://doi.org/10.5281/zenodo.${props.doi}" target="_blank"> ${props.doi}</a><br/>
                     Acquisition date: ${props.creation_date} <br/>
                     Platform: ${props.platform} <br/>
-                    ${text_length_or_surface}
+                    ${text_length_or_surface} <br/>
+                    ${easter_eggs}
                 `);
 
                 // When popup opens → highlight

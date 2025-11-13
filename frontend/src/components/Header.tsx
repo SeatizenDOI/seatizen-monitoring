@@ -16,7 +16,11 @@ const url_paths: LinkItem[] = [
         href: "/exporter",
         icon: Upload,
     },
-    { name: "Explorer", href: "/explorer", icon: Compass },
+    {
+        name: "Explorer",
+        href: "explorer?lat=-21.16381&lng=55.28671&zoom=19&left=ortho_2023&right=ortho_2025",
+        icon: Compass,
+    },
     {
         name: "Explorer ASV data",
         href: "/explorer-asv",
