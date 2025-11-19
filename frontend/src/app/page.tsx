@@ -142,7 +142,7 @@ export default function Page() {
                             <div className="text-ocean-700">Images</div>
                         </div>
                         <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-ocean-200 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                            <div className="text-3xl font-bold text-ocean-600 mb-2">12TB</div>
+                            <div className="text-3xl font-bold text-ocean-600 mb-2">14TB</div>
                             <div className="text-ocean-700">Data</div>
                         </div>
                     </div>

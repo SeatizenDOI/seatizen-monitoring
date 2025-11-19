@@ -12,7 +12,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.deposit import Deposit
 
-PLATFORMS_AS_LINESTRING = ["UVC", "SCUBA", "PADDLE"]
+PLATFORMS_AS_LINESTRING = ["UVC", "SCUBA", "PADDLE", "KITE", "SURF"]
 
 async def get_deposits_filtered(
         platforms: Optional[str],
