@@ -65,6 +65,8 @@ async def get_deposits_filtered(
                 fl = WKBElement(unhexlify(fl), srid=4326)
 
             shape = to_shape(fl)  # Converts WKB to Shapely geometry
+            if d.platform_type == "KITE":
+                shape = shape.simplify(tolerance=0.009, preserve_topology=True)
             poly_area, poly_perimeter = geod.geometry_area_perimeter(shape)
             d.deposit_linestring.footprint_linestring = shape.__geo_interface__  # GeoJSON format
             d.perimeter = f"{round(poly_perimeter / 2)} m" # Magic smoke.
