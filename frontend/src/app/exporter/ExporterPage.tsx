@@ -6,6 +6,7 @@ import { useFilters } from "@/context/FiltersContext";
 import React, { useState, useEffect } from "react";
 
 import ResizablePanel from "@/components/ResizablePanel";
+import SpinningLoader from "@/components/SpinningLoader";
 
 export default function ExporterPage() {
     const { filters } = useFilters();
@@ -71,7 +72,6 @@ export default function ExporterPage() {
         fetchDeposits();
     }, [filters.platform, filters.startDate, filters.endDate]);
 
-    if (loadingDeposits) return <p>Loading deposits...</p>;
     if (error) return <p className="text-red-500">Error: {error}</p>;
 
     return (
@@ -92,12 +92,16 @@ export default function ExporterPage() {
                 </div>
             }
             right_content={
-                <MapExport
-                    deposits={deposits}
-                    polygons={polygons}
-                    onPolygonAdd={handlePolygonAdd}
-                    onPolygonDelete={handlePolygonDelete}
-                />
+                loadingDeposits ? (
+                    <SpinningLoader />
+                ) : (
+                    <MapExport
+                        deposits={deposits}
+                        polygons={polygons}
+                        onPolygonAdd={handlePolygonAdd}
+                        onPolygonDelete={handlePolygonDelete}
+                    />
+                )
             }
             right_title="Flying solo, you have a fair workload."
         ></ResizablePanel>
