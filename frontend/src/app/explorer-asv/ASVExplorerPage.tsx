@@ -32,7 +32,7 @@ export default function ASVExplorerPage() {
         if (!res.ok) throw new Error(`HTTP ${res.status}, Cannot retrieve information for left layer`);
         const layer: COGServerResponse = await res.json();
 
-        const background_map = layersMap.get(`ortho_${filters.left_year}`);
+        const background_map = layersMap.get(`ortho_${year}`);
 
         if (background_map) {
             return [background_map, layer];
