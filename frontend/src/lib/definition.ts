@@ -21,6 +21,8 @@ export const TOKEN_PAGE_EXPORTER = "token_page_exporter";
 export const TOKEN_PAGE_ASV_EXPLORER = "token_page_asv_explorer";
 export const TOKEN_PAGE_EXPLORER = "token_page_explorer";
 
+export const EXPLORER_ADRESS = "/explorer?lat=-21.16381&lng=55.28671&zoom=19&left=ortho_2023&right=ortho_2025";
+
 export interface Item {
     id: string;
     name: string;

@@ -6,7 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
 
-import { LinkItem } from "@/lib/definition";
+import { EXPLORER_ADRESS, LinkItem } from "@/lib/definition";
 import { HeaderLink } from "@/components/HeaderLink";
 import { Upload, Compass, DraftingCompass, ScrollText, HelpingHand } from "lucide-react";
 
@@ -18,7 +18,7 @@ const url_paths: LinkItem[] = [
     },
     {
         name: "Explorer",
-        href: "explorer?lat=-21.16381&lng=55.28671&zoom=19&left=ortho_2023&right=ortho_2025",
+        href: EXPLORER_ADRESS,
         icon: Compass,
     },
     {

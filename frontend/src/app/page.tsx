@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { HeavyStats, LightStats } from "@/lib/definition";
+import { EXPLORER_ADRESS, HeavyStats, LightStats } from "@/lib/definition";
 import HeavyStatsSection from "@/components/StatsHomepage/HeavyChartContainer";
 
 const DEFAULT_LIGHT_STATS: LightStats = {
@@ -163,7 +163,7 @@ export default function Page() {
                             Explore Dataset
                         </Link>
                         <Link
-                            href="/explorer"
+                            href={EXPLORER_ADRESS}
                             className="bg-gradient-to-r from-ocean-500 to-ocean-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:from-ocean-600 hover:to-ocean-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
                         >
                             <Eye className="w-5 h-5" />
