@@ -13,6 +13,9 @@ export const metadata: Metadata = {
         default: "Seatizen Monitoring",
     },
     description: "Seatizen Monitoring",
+    verification: {
+        google: "n38t0e8f9xz3weXm0KHZn1p9Q4aLrCZKJCv3lR8GFlo",
+    },
 };
 
 export default function RootLayout({
