@@ -1,7 +1,7 @@
 services:
   db:
     image: postgis/postgis:17-3.5
-    container_name: postgis
+    container_name: sm_database
     volumes:
       - db_data:/var/lib/postgresql/data
     environment:
@@ -18,7 +18,7 @@ services:
   
   gdal:
     build: ./db
-    container_name: gdal
+    container_name: sm_gdal
     depends_on:
       - db
     env_file: .env
@@ -35,7 +35,7 @@ services:
 
   backend:
     build: ./backend
-    container_name: fastapi
+    container_name: sm_backend
     env_file: .env
     depends_on:
       gdal:
@@ -47,7 +47,7 @@ services:
 
   frontend:
     build: ./frontend
-    container_name: nextjs
+    container_name: sm_frontend
     depends_on:
       - backend
     ports:
