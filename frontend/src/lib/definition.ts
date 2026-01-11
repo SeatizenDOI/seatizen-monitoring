@@ -138,6 +138,7 @@ export const depositPlatformColorMap: Record<string, string> = {
     KITE: "yellow",
     HIKE: "red",
     BOAT: "red",
+    AUV: "green",
     default: "gray",
 };
 
