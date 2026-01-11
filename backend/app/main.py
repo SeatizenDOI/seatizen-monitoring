@@ -8,7 +8,7 @@ load_dotenv()
 
 ENV_TYPE = os.getenv("ENV_TYPE")
 
-if ENV_TYPE == "DEV" or None:
+if ENV_TYPE == "DEV":
 
     app = FastAPI()
 
